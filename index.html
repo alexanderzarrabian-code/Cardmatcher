@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Binder Buddy</title>
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#1b1048">
+<meta name="theme-color" content="#10192e">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,82 +12,75 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <style>
-:root{--bg:#0b0820;--fg:#f1eeff;--card:rgba(32,24,74,.78);--ac:#d946ef;--mu:#b5acd9;--gold:#8b7bff;--blue:#22d3ee;--line:#4b3f9e;--aqua:#22e4c8;--shadow:0 4px 0 rgba(0,0,0,.4),0 0 18px rgba(139,123,255,.25)}
+:root{--bg:#0c1220;--fg:#eef1f7;--card:rgba(22,31,52,.85);--ac:#f5c542;--mu:#9aa6bf;--gold:#c99a2e;--blue:#f5c542;--line:#2f3e62;--aqua:#34d399;--shadow:0 3px 0 rgba(0,0,0,.35),0 0 14px rgba(245,197,66,.10)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{background:#0b0820}
+html{background:#0c1220}
 body{margin:0;padding:0 14px 96px;font:16px/1.4 "Trebuchet MS","Avenir Next",system-ui,sans-serif;color:var(--fg);max-width:640px;margin:auto;min-height:100vh;
-  background:
-   radial-gradient(1.2px 1.2px at 12% 18%,#fff 98%,transparent),radial-gradient(1px 1px at 78% 8%,#cfe 98%,transparent),
-   radial-gradient(1.4px 1.4px at 38% 44%,#fff 98%,transparent),radial-gradient(1px 1px at 88% 52%,#fdf 98%,transparent),
-   radial-gradient(1.2px 1.2px at 22% 72%,#cff 98%,transparent),radial-gradient(1px 1px at 64% 86%,#fff 98%,transparent),
-   radial-gradient(1.3px 1.3px at 52% 22%,#fff 98%,transparent),radial-gradient(1px 1px at 6% 90%,#fff 98%,transparent),
-   radial-gradient(ellipse 80% 40% at 90% 0%,rgba(217,70,239,.28),transparent 70%),
-   radial-gradient(ellipse 70% 45% at 0% 55%,rgba(34,211,238,.16),transparent 70%),
-   radial-gradient(ellipse 90% 50% at 60% 100%,rgba(99,70,230,.35),transparent 70%),
-   linear-gradient(180deg,#0b0820,#120a33 60%,#0b0820);
+  background:linear-gradient(180deg,#0c1220,#0a0f1b);
   background-repeat:no-repeat;background-attachment:fixed}
-.banner{margin:0 -14px 12px;padding:12px 16px 10px;text-align:center;background:linear-gradient(135deg,#3b1d8f 0%,#a21caf 52%,#0891b2 100%);color:#fff;border-bottom:4px solid #22d3ee;position:relative;overflow:hidden}
-.banner h1{margin:0;font:900 26px/1.1 "Arial Black","Trebuchet MS",system-ui,sans-serif;letter-spacing:.5px;text-shadow:0 0 14px rgba(255,255,255,.55),0 3px 0 rgba(0,0,0,.3)}
+.banner{margin:0 -14px 12px;padding:12px 16px 10px;text-align:center;background:linear-gradient(180deg,#16223f,#101a30);color:#fff;border-bottom:3px solid #f5c542;position:relative;overflow:hidden}
+.banner h1{margin:0;font:900 26px/1.1 "Arial Black","Trebuchet MS",system-ui,sans-serif;letter-spacing:.5px;color:#f5c542;text-shadow:0 2px 0 rgba(0,0,0,.35)}
 .banner p{margin:3px 0 0;font-size:12.5px;font-weight:700;opacity:.95}
-.spark{position:absolute;color:#fff7c2;font-size:18px;animation:tw 2.4s ease-in-out infinite}
+.spark{display:none;position:absolute;color:#fff7c2;font-size:18px;animation:tw 2.4s ease-in-out infinite}
 .spark:nth-child(1){right:18px;top:10px}.spark:nth-child(2){left:22px;top:30px;font-size:12px;animation-delay:.7s}.spark:nth-child(3){left:72px;top:10px;font-size:14px;animation-delay:1.3s}.spark:nth-child(4){right:64px;top:44px;font-size:11px;animation-delay:.3s}
 @keyframes tw{0%,100%{opacity:.25;transform:scale(.7) rotate(0)}50%{opacity:1;transform:scale(1.2) rotate(25deg)}}
 .pick{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
-.btn{display:block;width:100%;padding:14px;border:0;border-radius:14px;background:linear-gradient(135deg,#a21caf,#d946ef);color:#fff;font-size:17px;font-weight:800;text-align:center;cursor:pointer;box-shadow:var(--shadow);transition:transform .08s}
+.btn{display:block;width:100%;padding:14px;border:0;border-radius:14px;background:linear-gradient(135deg,#f5c542,#e0a82e);color:#1a1405;font-size:17px;font-weight:800;text-align:center;cursor:pointer;box-shadow:var(--shadow);transition:transform .08s}
 .btn:active{transform:translateY(3px);box-shadow:none}
-label.btn.alt{background:linear-gradient(135deg,#4338ca,#22d3ee)}
+.btn[style*="b91c1c"]{color:#fff}
+.btn.alt{background:#18233f;border:2px solid #3a4a70;color:var(--fg);box-shadow:none}
 .row{display:flex;gap:8px;margin:10px 0}
-input[type=text],input[type=number]{flex:1;min-width:0;padding:12px;border-radius:12px;border:2px solid var(--line);background:rgba(15,10,45,.85);color:var(--fg);font-size:16px}
-input::placeholder{color:#8a80bd}
-input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 10px rgba(34,211,238,.45)}
+input[type=text],input[type=number]{flex:1;min-width:0;padding:12px;border-radius:12px;border:2px solid var(--line);background:rgba(10,15,28,.85);color:var(--fg);font-size:16px}
+input::placeholder{color:#6f7c98}
+input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 10px rgba(245,197,66,.45)}
 #num{flex:0 0 110px}
 [hidden]{display:none!important}
 button.item{border:3px solid var(--gold);text-align:left;font:inherit;cursor:pointer;width:100%}
-select{padding:8px;border-radius:10px;background:rgba(15,10,45,.85);color:var(--fg);border:2px solid var(--line);font-size:15px}
+select{padding:8px;border-radius:10px;background:rgba(10,15,28,.85);color:var(--fg);border:2px solid var(--line);font-size:15px}
 .mu{color:var(--mu);font-size:14px}
-h3{font:900 17px/1.2 "Arial Black","Trebuchet MS",system-ui,sans-serif;margin:18px 0 8px;color:#7ee7ff;text-shadow:0 0 10px rgba(34,211,238,.35)}
+h3{font:900 17px/1.2 "Arial Black","Trebuchet MS",system-ui,sans-serif;margin:18px 0 8px;color:#f5c542}
 .hero{display:flex;gap:12px;background:var(--card);border:4px solid transparent;border-radius:16px;padding:12px;margin:14px 0;box-shadow:var(--shadow);animation:pop .35s ease-out;
-  background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(135deg,#8b7bff,#22d3ee,#d946ef) border-box}
+  background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(135deg,#c99a2e,#f5c542,#c99a2e) border-box}
 @keyframes pop{from{transform:scale(.94);opacity:0}to{transform:none;opacity:1}}
-.hero img{flex:0 0 110px;width:110px;height:auto;align-self:flex-start;border-radius:8px;box-shadow:0 0 14px rgba(139,123,255,.5)}
-.price{display:inline-block;font:900 26px/1 "Arial Black",system-ui,sans-serif;color:#052e2a;background:linear-gradient(135deg,#22e4c8,#7ee7ff);padding:6px 12px;border-radius:12px;margin:4px 0;box-shadow:0 0 16px rgba(34,228,200,.5)}
+.hero img{flex:0 0 110px;width:110px;height:auto;align-self:flex-start;border-radius:8px;box-shadow:0 0 14px rgba(245,197,66,.5)}
+.price{display:inline-block;font:900 26px/1 "Arial Black",system-ui,sans-serif;color:#052e1f;background:linear-gradient(135deg,#34d399,#6ee7b7);padding:6px 12px;border-radius:12px;margin:4px 0;box-shadow:0 0 16px rgba(52,211,153,.4)}
 .warn{display:inline-block;color:#4a3000;background:#ffd54a;border:2px solid #d99a00;border-radius:8px;padding:2px 8px;font-size:12.5px;font-weight:800;margin:3px 0}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .item{position:relative;background:var(--card);border:3px solid transparent;border-radius:14px;padding:8px;text-decoration:none;color:inherit;font-size:14px;box-shadow:var(--shadow);transition:transform .12s;overflow:hidden;
-  background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(135deg,#8b7bff,#22d3ee) border-box}
+  background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(135deg,#c99a2e,#3a4a70) border-box}
 .item:active{transform:scale(.97)}
 .item b{display:block;margin-top:4px}
 .item img{width:100%;border-radius:6px;display:block}
-.item::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .25s;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.4) 45%,rgba(120,200,255,.3) 52%,rgba(255,150,230,.3) 58%,transparent 72%)}
+.item::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .25s;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.4) 45%,rgba(245,197,66,.28) 52%,rgba(255,255,255,.2) 58%,transparent 72%)}
 .item:hover::after,.item:active::after{opacity:1}
-.item .tag{display:inline-block;margin-top:5px;background:linear-gradient(135deg,#22e4c8,#7ee7ff);color:#052e2a;font-weight:800;border-radius:9px;padding:2px 8px}
+.item .tag{display:inline-block;margin-top:5px;background:linear-gradient(135deg,#34d399,#6ee7b7);color:#052e1f;font-weight:800;border-radius:9px;padding:2px 8px}
 .chips{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 8px}
-.chip{flex:0 0 auto;padding:7px 12px;border-radius:99px;background:rgba(32,24,74,.9);border:2px solid var(--line);color:var(--fg);font-size:13px;font-weight:700;cursor:pointer}
-.chip[data-d]{border-color:#22d3ee;color:#7ee7ff}
-.chip[data-v]{border-width:2px;color:#e9e4ff}
-.chip[data-v^="Holofoil"]{background:linear-gradient(120deg,#2b2370,#3a2a86)}
-.chip[data-v^="Reverse"]{background:linear-gradient(120deg,#0f4a5a,#2b2370)}
-.chip[data-v^="1st"]{background:linear-gradient(120deg,#6b2470,#2b2370)}
+.chip{flex:0 0 auto;padding:7px 12px;border-radius:99px;background:rgba(22,31,52,.9);border:2px solid var(--line);color:var(--fg);font-size:13px;font-weight:700;cursor:pointer}
+.chip[data-d]{border-color:#f5c542;color:#f5c542}
+.chip[data-v]{border-width:2px;color:#eef1f7}
+.chip[data-v^="Holofoil"]{background:linear-gradient(120deg,#1b2744,#22305a)}
+.chip[data-v^="Reverse"]{background:linear-gradient(120deg,#1b2744,#1b2744)}
+.chip[data-v^="1st"]{background:linear-gradient(120deg,#2a2440,#1b2744)}
 #status{font-weight:700}
-.chip.on{background:linear-gradient(135deg,#a21caf,#d946ef)!important;border-color:#f0abfc!important;color:#fff!important}
+.chip.on{background:#f5c542!important;border-color:#ffe08a!important;color:#1a1405!important}
 .lang{display:inline-block;background:#f43f5e;color:#fff;font-size:11px;font-weight:800;border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:1px}
 details summary{cursor:pointer}
 label.mu{color:var(--mu)}
-.bsum{list-style:none;cursor:pointer;text-align:center;font-weight:800;font-size:17px;color:#fff;padding:13px;border-radius:14px;background:linear-gradient(135deg,#3b1d8f,#a21caf 60%,#0891b2);border:2px solid var(--blue);box-shadow:var(--shadow)}.bsum::-webkit-details-marker{display:none}#browse[open] .bsum{margin-bottom:6px}
-.tabs{position:fixed;left:0;right:0;bottom:0;max-width:640px;margin:0 auto;z-index:20;display:flex;gap:8px;padding:8px 14px calc(8px + env(safe-area-inset-bottom));background:rgba(11,8,32,.94);border-top:2px solid var(--line);backdrop-filter:blur(6px)}.tab{flex:1;padding:11px;border-radius:12px;border:2px solid var(--line);background:rgba(32,24,74,.9);color:var(--fg);font:800 15px system-ui;cursor:pointer}.tab.on{background:linear-gradient(135deg,#a21caf,#d946ef);border-color:transparent}
-.bgrid{display:grid;gap:6px;background:rgba(32,24,74,.6);border:3px solid var(--line);border-radius:14px;padding:8px;margin:8px 0}
-.pk{position:relative;aspect-ratio:5/7;border:2px dashed var(--line);border-radius:8px;background:rgba(11,8,32,.6);padding:0;overflow:hidden;color:var(--mu);font-size:24px;cursor:pointer}
+.bsum{list-style:none;cursor:pointer;text-align:center;font-weight:800;font-size:17px;color:#fff;padding:13px;border-radius:14px;background:#18233f;border:2px solid #c99a2e;box-shadow:var(--shadow)}.bsum::-webkit-details-marker{display:none}#browse[open] .bsum{margin-bottom:6px}
+.tabs{position:fixed;left:0;right:0;bottom:0;max-width:640px;margin:0 auto;z-index:20;display:flex;gap:8px;padding:8px 14px calc(8px + env(safe-area-inset-bottom));background:rgba(12,18,32,.94);border-top:2px solid var(--line);backdrop-filter:blur(6px)}.tab{flex:1;padding:11px;border-radius:12px;border:2px solid var(--line);background:rgba(22,31,52,.9);color:var(--fg);font:800 15px system-ui;cursor:pointer}.tab.on{background:linear-gradient(135deg,#f5c542,#e0a82e);border-color:transparent;color:#1a1405}
+.bgrid{display:grid;gap:6px;background:rgba(22,31,52,.6);border:3px solid var(--line);border-radius:14px;padding:8px;margin:8px 0}
+.pk{position:relative;aspect-ratio:5/7;border:2px dashed var(--line);border-radius:8px;background:rgba(12,18,32,.6);padding:0;overflow:hidden;color:var(--mu);font-size:24px;cursor:pointer}
 .pk.has{border:2px solid transparent}.pk.sel{outline:3px solid var(--ac)}.pk img{width:100%;height:100%;object-fit:cover;display:block}
-.pk .qm{position:absolute;top:2px;right:3px;background:#f59e0b;color:#1b1048;font:900 11px system-ui;border-radius:9px;padding:0 6px;box-shadow:0 0 6px #000}.pk .pp{position:absolute;left:0;right:0;bottom:0;background:rgba(5,46,42,.9);color:#7ff;font:800 11px system-ui;text-align:center;padding:2px 0}
+.pk .qm{position:absolute;top:2px;right:3px;background:#f59e0b;color:#10192e;font:900 11px system-ui;border-radius:9px;padding:0 6px;box-shadow:0 0 6px #000}.pk .pp{position:absolute;left:0;right:0;bottom:0;background:rgba(6,28,22,.9);color:#6ee7b7;font:800 11px system-ui;text-align:center;padding:2px 0}
 .chip:disabled{opacity:.35}
 #modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:50;overflow:auto}
-#modal .sheet{max-width:520px;margin:6vh auto;background:#14103a;border:2px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--shadow)}
+#modal .sheet{max-width:520px;margin:6vh auto;background:#111a30;border:2px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--shadow)}
 #binderView select{flex:1;min-width:0}
 .pk{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}.pk.drag{opacity:.35}.pk.over{outline:3px solid var(--blue);box-shadow:0 0 14px var(--blue)}.ghost{position:fixed;z-index:60;pointer-events:none;border-radius:8px;overflow:hidden;box-shadow:0 10px 26px rgba(0,0,0,.6),0 0 16px var(--ac);transform:scale(1.06) rotate(3deg);opacity:.95}.ghost img{width:100%;height:100%;object-fit:cover;display:block}
 .cams{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}.cams .btn{padding:12px 6px;font-size:16px}
-.panel{background:rgba(32,24,74,.55);border:2px solid var(--line);border-radius:14px;padding:10px 12px;margin:12px 0}
+.panel{background:rgba(22,31,52,.55);border:2px solid var(--line);border-radius:14px;padding:10px 12px;margin:12px 0}
 .prow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;color:var(--mu);font-size:14px}
-.prow #range{flex:0 0 84px;width:84px;text-align:center;font-weight:800;padding:8px}
+.prow #range,.prow #trng{flex:0 0 76px;width:76px;text-align:center;font-weight:800;padding:8px}.stp{display:flex;gap:6px;align-items:center}.stpb{width:42px;height:42px;border-radius:12px;border:2px solid var(--line);background:rgba(22,31,52,.9);color:var(--fg);font:800 22px system-ui;cursor:pointer;padding:0}.acts{display:flex;gap:8px;margin:6px 0 10px}.acts .chip{flex:1;padding:11px 4px;font-size:13px;text-align:center;border-radius:12px}
 .chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
 .bsum{padding:9px;font-size:15px}
 .btot{text-align:center;margin:6px 0;font-size:15px}.btot span{color:var(--mu);font-size:13px}
@@ -96,7 +89,7 @@ label.mu{color:var(--mu)}
 .mbtn{margin-top:8px}
 .trow{display:flex;gap:10px;align-items:center;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:8px;margin-bottom:8px}
 .trow img{width:46px;flex:0 0 46px;border-radius:5px}.trow b{font-size:15px}.trow .mu{font-size:12px}
-.tp{font-weight:800;color:#7ff;text-align:right;font-size:15px}.x{border:0;background:rgba(185,28,28,.85);color:#fff;border-radius:50%;width:30px;height:30px;font-size:14px;cursor:pointer;flex:0 0 30px}
+.tp{font-weight:800;color:#6ee7b7;text-align:right;font-size:15px}.x{border:0;background:rgba(185,28,28,.85);color:#fff;border-radius:50%;width:30px;height:30px;font-size:14px;cursor:pointer;flex:0 0 30px}
 .review{background:rgba(255,217,102,.08);border:2px solid #b8962f;border-radius:14px;padding:10px;margin-bottom:10px}
 .pair{display:flex!important;gap:10px;align-items:center;margin-top:8px;text-align:left}.pair img{width:44px;flex:0 0 44px}
 #tradeView .prow input[type=number]{flex:0 0 84px;width:84px;text-align:center;font-weight:800;padding:8px}
@@ -104,8 +97,9 @@ label.mu{color:var(--mu)}
 .trend{display:flex;align-items:center;gap:10px;margin:2px 4px 6px}.trend svg{flex:1;height:34px}
 </style></head><body>
 <div class="banner"><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><h1>Binder Buddy</h1><p>Snap a card. Find its price twins.</p></div>
-<div class="tabs"><button class="tab on" data-tab="find">🔍 Find</button><button class="tab" data-tab="binders">📒 Binders</button><button class="tab" data-tab="trade">🔄 Trade</button></div>
-<div id="findView">
+<div class="tabs"><button class="tab on" data-tab="binders">📒 Binders</button><button class="tab" data-tab="find">🔍 Look up</button><button class="tab" data-tab="trade">🔄 Trade</button></div>
+<div id="findView" hidden>
+<p class="hint" style="margin:0 0 8px">Scan or type a card to see its price and find cards worth about the same.</p>
 <div class="cams"><label class="btn" for="file">📷 Take photo</label>
 <input id="file" class="pick" type="file" accept="image/*" capture="environment">
 <label class="btn alt" for="file2">🖼️ Library</label></div>
@@ -113,8 +107,7 @@ label.mu{color:var(--mu)}
 <div class="row"><input id="name" type="text" placeholder="Card name"><input id="num" type="text" placeholder="e.g. 4/102"></div>
 <button class="btn" id="go">Find price &amp; alternatives</button>
 <div class="panel"><div class="prow"><span>Cards</span><div class="chips"><button class="chip on" data-lang="en">English</button><button class="chip" data-lang="jp">Japanese</button><button class="chip" data-lang="both">Both</button></div></div>
-<div class="prow"><span>Price range ± $</span><input id="range" type="number" inputmode="decimal" min="0" step="5" value="5"></div>
-<div class="chips"><button class="chip" data-d="5">$5</button><button class="chip" data-d="10">$10</button><button class="chip" data-d="25">$25</button><button class="chip" data-d="50">$50</button><button class="chip" data-d="100">$100</button></div></div>
+<div class="prow"><span>Price range ± $</span><div class="stp"><button class="stpb" data-dir="-1" aria-label="Less">−</button><input id="range" type="number" inputmode="decimal" min="1" step="1" value="5"><button class="stpb" data-dir="1" aria-label="More">+</button></div></div></div>
 <details class="mu" id="browse" style="margin-top:14px"><summary class="bsum">💰 Browse by price</summary>
 <div class="row" style="margin-top:8px"><input id="bmin" type="number" inputmode="decimal" placeholder="Min $"><input id="bmax" type="number" inputmode="decimal" placeholder="Max $"></div>
 <div class="row"><input id="bname" type="text" placeholder="Pokémon name (optional)"></div>
@@ -124,7 +117,7 @@ label.mu{color:var(--mu)}
 <details class="mu" id="dbgbox" style="display:none"><summary>What the scanner saw</summary><div id="dbgimg"></div><pre id="dbgtxt" style="white-space:pre-wrap;font-size:12px"></pre></details>
 <div id="out"></div>
 </div>
-<div id="binderView" hidden></div>
+<div id="binderView"></div>
 <div id="tradeView" hidden></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.1.1/tesseract.min.js"></script>
 <script>
@@ -133,7 +126,10 @@ const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 const status=t=>$('#status').textContent=t||'';
 const money=v=>'$'+v.toFixed(2);
 const S={card:null,v:null,alts:[],shown:60,list:[],incl:false,lang:'en',scanSet:'',note:''};
-document.querySelectorAll('.chip[data-d]').forEach(b=>b.onclick=()=>{$('#range').value=b.dataset.d;if(S.card)render()});
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.stpb');if(!b)return;const inp=b.parentElement.querySelector('input');if(!inp)return;
+  const v=parseFloat(inp.value)||0,up=+b.dataset.dir>0,min=inp.min===''?0:+inp.min;
+  let n=up?(v>=10?(Math.floor(v/5)+1)*5:Math.floor(v)+1):(v>10?(Math.ceil(v/5)-1)*5:Math.ceil(v)-1);
+  n=Math.max(min,Math.round(n*100)/100);inp.value=n;inp.dispatchEvent(new Event('input',{bubbles:true}))});
 
 // ---- Price data: prices.json is rebuilt every night by the GitHub job ----
 const DATA={cards:[],jp:[],updated:'',jpUpdated:'',ready:null,jpReady:null};
@@ -394,19 +390,19 @@ function closeModal(fromPop){const m=$('#modal');if(!m||m.style.display!=='block
   if(!fromPop&&history.state&&history.state.modal){NAV.skip++;history.back()}}
 
 // back-swipe support: every screen change is a history step
-const NAV={skip:0,tab:'find'};
+const NAV={skip:0,tab:'binders'};
 function navSnap(){return {tab:NAV.tab,page:BD.page,cur:BD.cur}}
 function navPush(){try{history.pushState(navSnap(),'')}catch(e){}}
 window.addEventListener('popstate',e=>{
   if(NAV.skip>0){NAV.skip--;return}
-  const st=e.state||{tab:'find'},m=$('#modal');
+  const st=e.state||{tab:'binders'},m=$('#modal');
   if(m&&m.style.display==='block'){m.style.display='none';m.innerHTML=''}
   if(st.modal)return;
   BD.sel=null;
   if(st.tab==='binders'){if(st.cur&&BD.binders.some(b=>b.id===st.cur))BD.cur=st.cur;BD.page=st.page||0}
-  showTab(st.tab||'find',true);
-  if((st.tab||'find')==='find'&&!st.pick&&S.card&&S.list.length>1)picker()});
-try{history.replaceState({tab:'find',page:0,cur:null},'')}catch(e){}
+  showTab(st.tab||'binders',true);
+  if((st.tab||'binders')==='find'&&!st.pick&&S.card&&S.list.length>1)picker()});
+try{history.replaceState({tab:'binders',page:0,cur:null},'')}catch(e){}
 
 // tabs
 function showTab(t,fromPop){
@@ -444,22 +440,22 @@ async function bRender(load){
   const pv=pg.reduce((s,r)=>s+ownVal(r),0),tv=b.pages.reduce((s,p)=>s+p.reduce((t,r)=>t+ownVal(r),0),0),wl=b.pages.reduce((s,p)=>s+p.reduce((t,r)=>t+wishVal(r),0),0),cnt=b.pages.reduce((s,p)=>s+p.filter(r=>r&&!r.w).length,0),wc=b.pages.reduce((s,p)=>s+p.filter(r=>r&&r.w).length,0);
   v.innerHTML=`<div class="row" style="align-items:center"><select id="bsel">${BD.binders.map(x=>`<option value="${esc(x.id)}"${x.id===b.id?' selected':''}>${esc(x.name)}</option>`).join('')}</select><button class="chip" id="bnew">＋ New</button><button class="chip" id="bmore" aria-label="More">⋯ More</button></div><input id="bimpf" type="file" accept=".json,application/json" hidden>
   <p class="btot"><b>Page ${money(pv)}</b> · Binder ${money(tv)} · ${cnt} card${cnt===1?'':'s'}${wc?`<br><span>♡ Wishlist ${money(wl)} · ${wc} card${wc===1?'':'s'}</span>`:''}</p>${bTrend(b,tv)}
-  <div class="row" style="align-items:center;justify-content:center;gap:10px;margin:6px 0"><button class="chip" id="bprev"${BD.page===0?' disabled':''}>◀</button><b>Page ${BD.page+1} of ${b.pages.length}</b><button class="chip" id="bnext"${BD.page>=b.pages.length-1?' disabled':''}>▶</button><button class="chip" id="baddp">＋ Page</button></div>
-  ${BD.sel?'<p class="mu" style="text-align:center;color:#ffd966;margin:4px 0">Moving a card: tap the pocket to move it to. <button class="chip" id="bcancel">Cancel</button></p>':''}
+  <div class="row" style="align-items:center;justify-content:center;gap:10px;margin:6px 0"><button class="chip" id="bprev"${BD.page===0?' disabled':''}>◀</button><b>Page ${BD.page+1} of ${b.pages.length}</b><button class="chip" id="bnext"${BD.page>=b.pages.length-1?' disabled':''}>▶</button></div>
+  <div class="acts"><button class="chip" id="bfill">📷 Fill page from photo</button><button class="chip" id="bmovep">↔ Move page</button><button class="chip" id="baddp">＋ Add page</button></div>
+  ${BD.sel?'<p class="mu" style="text-align:center;color:#f5c542;margin:4px 0">Moving a card: tap the pocket to move it to. <button class="chip" id="bcancel">Cancel</button></p>':''}
   <div class="bgrid" style="grid-template-columns:repeat(${b.cols},1fr);max-width:${b.cols*98+16+(b.cols-1)*6}px">${pg.map((r,i)=>{
     const c=r&&cardById(r.i);
     if(!r)return `<button class="pk" data-i="${i}">＋</button>`;
     if(!c)return `<button class="pk has" data-i="${i}"><span style="font-size:11px">card not found</span></button>`;
     const val=c.v[r.k]?c.v[r.k][0]:0;
     return `<button class="pk has${r.w?' wish':''}${BD.sel&&BD.sel.p===BD.page&&BD.sel.i===i?' sel':''}" data-i="${i}"><img src="${esc(c.img)}" alt="${esc(c.name)}" loading="lazy">${r.w?'<span class="heart">♡</span>':''}${r.q?'<span class="qm">check</span>':''}<span class="pp">${val>0?money(val):'—'}${shaky(c,r.k)?' ⚠':''}</span></button>`}).join('')}</div>
-  <p class="hint">Press and hold a card to drag it · Near Mint prices · ⚠ = uncertain</p>`;
+  <p class="hint">Press and hold a card to drag it. Hold it at the screen edge to turn the page · Near Mint prices · ⚠ = uncertain</p>`;
   $('#bsel').onchange=e=>{BD.cur=e.target.value;BD.page=0;BD.sel=null;bSave();bRender()};
   $('#bnew').onclick=bNewDlg;
   $('#bmore').onclick=()=>{
-    modal(`<h3>${esc(b.name)}</h3><button class="btn alt mbtn" id="m1">Rename binder</button><button class="btn alt mbtn" id="mp">📷 Fill this page from a photo</button><button class="btn alt mbtn" id="mi">🖼️ Share this page as an image</button><button class="btn alt mbtn" id="m2">Share link (whole binder)</button><button class="btn alt mbtn" id="m3">Export (backup file)</button><button class="btn alt mbtn" id="m4">Import binders</button><button class="btn alt mbtn" id="m5"${b.pages.length<2?' disabled style="opacity:.4"':''}>Delete this page</button><button class="btn mbtn" id="m6" style="background:#b91c1c">Delete binder</button><button class="btn alt mbtn" id="m0">Close</button>`);
+    modal(`<h3>${esc(b.name)}</h3><button class="btn alt mbtn" id="m1">Rename binder</button><button class="btn alt mbtn" id="mi">🖼️ Share this page as an image</button><button class="btn alt mbtn" id="m2">Share link (whole binder)</button><button class="btn alt mbtn" id="m3">Export (backup file)</button><button class="btn alt mbtn" id="m4">Import binders</button><button class="btn alt mbtn" id="m5"${b.pages.length<2?' disabled style="opacity:.4"':''}>Delete this page</button><button class="btn mbtn" id="m6" style="background:#b91c1c">Delete binder</button><button class="btn alt mbtn" id="m0">Close</button>`);
     $('#m0').onclick=()=>closeModal();
     $('#m1').onclick=()=>bNameDlg('Rename binder',b.name,n=>{b.name=n;bSave();bRender()});
-    $('#mp').onclick=()=>bPhotoMenu(b);
     $('#mi').onclick=()=>bShareImage(b);
     $('#m2').onclick=()=>bShare(b);
     $('#m3').onclick=()=>{closeModal();bExport()};
@@ -468,6 +464,8 @@ async function bRender(load){
     $('#m6').onclick=()=>{modal(`<h3>Delete "${esc(b.name)}"?</h3><p class="mu">This can't be undone. Export it first if you want a backup.</p><button class="btn" id="yes" style="background:#b91c1c">Delete binder</button><button class="btn alt" id="no" style="margin-top:8px">Cancel</button>`);
       $('#no').onclick=()=>closeModal();
       $('#yes').onclick=()=>{BD.binders=BD.binders.filter(x=>x.id!==b.id);BD.cur=BD.binders[0]?BD.binders[0].id:null;BD.page=0;bSave();closeModal();bRender()}}};
+  $('#bfill').onclick=()=>bPhotoMenu(b);
+  $('#bmovep').onclick=()=>bMovePage(b);
   $('#bprev').onclick=()=>{BD.page--;BD.sel=null;navPush();bRender()};
   $('#bnext').onclick=()=>{BD.page++;BD.sel=null;navPush();bRender()};
   $('#baddp').onclick=()=>{b.pages.push(newPage(b));BD.page=b.pages.length-1;bSave();navPush();bRender()};
@@ -476,6 +474,21 @@ async function bRender(load){
   document.querySelectorAll('.pk').forEach(el=>{el.onclick=()=>{if(DR.block)return;bPocket(b,+el.dataset.i)};el.oncontextmenu=e=>{if(el.classList.contains('has'))e.preventDefault()}});
   bWireDrag(b)}
 
+function bMovePage(b){
+  const n=b.pages.length,p=BD.page;
+  modal(`<h3>Move page ${p+1}</h3><p class="mu">This is page ${p+1} of ${n}. Where should it go?</p>
+  <div class="row"><button class="btn alt" id="mpl"${p?'':' disabled style="opacity:.4"'}>◀ One earlier</button><button class="btn alt" id="mpr"${p<n-1?'':' disabled style="opacity:.4"'}>One later ▶</button></div>
+  <div class="row" style="margin-top:8px"><input id="mpn" type="number" inputmode="numeric" min="1" max="${n}" placeholder="Move to page # (1 to ${n})"><button class="btn" id="mpg" style="flex:0 0 90px">Move</button></div>
+  <button class="btn alt" id="no" style="margin-top:8px">Close</button>`);
+  $('#no').onclick=()=>closeModal();
+  const mv=to=>{if(!(to>=0&&to<n)||to===p)return;const pg=b.pages.splice(p,1)[0];b.pages.splice(to,0,pg);BD.page=to;BD.sel=null;bSave();closeModal();bRender()};
+  $('#mpl').onclick=()=>mv(p-1);$('#mpr').onclick=()=>mv(p+1);
+  $('#mpg').onclick=()=>{const t=parseInt($('#mpn').value,10);if(t>=1&&t<=n)mv(t-1)}}
+function bMoveToPage(b,i){
+  const r=b.pages[BD.page][i];if(!r)return;
+  modal(`<h3>Move to which page?</h3>${b.pages.map((pg,n)=>{if(n===BD.page)return '';const free=pg.filter(x=>!x).length;return `<button class="btn alt" data-mp="${n}" style="margin-bottom:8px"${free?'':' disabled'}>Page ${n+1} · ${free?free+' empty pocket'+(free===1?'':'s'):'full'}</button>`}).join('')}<button class="btn" id="no">Cancel</button>`);
+  $('#no').onclick=()=>closeModal();
+  document.querySelectorAll('#modal [data-mp]').forEach(el=>el.onclick=()=>{const n=+el.dataset.mp,dp=b.pages[n],k=dp.findIndex(x=>!x);if(k<0)return;dp[k]=r;b.pages[BD.page][i]=null;BD.page=n;BD.sel=null;bSave();closeModal();bRender()})}
 function bNameDlg(title,val,cb){
   modal(`<h3>${esc(title)}</h3><input id="bn" type="text" value="${esc(val)}" maxlength="40" style="width:100%"><button class="btn" id="ok" style="margin-top:10px">Save</button><button class="btn alt" id="no" style="margin-top:8px">Cancel</button>`);
   $('#no').onclick=()=>closeModal();$('#ok').onclick=()=>{const n=$('#bn').value.trim();if(!n)return;closeModal();cb(n)};setTimeout(()=>{const i=$('#bn');if(i)i.focus()},50)}
@@ -494,13 +507,14 @@ function bPocket(b,i){
   const c=cardById(r.i),cur=refVal(r),gain=(Number.isFinite(r.a)&&r.a>0&&cur>0)?cur-r.a:null;
   modal(`<h3>${c?esc(c.name):'Card'}${r.w?' <span class="mu">♡ wishlist</span>':''}</h3>${c?`<p class="mu">${esc(c.set)}${c.lang==='jp'?' · JP':''} · #${esc(c.number)}<br>Near Mint · ${esc(r.k)} · ${money(cur)}${gain!==null&&Math.abs(gain)>=0.005?`<br>Added at ${money(r.a)} · ${gain>=0?'▲':'▼'} ${money(Math.abs(gain))} since`:''}</p>`:''}
   ${r.q&&c&&c.vk.length>1?`<div class="review"><b>⚠ I guessed the printing from your photo</b><div class="mu">Tap the right one:</div>${c.vk.map((k,n)=>`<button class="item" data-pk="${n}" style="${k===r.k?'outline:2px solid var(--ac)':''}">${esc(k)} · ${c.v[k][0]>0?money(c.v[k][0]):'no price'}</button>`).join('')}<button class="chip" id="qok">Looks right</button></div>`:''}
-  ${r.w?'':'<button class="btn" id="tr">🔄 Trade this card</button>'}<button class="btn alt" id="wl" style="margin-top:8px">${r.w?'I own this now':'♡ Mark as wishlist'}</button><button class="btn alt" id="mv" style="margin-top:8px">Move / swap</button><button class="btn alt" id="rp" style="margin-top:8px">Replace card</button>${c?`<a class="btn alt" style="margin-top:8px;text-decoration:none" target="_blank" rel="noopener" href="${esc(link(c,r.k))}">Open on TCGplayer</a>`:''}<button class="btn" id="rm" style="margin-top:8px;background:#b91c1c">Remove from pocket</button><button class="btn alt" id="no" style="margin-top:8px">Close</button>`);
+  ${r.w?'':'<button class="btn" id="tr">🔄 Trade this card</button>'}<button class="btn alt" id="wl" style="margin-top:8px">${r.w?'I own this now':'♡ Mark as wishlist'}</button><button class="btn alt" id="mv" style="margin-top:8px">Move / swap on this page</button>${b.pages.length>1?'<button class="btn alt" id="mtp" style="margin-top:8px">Move to another page</button>':''}<button class="btn alt" id="rp" style="margin-top:8px">Replace card</button>${c?`<a class="btn alt" style="margin-top:8px;text-decoration:none" target="_blank" rel="noopener" href="${esc(link(c,r.k))}">Open on TCGplayer</a>`:''}<button class="btn" id="rm" style="margin-top:8px;background:#b91c1c">Remove from pocket</button><button class="btn alt" id="no" style="margin-top:8px">Close</button>`);
   $('#no').onclick=()=>closeModal();
   if($('#tr'))$('#tr').onclick=()=>{T.mine.push({i:r.i,k:r.k});tSave();T.msg='Added '+(c?c.name:'card')+' to your Trade stack.';closeModal();showTab('trade')};
   document.querySelectorAll('#modal [data-pk]').forEach(el=>el.onclick=()=>{r.k=c.vk[+el.dataset.pk];if(!r.w)r.a=c.v[r.k][0]||0;delete r.q;bSave();closeModal();bRender()});
   if($('#qok'))$('#qok').onclick=()=>{delete r.q;bSave();closeModal();bRender()};
   $('#wl').onclick=()=>{if(r.w){delete r.w;r.a=refVal(r)||r.a}else r.w=1;bSave();closeModal();bRender()};
   $('#mv').onclick=()=>{BD.sel={p:BD.page,i};closeModal();bRender()};
+  if($('#mtp'))$('#mtp').onclick=()=>bMoveToPage(b,i);
   $('#rp').onclick=()=>bPicker(b,i);
   $('#rm').onclick=()=>{b.pages[BD.page][i]=null;bSave();closeModal();bRender()}}
 
@@ -573,7 +587,7 @@ function bCheckShared(){
 
 // ---- drag & drop cards between pockets (press and hold, then drag) ----
 const DR={st:null,block:false,b:null};
-function drCleanup(){const st=DR.st;if(!st)return;clearTimeout(st.timer);if(st.ghost)st.ghost.remove();if(st.el)st.el.classList.remove('drag');document.querySelectorAll('.pk.over').forEach(x=>x.classList.remove('over'));DR.st=null}
+function drCleanup(){const st=DR.st;if(!st)return;clearTimeout(st.timer);clearTimeout(st.edgeT);if(st.ghost)st.ghost.remove();if(st.el)st.el.classList.remove('drag');document.querySelectorAll('.pk.over').forEach(x=>x.classList.remove('over'));DR.st=null}
 function drPick(){const st=DR.st;if(!st||st.on)return;st.on=true;
   const r=st.el.getBoundingClientRect(),g=document.createElement('div');g.className='ghost';g.style.width=r.width+'px';g.style.height=r.height+'px';
   const im=st.el.querySelector('img');if(im)g.innerHTML='<img src="'+im.src+'" alt="">';document.body.appendChild(g);st.ghost=g;st.el.classList.add('drag');
@@ -581,15 +595,23 @@ function drPick(){const st=DR.st;if(!st||st.on)return;st.on=true;
   drMoveGhost(st.x,st.y)}
 function drMoveGhost(x,y){const st=DR.st;if(!st||!st.ghost)return;const w=st.ghost.offsetWidth,h=st.ghost.offsetHeight;st.ghost.style.left=(x-w/2)+'px';st.ghost.style.top=(y-h/2)+'px';
   const t=document.elementFromPoint?document.elementFromPoint(x,y):null,pk=t&&t.closest?t.closest('.pk'):null;
-  document.querySelectorAll('.pk.over').forEach(e=>e.classList.remove('over'));if(pk&&pk!==st.el)pk.classList.add('over');st.target=pk&&pk!==st.el?pk:null}
-function drBegin(el,x,y,touch){if(BD.sel||DR.st)return;DR.st={el,x0:x,y0:y,x,y,on:false,touch,timer:null,target:null};if(touch)DR.st.timer=setTimeout(drPick,230)}
+  document.querySelectorAll('.pk.over').forEach(e=>e.classList.remove('over'));
+  const same=pk&&BD.page===st.sp&&+pk.dataset.i===st.si;if(pk&&!same)pk.classList.add('over');st.target=pk&&!same?pk:null;drEdge()}
+// holding a dragged card at the left or right edge turns the page
+function drEdge(){const st=DR.st;if(!st||!st.on)return;const W=window.innerWidth,z=44,side=st.x<z?-1:st.x>W-z?1:0;
+  if(side===st.side)return;st.side=side;clearTimeout(st.edgeT);if(!side)return;
+  const tick=()=>{const s2=DR.st,b=DR.b;if(!s2||s2.side!==side||!b)return;const np=BD.page+side;
+    if(np>=0&&np<b.pages.length){BD.page=np;bRender();if(navigator.vibrate)try{navigator.vibrate(10)}catch(e){}drMoveGhost(s2.x,s2.y)}
+    s2.edgeT=setTimeout(tick,750)};
+  st.edgeT=setTimeout(tick,550)}
+function drBegin(el,x,y,touch){if(BD.sel||DR.st)return;DR.st={el,x0:x,y0:y,x,y,on:false,touch,timer:null,target:null,sp:BD.page,si:+el.dataset.i,side:0};if(touch)DR.st.timer=setTimeout(drPick,230)}
 function drMove(e){const st=DR.st;if(!st)return;const p=e.touches?e.touches[0]:e;if(!p)return;st.x=p.clientX;st.y=p.clientY;
   if(!st.on){if(Math.hypot(st.x-st.x0,st.y-st.y0)>10){if(st.touch){drCleanup()}else{drPick()}}return}
   if(e.cancelable)e.preventDefault();drMoveGhost(st.x,st.y)}
 function drEnd(){const st=DR.st;if(!st)return;
   if(st.on){DR.block=true;setTimeout(()=>{DR.block=false},120);
     const b=DR.b,t=st.target;
-    if(t&&b){const a=+st.el.dataset.i,c=+t.dataset.i,pg=b.pages[BD.page];const tmp=pg[a];pg[a]=pg[c];pg[c]=tmp;bSave();drCleanup();bRender();return}}
+    if(t&&b){const a=st.si,c=+t.dataset.i,sp=b.pages[st.sp],dp=b.pages[BD.page];const tmp=sp[a];sp[a]=dp[c];dp[c]=tmp;bSave();drCleanup();bRender();return}}
   drCleanup()}
 document.addEventListener('touchmove',drMove,{passive:false});document.addEventListener('mousemove',drMove);
 document.addEventListener('touchend',drEnd);document.addEventListener('touchcancel',drCleanup);document.addEventListener('mouseup',drEnd);
@@ -622,7 +644,7 @@ async function tRender(load){
   <div class="cams"><label class="btn" for="tfile">📷 Scan card</label><label class="btn alt" for="tfile2">🖼️ Scan photos</label></div>
   <input id="tfile" class="pick" type="file" accept="image/*" capture="environment"><input id="tfile2" class="pick" type="file" accept="image/*" multiple>
   <button class="btn alt" data-act="addmine" style="margin-bottom:8px">＋ Add by name</button>
-  ${T.msg?`<p class="mu" id="tmsg" style="color:#ffd966">${esc(T.msg)}</p>`:''}
+  ${T.msg?`<p class="mu" id="tmsg" style="color:#f5c542">${esc(T.msg)}</p>`:''}
   ${T.review.length?`<h3>Needs a quick look (${T.review.length})</h3>${T.review.map(rv=>`<div class="review"><div style="display:flex;gap:10px;align-items:center">${rv.thumb?`<img src="${rv.thumb}" alt="" style="width:64px;border-radius:6px">`:''}<div><b>${esc(rv.label||'Unknown card')}</b><div class="mu">${esc(rv.note||'Tap the right one:')}</div></div></div>${rv.pairs.map((p,n)=>`<button class="item pair" data-act="pair" data-r="${rv.id}" data-p="${n}"><img src="${esc(p.c.img)}" loading="lazy" alt=""><div style="flex:1;min-width:0"><b style="margin:0">${esc(p.c.name)}</b>${p.c.lang==='jp'?'<span class="lang">JP</span>':''}<div class="mu">${esc(p.c.set)} · #${esc(p.c.number)}<br>${esc(p.k)}</div></div><span class="tag">${p.c.v[p.k][0]>0?money(p.c.v[p.k][0]):'—'}</span></button>`).join('')}<div class="row"><button class="chip" data-act="manual" data-r="${rv.id}">Search by name</button><button class="chip" data-act="skip" data-r="${rv.id}">Skip</button></div></div>`).join('')}`:''}
   ${T.mine.length?T.mine.map((r,i)=>tRow(r,'mine',i)).join(''):'<p class="mu">Scan or add the cards you want to trade or sell.</p>'}
   <div class="panel" style="margin-top:10px"><div class="prow"><span>Trade value %</span><input id="tpct" type="number" inputmode="decimal" min="1" max="200" value="${T.pct}"></div>
@@ -637,7 +659,7 @@ async function tRender(load){
   <h3>Cards worth about ${money(Math.max(0,diff))}</h3>
   <div class="panel"><div class="prow"><span>Cards</span><div class="chips"><button class="chip${T.lang==='en'?' on':''}" data-act="tlang" data-v="en">English</button><button class="chip${T.lang==='jp'?' on':''}" data-act="tlang" data-v="jp">Japanese</button><button class="chip${T.lang==='both'?' on':''}" data-act="tlang" data-v="both">Both</button></div></div>
   <div class="prow"><span>Show</span><div class="chips"><button class="chip${T.mode==='about'?' on':''}" data-act="mode" data-v="about">About this value</button><button class="chip${T.mode==='upto'?' on':''}" data-act="mode" data-v="upto">Up to this value</button></div></div>
-  ${T.mode==='about'?`<div class="prow"><span>Range ± $</span><input id="trng" type="number" inputmode="decimal" min="0" step="5" value="${T.range}"></div><div class="chips"><button class="chip" data-act="rng" data-v="5">$5</button><button class="chip" data-act="rng" data-v="10">$10</button><button class="chip" data-act="rng" data-v="25">$25</button><button class="chip" data-act="rng" data-v="50">$50</button></div>`:''}</div>
+  ${T.mode==='about'?`<div class="prow"><span>Range ± $</span><div class="stp"><button class="stpb" data-dir="-1" aria-label="Less">−</button><input id="trng" type="number" inputmode="decimal" min="0" step="1" value="${T.range}"><button class="stpb" data-dir="1" aria-label="More">+</button></div></div>`:''}</div>
   <div id="tres"></div>`;
   tWire();tResults();
 }
@@ -809,21 +831,21 @@ async function bShareImage(b){
   const pg=b.pages[BD.page],W=1080,pad=36,gap=18,head=150,foot=70,cw=Math.floor((W-pad*2-gap*(b.cols-1))/b.cols),ch=Math.round(cw*1.4);
   const H=head+b.rows*ch+(b.rows-1)*gap+foot+pad;
   const cv=document.createElement('canvas');cv.width=W;cv.height=H;const g=cv.getContext('2d');
-  const grad=g.createLinearGradient(0,0,W,H);grad.addColorStop(0,'#1b1048');grad.addColorStop(.55,'#0e0a2a');grad.addColorStop(1,'#10223d');g.fillStyle=grad;g.fillRect(0,0,W,H);
+  const grad=g.createLinearGradient(0,0,W,H);grad.addColorStop(0,'#10192e');grad.addColorStop(.55,'#0a1020');grad.addColorStop(1,'#101a30');g.fillStyle=grad;g.fillRect(0,0,W,H);
   g.fillStyle='#fff';g.textAlign='center';g.font='bold 54px system-ui,sans-serif';g.fillText(b.name,W/2,80);
   const own=pg.reduce((s,r)=>s+ownVal(r),0);
-  g.font='28px system-ui,sans-serif';g.fillStyle='#7ff';g.fillText(`Page ${BD.page+1} of ${b.pages.length} · ${money(own)}`,W/2,125);
+  g.font='28px system-ui,sans-serif';g.fillStyle='#6ee7b7';g.fillText(`Page ${BD.page+1} of ${b.pages.length} · ${money(own)}`,W/2,125);
   const imgs=await Promise.all(pg.map(r=>{const c=r&&cardById(r.i);return c?bLoadCardImg(c.img):Promise.resolve(null)}));
   pg.forEach((r,i)=>{
     const x=pad+(i%b.cols)*(cw+gap),y=head+Math.floor(i/b.cols)*(ch+gap);
-    g.fillStyle='rgba(255,255,255,.06)';g.strokeStyle='rgba(217,70,239,.5)';g.lineWidth=3;
+    g.fillStyle='rgba(255,255,255,.06)';g.strokeStyle='rgba(245,197,66,.5)';g.lineWidth=3;
     g.beginPath();g.roundRect?g.roundRect(x,y,cw,ch,14):g.rect(x,y,cw,ch);g.fill();g.stroke();
     const c=r&&cardById(r.i);if(!c)return;
     g.save();g.globalAlpha=r.w?.45:1;
     if(imgs[i])g.drawImage(imgs[i],x+4,y+4,cw-8,ch-8);
     else{g.fillStyle='#fff';g.font='bold 26px system-ui,sans-serif';g.textAlign='center';g.fillText(c.name.slice(0,18),x+cw/2,y+ch/2)}
     g.restore();
-    const v=refVal(r);g.fillStyle='rgba(5,46,42,.92)';g.fillRect(x+4,y+ch-46,cw-8,42);g.fillStyle='#7ff';g.textAlign='center';g.font='bold 26px system-ui,sans-serif';g.fillText((r.w?'♡ ':'')+(v>0?money(v):'—'),x+cw/2,y+ch-16)});
+    const v=refVal(r);g.fillStyle='rgba(6,28,22,.92)';g.fillRect(x+4,y+ch-46,cw-8,42);g.fillStyle='#6ee7b7';g.textAlign='center';g.font='bold 26px system-ui,sans-serif';g.fillText((r.w?'♡ ':'')+(v>0?money(v):'—'),x+cw/2,y+ch-16)});
   g.fillStyle='rgba(255,255,255,.6)';g.font='22px system-ui,sans-serif';g.textAlign='center';g.fillText('Binder Buddy · Near Mint market prices',W/2,H-30);
   let blob;try{blob=await new Promise((ok,no)=>cv.toBlob(x=>x?ok(x):no(new Error('no image')),'image/png'))}
   catch(e){modal(`<h3>Couldn't make the picture</h3><p class="mu">The card images could not be used by the browser. Try again later.</p><button class="btn" id="no">OK</button>`);$('#no').onclick=()=>closeModal();return}
@@ -831,5 +853,5 @@ async function bShareImage(b){
   modal(`<h3>Your page</h3><img src="${url}" alt="Binder page" style="width:100%;border-radius:10px"><p class="mu">Press and hold the picture to save it, or use the buttons.</p><button class="btn" id="sh">Share</button><a class="btn alt" id="dl" style="margin-top:8px;text-decoration:none" href="${url}" download="binder-page.png">Download</a><button class="btn alt" id="no" style="margin-top:8px">Close</button>`);
   $('#no').onclick=()=>closeModal();
   $('#sh').onclick=async()=>{try{if(navigator.canShare&&navigator.canShare({files:[file]}))await navigator.share({files:[file],title:b.name});else $('#dl').click()}catch(e){}}}
-bLoad();bCheckShared();
+bLoad();showTab('binders',true);bCheckShared();
 </script></body></html>
