@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Card Twin Finder</title>
+<style>
+:root{--bg:#fff;--fg:#1a1a1a;--card:#f1f1f5;--ac:#e3350d;--mu:#666}
+@media(prefers-color-scheme:dark){:root{--bg:#121214;--fg:#f0f0f0;--card:#1e1e24;--mu:#9a9aa3}}
+*{box-sizing:border-box}
+body{margin:0;padding:16px;font:16px/1.4 system-ui,sans-serif;background:var(--bg);color:var(--fg);max-width:640px;margin:auto}
+h1{font-size:22px;margin:0 0 12px}
+.pick{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.btn{display:block;width:100%;padding:14px;border:0;border-radius:12px;background:var(--ac);color:#fff;font-size:16px;font-weight:600;text-align:center;cursor:pointer}
+.row{display:flex;gap:8px;margin:10px 0}
+input[type=text]{flex:1;min-width:0;padding:12px;border-radius:10px;border:1px solid var(--mu);background:var(--card);color:var(--fg);font-size:16px}
+#num{flex:0 0 110px}
+[hidden]{display:none!important}
+button.item{border:0;text-align:left;font:inherit;cursor:pointer}
+select{padding:8px;border-radius:8px;background:var(--card);color:var(--fg);border:1px solid var(--mu);font-size:15px}
+.mu{color:var(--mu);font-size:14px}
+.hero{display:flex;gap:12px;background:var(--card);border-radius:14px;padding:12px;margin:14px 0}
+.hero img{width:110px;border-radius:8px}
+.price{font-size:26px;font-weight:700;color:var(--ac)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.item{background:var(--card);border-radius:12px;padding:8px;text-decoration:none;color:inherit;font-size:14px}
+.item img{width:100%;border-radius:6px}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px}
+.chip{flex:0 0 auto;padding:6px 10px;border-radius:99px;background:var(--card);border:1px solid var(--mu);color:var(--fg);font-size:13px}
+</style></head><body>
+<h1>Card Twin Finder</h1>
+<details class="mu" open style="margin-bottom:10px"><summary>Photo recognition setup (one time)</summary>
+<div class="row"><input id="key" type="password" placeholder="Claude API key (sk-ant-…)"><button class="chip" id="savekey">Save</button></div>
+<div class="row"><input id="pkey" type="password" placeholder="pokemontcg.io key (optional, fewer errors)"><button class="chip" id="savepk">Save</button></div>
+<p class="mu" style="margin:0 0 8px">A free pokemontcg.io key (dev.pokemontcg.io) raises the database limits and helps with "bad gateway" errors.</p>
+<p class="mu" style="margin:0">Get a key at console.anthropic.com (a separate pay-per-use account from claude.ai; check its pricing). The key stays in this browser and is only sent to Anthropic. Without a key, the app falls back to basic text reading, which is unreliable.</p></details>
+<label class="btn" for="file">📷 Take a photo</label>
+<input id="file" class="pick" type="file" accept="image/*" capture="environment">
+<label class="btn" for="file2" style="margin-top:8px;background:var(--card);color:var(--fg)">🖼️ Choose from library</label>
+<input id="file2" class="pick" type="file" accept="image/*">
+<div class="row"><input id="name" type="text" placeholder="Card name"><input id="num" type="text" placeholder="e.g. 4/102"></div>
+<button class="btn" id="go">Find price &amp; alternatives</button>
+<div hidden class="row mu" style="align-items:center;flex-wrap:wrap">Your card is <select id="cond"></select> Show alternatives in <select id="buy"></select></div>
+<p hidden class="mu" style="margin:0">Condition is an estimate: the free price data has one market price per card, so other conditions are that price times a fixed percentage.</p>
+<div class="row mu">Price range ±<input id="range" type="range" min="5" max="50" value="15" style="flex:1"><span id="rv">15%</span></div>
+<p class="mu" id="status"></p>
+<details class="mu"><summary>What the scanner saw</summary><div id="dbgimg"></div><pre id="dbgtxt" style="white-space:pre-wrap;font-size:12px"></pre></details>
+<div id="out"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.1.1/tesseract.min.js"></script>
+<script>
+const $=s=>document.querySelector(s), API='https://api.pokemontcg.io/v2/cards';
+const FIELDS='id,name,number,rarity,images,set,tcgplayer';
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const status=t=>$('#status').textContent=t||'';
+const money=v=>'$'+v.toFixed(2);
+$('#range').oninput=e=>$('#rv').textContent=e.target.value+'%';
+
+const VARS=['normal','holofoil','reverseHolofoil','1stEditionHolofoil','1stEditionNormal','unlimitedHolofoil','unlimitedNormal'];
+const VL={normal:'Normal',holofoil:'Holofoil',reverseHolofoil:'Reverse Holo','1stEditionHolofoil':'1st Ed Holo','1stEditionNormal':'1st Ed',unlimitedHolofoil:'Unlimited Holo',unlimitedNormal:'Unlimited'};
+const COND={NM:[1,'Near Mint'],LP:[.85,'Lightly Played'],MP:[.7,'Mod. Played'],HP:[.5,'Heavily Played'],DMG:[.35,'Damaged']};
+for(const id of ['cond','buy'])$('#'+id).innerHTML=Object.entries(COND).map(([k,v])=>`<option value="${k}">${v[1]}</option>`).join('');
+$('#buy').insertAdjacentHTML('beforeend','<option value="ANY">Any condition</option>');
+const mult=id=>COND[$('#'+id).value][0];
+const S={card:null,v:null,alts:[],total:0,shown:60,tok:0,list:[]};
+const pr=c=>(c.tcgplayer&&c.tcgplayer.prices)||{};
+const vars=c=>Object.keys(pr(c)).filter(k=>pr(c)[k]&&pr(c)[k].market);
+
+const getPk=()=>{try{return localStorage.getItem('pk')||''}catch(e){return ''}};
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function api(q,size,page=1,tries=4){
+  const u=`${API}?q=${encodeURIComponent(q)}&pageSize=${size}&page=${page}&select=${FIELDS}`;
+  const headers=getPk()?{'X-Api-Key':getPk()}:{};
+  for(let t=1;;t++){
+    const ac=new AbortController(),to=setTimeout(()=>ac.abort(),25000);
+    try{
+      const r=await fetch(u,{signal:ac.signal,headers});clearTimeout(to);
+      if(r.ok)return await r.json();
+      const e=new Error(r.status===502?'Bad gateway (502)':'API error '+r.status);
+      e.retry=[429,500,502,503,504].includes(r.status);throw e;
+    }catch(err){clearTimeout(to);
+      const retry=err.retry===undefined?(err.name==='AbortError'||err instanceof TypeError):err.retry;
+      if(!retry||t>=tries)throw new Error(err.name==='AbortError'?'The card database timed out':err.message);
+      status(`Database is busy, retrying… (${t}/${tries-1})`);await sleep(1200*t)}}}
+
+const loadImg=f=>new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=URL.createObjectURL(f)});
+function crop(img,x,y,w,h,outW,mode){
+  const sw=img.width*w,sh=img.height*h,sc=outW/sw,c=document.createElement('canvas');
+  c.width=outW;c.height=Math.max(1,Math.round(sh*sc));const g=c.getContext('2d');
+  g.drawImage(img,img.width*x,img.height*y,sw,sh,0,0,c.width,c.height);
+  const d=g.getImageData(0,0,c.width,c.height),px=d.data,L=new Float32Array(px.length/4);let sum=0;
+  for(let i=0,j=0;i<px.length;i+=4,j++){L[j]=.3*px[i]+.59*px[i+1]+.11*px[i+2];sum+=L[j]}
+  const mean=sum/L.length;
+  for(let i=0,j=0;i<px.length;i+=4,j++){
+    const l=L[j];let v;
+    if(mode==='bin')v=l>mean*.8?255:0;            // dark text on light card
+    else if(mode==='inv')v=l<mean*1.2?255:0;      // light text on dark card
+    else v=Math.max(0,Math.min(255,(l-mean)*1.8+128));
+    px[i]=px[i+1]=px[i+2]=v}
+  g.putImageData(d,0,0);return c}
+const MODEL='claude-sonnet-5-5';
+const getKey=()=>{try{return localStorage.getItem('ak')||''}catch(e){return ''}};
+$('#savekey').onclick=()=>{try{localStorage.setItem('ak',$('#key').value.trim());$('#key').value='';$('#key').placeholder='Key saved (paste to replace)';status('Key saved on this device.')}catch(e){status('Could not save the key in this browser.')}};
+if(getKey())$('#key').placeholder='Key saved (paste to replace)';
+async function claudeRead(img,key){
+  const sc=Math.min(1,1200/Math.max(img.width,img.height)),c=document.createElement('canvas');
+  c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+  const b64=c.toDataURL('image/jpeg',.85).split(',')[1];
+  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:MODEL,max_tokens:200,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:'Identify this Pokémon trading card. Read the printed card name and the collector number at the bottom (like 4/102). Reply with ONLY JSON: {"name":"","number":"","set_total":"","set_name":""}. Use empty strings for anything you cannot read.'}]}]})});
+  if(!r.ok){const t=await r.text();throw new Error(r.status===401?'Invalid API key.':'Claude API error '+r.status+': '+t.slice(0,120))}
+  const j=await r.json(),t=(j.content||[]).map(x=>x.text||'').join(''),m=t.match(/\{[\s\S]*\}/);
+  if(!m)throw new Error('Unexpected reply from Claude.');return JSON.parse(m[0])}
+$('#savepk').onclick=()=>{try{localStorage.setItem('pk',$('#pkey').value.trim());$('#pkey').value='';$('#pkey').placeholder='Key saved (paste to replace)';status('Database key saved.')}catch(e){status('Could not save the key.')}};
+const SKIP=/^(basic|stage|hp|trainer|pokemon|pokémon|item|supporter|evolves|from|ability|attack)$/i;
+const MODES=['gray','bin','inv'];
+async function readNumber(w,img,dbg){
+  for(const r of [[0,.87,1,.12],[0,.87,.5,.12],[.5,.87,.5,.12]])for(const mode of MODES){
+    const cv=crop(img,...r,r[2]===1?1400:900,mode);
+    const {data:{text}}=await w.recognize(cv);
+    dbg.push(`number ${r[0]}/${r[2]} ${mode}: ${text.trim().replace(/\n/g,' ')}`);
+    const m=text.match(/(\d{1,3})\s*[\/Il|]\s*(\d{2,3})/);
+    if(m&&+m[2]>=10){dbg.cv=cv;return String(parseInt(m[1],10))+'/'+m[2]}}
+  return ''}
+async function readName(w,img,dbg){
+  const votes={};
+  for(const r of [[.04,.03,.72,.1],[.02,.02,.85,.14]])for(const mode of MODES){
+    const {data:{text}}=await w.recognize(crop(img,...r,1200,mode));
+    dbg.push(`name ${r[1]} ${mode}: ${text.trim().replace(/\n/g,' ')}`);
+    for(const line of text.split('\n')){
+      const ws=(line.match(/[A-Za-z]{3,}/g)||[]).filter(x=>!SKIP.test(x));
+      if(ws.length){const k=ws[0].toLowerCase();votes[k]=(votes[k]||0)+1;break}}}
+  const best=Object.entries(votes).sort((a,b)=>b[1]-a[1]||b[0].length-a[0].length)[0];
+  return best?best[0][0].toUpperCase()+best[0].slice(1):''}
+const onPick=async e=>{
+  const f=e.target.files[0];if(!f)return;
+  const key=getKey();
+  if(key){
+    try{status('Identifying card…');const img=await loadImg(f),r=await claudeRead(img,key);
+      $('#name').value=r.name||'';$('#num').value=r.number?r.number+(r.set_total?'/'+r.set_total:''):'';
+      $('#dbgtxt').textContent=JSON.stringify(r,null,1);
+      if(r.name||r.number){$('#go').click()}else status("Couldn't identify it. Try a clearer photo.")}
+    catch(err){status('Scan failed: '+err.message)}
+    return}
+  if(!window.Tesseract){status('OCR failed to load. Type the name and number instead.');return}
+  try{
+    status('Reading card… this takes about 10 seconds.');
+    const img=await loadImg(f),w=await Tesseract.createWorker('eng'),dbg=[];
+    await w.setParameters({tessedit_pageseg_mode:'6',tessedit_char_whitelist:'0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'});
+    const num=await readNumber(w,img,dbg),name=await readName(w,img,dbg);
+    await w.terminate();
+    $('#name').value=name;$('#num').value=num;
+    $('#dbgtxt').textContent=dbg.join('\n');
+    const box=$('#dbgimg');box.innerHTML='';if(dbg.cv){dbg.cv.style.width='100%';box.appendChild(dbg.cv)}
+    if(name||num){$('#go').click()}
+    else status("Couldn't read the card. Retake it with the card filling the frame and no glare, or type it in.");
+  }catch(err){status('Could not read photo: '+err.message)}};
+$('#file').onchange=onPick;$('#file2').onchange=onPick;
+
+$('#go').onclick=async()=>{
+  const n=$('#name').value.trim().replace(/["*]/g,'');
+  const m=$('#num').value.match(/(\d+)\s*(?:\/\s*(\d+))?/),num=m?String(parseInt(m[1],10)):'',tot=m&&m[2]?+m[2]:0;
+  if(!n&&!num){status('Enter a name or number.');return}
+  try{
+    status('Searching…');
+    const nq=n?(/\s/.test(n)?`name:"${n}"`:`name:${n}`):'';
+    let lastErr=null;const tryQ=q=>api(q,250).then(r=>r.data).catch(e=>{lastErr=e;return[]});
+    let list=[];
+    if(nq&&num)list=await tryQ(`${nq} number:${num}`);
+    if(!list.length&&num&&tot)list=await tryQ(`number:${num} set.printedTotal:${tot}`);
+    if(!list.length&&nq)list=await tryQ(nq);
+    if(!list.length&&num)list=await tryQ(`number:${num}`);
+    list=list.filter(c=>vars(c).length);
+    if(tot){const t=list.filter(c=>c.set.printedTotal===tot);if(t.length)list=t}
+    if(num)list.sort((a,b)=>(String(parseInt(b.number,10))===num)-(String(parseInt(a.number,10))===num));
+    S.list=list;
+    if(!list.length&&lastErr){status(`The card database is having trouble (${lastErr.message}). Try again in a minute.`);$('#out').innerHTML='';return}
+    if(!list.length){status(`No priced cards found for "${n||num}". Check the spelling.`);$('#out').innerHTML='';return}
+    status('');list.length===1?pick(list[0]):picker();
+  }catch(err){status('Error: '+err.message)}};
+
+function picker(){
+  S.card=null;S.tok++;
+  $('#out').innerHTML=`<h3>Which one is yours? (${S.list.length} matches)</h3><div class="grid">${S.list.slice(0,80).map((c,i)=>`<button class="item" data-i="${i}"><img src="${esc(c.images.small)}" loading="lazy" alt=""><b>${esc(c.name)}</b><div class="mu">${esc(c.set.name)} (${esc((c.set.releaseDate||'').slice(0,4))})<br>#${esc(c.number)}/${esc(c.set.printedTotal)} · ${esc(c.rarity||'')}</div></button>`).join('')}</div>`;
+  document.querySelectorAll('#out .item').forEach(b=>b.onclick=()=>pick(S.list[b.dataset.i]));}
+
+function pick(c){S.card=c;S.v=vars(c)[0];render()}
+
+function render(){
+  const c=S.card,p=pr(c)[S.v].market,adj=p*mult('cond');
+  S.any=$('#buy').value==='ANY';S.buy=S.any?1:mult('buy');S.budget=adj;
+  $('#out').innerHTML=`${S.list.length>1?'<button class="chip" id="back">← Back to matches</button>':''}
+  <div class="hero"><img src="${esc(c.images.small)}" alt=""><div><b>${esc(c.name)}</b><div class="mu">${esc(c.set.name)} · #${esc(c.number)}/${esc(c.set.printedTotal)} · ${esc(c.rarity||'')}</div><div class="price">${money(adj)}</div><div class="mu">TCGplayer market price</div><div class="mu">Lowest listing ${pr(c)[S.v].low!=null?money(pr(c)[S.v].low):"n/a"} · data as of ${esc(c.tcgplayer.updatedAt||"unknown")}</div></div></div>
+  <div class="chips">${vars(c).map(k=>`<button class="chip" data-v="${k}" style="${k===S.v?'border-color:var(--ac);color:var(--ac)':''}">${esc(VL[k]||k)} ${money(pr(c)[k].market)}</button>`).join('')}</div>
+  <h3 id="h">Finding alternatives…</h3>
+  <p class="mu" style="margin:0 0 8px">Tap any card to open it on TCGplayer and filter by condition there.</p>
+  <div class="row mu">Sort <select id="sort"><option value="near">Closest price</option><option value="lo">Low to high</option><option value="hi">High to low</option><option value="az">A to Z</option></select></div>
+  <div class="grid" id="sim"></div><button class="btn" id="more" style="margin-top:10px" hidden></button>`;
+  if($('#back'))$('#back').onclick=picker;
+  document.querySelectorAll('.chip[data-v]').forEach(b=>b.onclick=()=>{S.v=b.dataset.v;render()});
+  $('#sort').onchange=draw;$('#more').onclick=()=>{S.shown+=60;draw()};
+  loadAlts();}
+
+function bestIn(c,lo,hi){let best=null;
+  const ms=S.any?Object.values(COND):[COND[$('#buy').value]];
+  for(const k of vars(c))for(const [m,label] of ms){const raw=pr(c)[k].market,a=raw*m;
+    if(a>=lo&&a<=hi&&(!best||Math.abs(a-S.budget)<Math.abs(best.a-S.budget)))best={k,a,raw,m,cd:label}}
+  return best}
+
+async function loadAlts(){
+  const tok=++S.tok,pct=+$('#range').value/100,lo=S.budget*(1-pct),hi=S.budget*(1+pct);
+  const rlo=S.any?lo:lo/S.buy,rhi=S.any?hi/COND.DMG[0]:hi/S.buy;
+  Object.assign(S,{lo,hi,alts:[],shown:60,total:0,loading:true});
+  const q=VARS.map(k=>`tcgplayer.prices.${k}.market:[${rlo.toFixed(2)} TO ${rhi.toFixed(2)}]`).join(' OR ');
+  try{
+    let pages=1;
+    for(let page=1;page<=pages;page++){
+      const r=await api(q,100,page);if(tok!==S.tok)return;
+      S.total=r.totalCount;pages=Math.min(20,Math.ceil(r.totalCount/100));
+      status(`Loading alternatives… ${page} of ${pages}`);
+      for(const c of r.data){if(c.id===S.card.id)continue;const b=bestIn(c,lo,hi);if(b)S.alts.push({c,...b})}
+      if(page===pages)S.loading=false;
+      draw()}
+    S.loading=false;draw();
+    status(S.total>2000?`Loaded the first 2,000 of ${S.total} database matches. Narrow the range to see the rest.`:'');
+  }catch(err){if(tok===S.tok){S.loading=false;draw();status(`Some results didn't load (${err.message}). Tap Find again to retry.`)}}}
+
+function draw(){
+  const s=$('#sort').value,T=S.budget,a=S.alts.slice();
+  a.sort(s==='lo'?(x,y)=>x.a-y.a:s==='hi'?(x,y)=>y.a-x.a:s==='az'?(x,y)=>x.c.name.localeCompare(y.c.name):(x,y)=>Math.abs(x.a-T)-Math.abs(y.a-T));
+  const bc=$('#buy').selectedOptions[0].text;
+  $('#h').textContent=`${a.length} cards at about ${money(S.lo)} to ${money(S.hi)} (TCGplayer market${S.loading?', still loading…':''})`;
+  $('#sim').innerHTML=a.slice(0,S.shown).map(x=>`<a class="item" target="_blank" rel="noopener" href="${esc(x.c.tcgplayer.url)}"><img src="${esc(x.c.images.small)}" loading="lazy" alt=""><b>${esc(x.c.name)}</b><div class="mu">${esc(x.c.set.name)} #${esc(x.c.number)}<br>${esc(VL[x.k]||x.k)}${S.any?' · '+esc(x.cd):''}</div><div>${money(x.a)}</div><div class="mu">as of ${esc(x.c.tcgplayer.updatedAt||'?')}</div></a>`).join('')||'<p class="mu">'+(S.loading?'Loading…':'No cards in this range.')+'</p>';
+  const left=a.length-S.shown;
+  $('#more').hidden=S.loading||left<=0;$('#more').textContent=`Show more (${left} left)`}
+
+for(const id of ['cond','buy','range'])$('#'+id).onchange=()=>{if(S.card)render()};
+</script></body></html>
