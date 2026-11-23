@@ -617,6 +617,8 @@ document.addEventListener('touchmove',drMove,{passive:false});document.addEventL
 document.addEventListener('touchend',drEnd);document.addEventListener('touchcancel',drCleanup);document.addEventListener('mouseup',drEnd);
 function bWireDrag(b){DR.b=b;document.querySelectorAll('.pk.has').forEach(el=>{
   el.addEventListener('touchstart',e=>{const p=e.touches[0];drBegin(el,p.clientX,p.clientY,true)},{passive:true});
+  // after a page turn this pocket is removed from the page; the phone keeps sending the finger's events to it, so listen on it directly
+  el.addEventListener('touchmove',drMove,{passive:false});el.addEventListener('touchend',drEnd);el.addEventListener('touchcancel',drCleanup);
   el.addEventListener('mousedown',e=>{if(e.button===0)drBegin(el,e.clientX,e.clientY,false)})})}
 
 // ================= Trade (scan a stack, see its value, find cards worth about that) =================
