@@ -22,6 +22,8 @@ OUT_JP = os.environ.get("OUT_JP", "prices_jp.json")
 PAUSE = float(os.environ.get("PAUSE", "0.15"))
 
 
+SEEN_FIELDS = set()
+
 def get(url, tries=4):
     for attempt in range(tries):
         try:
@@ -71,6 +73,7 @@ def build(base, out_path, min_cards):
 
         for prod in products:
             ext = {e.get("name"): e.get("value") for e in prod.get("extendedData", [])}
+            SEEN_FIELDS.update(ext.keys())
             number = ext.get("Number")
             if not number:  # sealed products etc. have no card number
                 continue
@@ -87,6 +90,9 @@ def build(base, out_path, min_cards):
                 "r": ext.get("Rarity", ""),
                 "v": variants,
             }
+            ctype = ext.get("Card Type") or ext.get("CardType") or ""
+            if ctype:
+                card["t"] = ctype
             std_img = f"https://tcgplayer-cdn.tcgplayer.com/product/{pid}_200w.jpg"
             if prod.get("imageUrl") and prod["imageUrl"] != std_img:
                 card["im"] = prod["imageUrl"]
@@ -94,6 +100,7 @@ def build(base, out_path, min_cards):
         time.sleep(PAUSE)
 
     print(f"{len(cards)} priced cards, {failed} sets skipped")
+    print("Card fields seen:", ", ".join(sorted(k for k in SEEN_FIELDS if k)))
     if len(cards) < min_cards or failed > max(5, len(groups) * 0.1):
         print(f"Too little data; not overwriting {out_path}.", file=sys.stderr)
         return False
