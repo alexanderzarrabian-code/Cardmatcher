@@ -29,8 +29,6 @@ select{padding:8px;border-radius:8px;background:var(--card);color:var(--fg);bord
 <h1>Card Twin Finder</h1>
 <details hidden class="mu" style="margin-bottom:10px"><summary>Photo recognition setup (one time)</summary>
 <div class="row"><input id="key" type="password" placeholder="Claude API key (sk-ant-…)"><button class="chip" id="savekey">Save</button></div>
-<div class="row"><input id="pkey" type="password" placeholder="pokemontcg.io key (optional, fewer errors)"><button class="chip" id="savepk">Save</button></div>
-<p class="mu" style="margin:0 0 8px">A free pokemontcg.io key (dev.pokemontcg.io) raises the database limits and helps with "bad gateway" errors.</p>
 <p class="mu" style="margin:0">Get a key at console.anthropic.com (a separate pay-per-use account from claude.ai; check its pricing). The key stays in this browser and is only sent to Anthropic. Without a key, the app falls back to basic text reading, which is unreliable.</p></details>
 <label class="btn" for="file">📷 Take a photo</label>
 <input id="file" class="pick" type="file" accept="image/*" capture="environment">
@@ -38,47 +36,41 @@ select{padding:8px;border-radius:8px;background:var(--card);color:var(--fg);bord
 <input id="file2" class="pick" type="file" accept="image/*">
 <div class="row"><input id="name" type="text" placeholder="Card name"><input id="num" type="text" placeholder="e.g. 4/102"></div>
 <button class="btn" id="go">Find price &amp; alternatives</button>
-<div hidden class="row mu" style="align-items:center;flex-wrap:wrap">Your card is <select id="cond"></select> Show alternatives in <select id="buy"></select></div>
-<p hidden class="mu" style="margin:0">Condition is an estimate: the free price data has one market price per card, so other conditions are that price times a fixed percentage.</p>
 <div class="row mu" style="align-items:center;flex-wrap:wrap">Price range ± $<input id="range" type="number" inputmode="decimal" min="1" step="5" value="25" style="width:90px;padding:10px;border-radius:10px;border:1px solid var(--mu);background:var(--card);color:var(--fg);font-size:16px"><button class="chip" data-d="10">$10</button><button class="chip" data-d="25">$25</button><button class="chip" data-d="50">$50</button><button class="chip" data-d="100">$100</button></div>
 <p class="mu" id="status"></p>
 <details class="mu"><summary>What the scanner saw</summary><div id="dbgimg"></div><pre id="dbgtxt" style="white-space:pre-wrap;font-size:12px"></pre></details>
 <div id="out"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.1.1/tesseract.min.js"></script>
 <script>
-const $=s=>document.querySelector(s), API='https://api.pokemontcg.io/v2/cards';
-const FIELDS='id,name,number,rarity,images,set,tcgplayer';
+const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const status=t=>$('#status').textContent=t||'';
 const money=v=>'$'+v.toFixed(2);
+const S={card:null,v:null,alts:[],shown:60,list:[]};
 document.querySelectorAll('.chip[data-d]').forEach(b=>b.onclick=()=>{$('#range').value=b.dataset.d;if(S.card)render()});
 
-const VARS=['normal','holofoil','reverseHolofoil','1stEditionHolofoil','1stEditionNormal','unlimitedHolofoil','unlimitedNormal'];
-const VL={normal:'Normal',holofoil:'Holofoil',reverseHolofoil:'Reverse Holo','1stEditionHolofoil':'1st Ed Holo','1stEditionNormal':'1st Ed',unlimitedHolofoil:'Unlimited Holo',unlimitedNormal:'Unlimited'};
-const COND={NM:[1,'Near Mint'],LP:[.85,'Lightly Played'],MP:[.7,'Mod. Played'],HP:[.5,'Heavily Played'],DMG:[.35,'Damaged']};
-for(const id of ['cond','buy'])$('#'+id).innerHTML=Object.entries(COND).map(([k,v])=>`<option value="${k}">${v[1]}</option>`).join('');
-$('#buy').insertAdjacentHTML('beforeend','<option value="ANY">Any condition</option>');
-const mult=id=>COND[$('#'+id).value][0];
-const S={card:null,v:null,alts:[],total:0,shown:60,tok:0,list:[]};
-const pr=c=>(c.tcgplayer&&c.tcgplayer.prices)||{};
-const vars=c=>Object.keys(pr(c)).filter(k=>pr(c)[k]&&pr(c)[k].market);
-
-const getPk=()=>{try{return localStorage.getItem('pk')||''}catch(e){return ''}};
-const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-async function api(q,size,page=1,tries=4){
-  const u=`${API}?q=${encodeURIComponent(q)}&pageSize=${size}&page=${page}&select=${FIELDS}`;
-  const headers=getPk()?{'X-Api-Key':getPk()}:{};
-  for(let t=1;;t++){
-    const ac=new AbortController(),to=setTimeout(()=>ac.abort(),25000);
-    try{
-      const r=await fetch(u,{signal:ac.signal,headers});clearTimeout(to);
-      if(r.ok)return await r.json();
-      const e=new Error(r.status===502?'Bad gateway (502)':'API error '+r.status);
-      e.retry=[429,500,502,503,504].includes(r.status);throw e;
-    }catch(err){clearTimeout(to);
-      const retry=err.retry===undefined?(err.name==='AbortError'||err instanceof TypeError):err.retry;
-      if(!retry||t>=tries)throw new Error(err.name==='AbortError'?'The card database timed out':err.message);
-      status(`Database is busy, retrying… (${t}/${tries-1})`);await sleep(1200*t)}}}
+// ---- Price data: prices.json is rebuilt every night by the GitHub job ----
+const DATA={cards:[],updated:'',ready:null};
+function norm(c){
+  c.name=c.n;c.set=c.s;c.number=c.no||'';c.rarity=c.r||'';c.year=(c.d||'').slice(0,4);
+  c.vk=Object.keys(c.v);
+  const m=c.number.match(/^(.*?)\s*\/\s*(\d+)\s*$/);
+  c.num=(m?m[1]:c.number).replace(/^0+(?=\d)/,'').toLowerCase();c.tot=m?+m[2]:0;
+  c.hay=(c.n+' '+c.s).toLowerCase();
+  c.url='https://www.tcgplayer.com/product/'+c.i;
+  c.img=c.im||('https://tcgplayer-cdn.tcgplayer.com/product/'+c.i+'_200w.jpg');
+  return c}
+function loadData(){
+  if(DATA.ready)return DATA.ready;
+  DATA.ready=(async()=>{
+    status('Loading card prices…');
+    let r;try{r=await fetch('prices.json',{cache:'no-cache'})}catch(e){DATA.ready=null;throw new Error('Could not load the price file (check your connection).')}
+    if(r.status===404){DATA.ready=null;throw new Error("The price file isn't built yet. On GitHub, open the Actions tab, run 'Update prices', then reload this page.")}
+    if(!r.ok){DATA.ready=null;throw new Error('Could not load the price file ('+r.status+').')}
+    const j=await r.json();DATA.cards=j.cards.map(norm);DATA.updated=j.updated||'';status('');return DATA})();
+  return DATA.ready}
+const asOf=()=>DATA.updated?new Date(DATA.updated).toLocaleDateString():'unknown';
+const mk=(c,k)=>c.v[k][0];
 
 const loadImg=f=>new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=URL.createObjectURL(f)});
 function crop(img,x,y,w,h,outW,mode){
@@ -108,7 +100,6 @@ async function claudeRead(img,key){
   if(!r.ok){const t=await r.text();throw new Error(r.status===401?'Invalid API key.':'Claude API error '+r.status+': '+t.slice(0,120))}
   const j=await r.json(),t=(j.content||[]).map(x=>x.text||'').join(''),m=t.match(/\{[\s\S]*\}/);
   if(!m)throw new Error('Unexpected reply from Claude.');return JSON.parse(m[0])}
-$('#savepk').onclick=()=>{try{localStorage.setItem('pk',$('#pkey').value.trim());$('#pkey').value='';$('#pkey').placeholder='Key saved (paste to replace)';status('Database key saved.')}catch(e){status('Could not save the key.')}};
 const SKIP=/^(basic|stage|hp|trainer|pokemon|pokémon|item|supporter|evolves|from|ability|attack)$/i;
 const MODES=['gray','bin','inv'];
 async function readNumber(w,img,dbg){
@@ -154,82 +145,67 @@ const onPick=async e=>{
   }catch(err){status('Could not read photo: '+err.message)}};
 $('#file').onchange=onPick;$('#file2').onchange=onPick;
 
+
+// ---- Search ----
+function search(nameText,numText){
+  const words=nameText.toLowerCase().replace(/[^a-z0-9é' ]/g,' ').split(/\s+/).filter(Boolean);
+  const m=numText.match(/([A-Za-z]*\d+)\s*(?:\/\s*(\d+))?/);
+  const num=m?m[1].replace(/^0+(?=\d)/,'').toLowerCase():'',tot=m&&m[2]?+m[2]:0;
+  let list=DATA.cards.filter(c=>words.every(w=>c.hay.includes(w))&&(!num||c.num===num));
+  if(tot){const t=list.filter(c=>c.tot===tot);if(t.length)list=t}
+  list.sort((a,b)=>(a.hay.length-b.hay.length)||((b.d||'').localeCompare(a.d||'')));
+  return list}
+
 $('#go').onclick=async()=>{
-  const n=$('#name').value.trim().replace(/["*]/g,'');
-  const m=$('#num').value.match(/(\d+)\s*(?:\/\s*(\d+))?/),num=m?String(parseInt(m[1],10)):'',tot=m&&m[2]?+m[2]:0;
-  if(!n&&!num){status('Enter a name or number.');return}
+  const n=$('#name').value.trim(),nn=$('#num').value.trim();
+  if(!n&&!nn){status('Enter a name or number.');return}
   try{
-    status('Searching…');
-    const nq=n?(/\s/.test(n)?`name:"${n}"`:`name:${n}`):'';
-    let lastErr=null;const tryQ=q=>api(q,250).then(r=>r.data).catch(e=>{lastErr=e;return[]});
-    let list=[];
-    if(nq&&num)list=await tryQ(`${nq} number:${num}`);
-    if(!list.length&&num&&tot)list=await tryQ(`number:${num} set.printedTotal:${tot}`);
-    if(!list.length&&nq)list=await tryQ(nq);
-    if(!list.length&&num)list=await tryQ(`number:${num}`);
-    list=list.filter(c=>vars(c).length);
-    if(tot){const t=list.filter(c=>c.set.printedTotal===tot);if(t.length)list=t}
-    if(num)list.sort((a,b)=>(String(parseInt(b.number,10))===num)-(String(parseInt(a.number,10))===num));
-    S.list=list;
-    if(!list.length&&lastErr){status(`The card database is having trouble (${lastErr.message}). Try again in a minute.`);$('#out').innerHTML='';return}
-    if(!list.length){status(`No priced cards found for "${n||num}". Check the spelling.`);$('#out').innerHTML='';return}
-    status('');list.length===1?pick(list[0]):picker();
-  }catch(err){status('Error: '+err.message)}};
+    await loadData();status('');
+    const list=search(n,nn);S.list=list;
+    if(!list.length){status(`No cards found for "${[n,nn].filter(Boolean).join(' ')}". Try fewer words or just the name.`);$('#out').innerHTML='';return}
+    list.length===1?pick(list[0]):picker();
+  }catch(err){status(err.message)}};
 
 function picker(){
-  S.card=null;S.tok++;
-  $('#out').innerHTML=`<h3>Which one is yours? (${S.list.length} matches)</h3><div class="grid">${S.list.slice(0,80).map((c,i)=>`<button class="item" data-i="${i}"><img src="${esc(c.images.small)}" loading="lazy" alt=""><b>${esc(c.name)}</b><div class="mu">${esc(c.set.name)} (${esc((c.set.releaseDate||'').slice(0,4))})<br>#${esc(c.number)}/${esc(c.set.printedTotal)} · ${esc(c.rarity||'')}</div></button>`).join('')}</div>`;
+  S.card=null;
+  $('#out').innerHTML=`<h3>Which one is yours? (${S.list.length} matches${S.list.length>80?', showing 80':''})</h3><div class="grid">${S.list.slice(0,80).map((c,i)=>`<button class="item" data-i="${i}"><img src="${esc(c.img)}" loading="lazy" alt=""><b>${esc(c.name)}</b><div class="mu">${esc(c.set)}${c.year?' ('+esc(c.year)+')':''}<br>#${esc(c.number)} · ${esc(c.rarity)}</div></button>`).join('')}</div>`;
   document.querySelectorAll('#out .item').forEach(b=>b.onclick=()=>pick(S.list[b.dataset.i]));}
 
-function pick(c){S.card=c;S.v=vars(c)[0];render()}
+function pick(c){S.card=c;S.v=c.vk[0];render()}
 
 function render(){
-  const c=S.card,p=pr(c)[S.v].market,adj=p*mult('cond');
-  S.any=$('#buy').value==='ANY';S.buy=S.any?1:mult('buy');S.budget=adj;
+  const c=S.card,v=c.v[S.v],p=v[0];
+  S.budget=p;
   $('#out').innerHTML=`${S.list.length>1?'<button class="chip" id="back">← Back to matches</button>':''}
-  <div class="hero"><img src="${esc(c.images.small)}" alt=""><div><b>${esc(c.name)}</b><div class="mu">${esc(c.set.name)} · #${esc(c.number)}/${esc(c.set.printedTotal)} · ${esc(c.rarity||'')}</div><div class="price">${money(adj)}</div><div class="mu">TCGplayer market price</div><div class="mu">Lowest listing ${pr(c)[S.v].low!=null?money(pr(c)[S.v].low):"n/a"} · data as of ${esc(c.tcgplayer.updatedAt||"unknown")}</div></div></div>
-  <div class="chips">${vars(c).map(k=>`<button class="chip" data-v="${k}" style="${k===S.v?'border-color:var(--ac);color:var(--ac)':''}">${esc(VL[k]||k)} ${money(pr(c)[k].market)}</button>`).join('')}</div>
-  <h3 id="h">Finding alternatives…</h3>
+  <div class="hero"><img src="${esc(c.img)}" alt=""><div><b>${esc(c.name)}</b><div class="mu">${esc(c.set)} · #${esc(c.number)} · ${esc(c.rarity)}</div><div class="price">${money(p)}</div><div class="mu">TCGplayer market price</div><div class="mu">Lowest listing ${v[1]!=null?money(v[1]):'n/a'} · prices as of ${esc(asOf())}</div></div></div>
+  <div class="chips">${c.vk.map(k=>`<button class="chip" data-v="${esc(k)}" style="${k===S.v?'border-color:var(--ac);color:var(--ac)':''}">${esc(k)} ${money(mk(c,k))}</button>`).join('')}</div>
+  <h3 id="h"></h3>
   <p class="mu" style="margin:0 0 8px">Tap any card to open it on TCGplayer and filter by condition there.</p>
   <div class="row mu">Sort <select id="sort"><option value="near">Closest price</option><option value="lo">Low to high</option><option value="hi">High to low</option><option value="az">A to Z</option></select></div>
   <div class="grid" id="sim"></div><button class="btn" id="more" style="margin-top:10px" hidden></button>`;
   if($('#back'))$('#back').onclick=picker;
   document.querySelectorAll('.chip[data-v]').forEach(b=>b.onclick=()=>{S.v=b.dataset.v;render()});
   $('#sort').onchange=draw;$('#more').onclick=()=>{S.shown+=60;draw()};
-  loadAlts();}
+  findAlts();draw()}
 
-function bestIn(c,lo,hi){let best=null;
-  const ms=S.any?Object.values(COND):[COND[$('#buy').value]];
-  for(const k of vars(c))for(const [m,label] of ms){const raw=pr(c)[k].market,a=raw*m;
-    if(a>=lo&&a<=hi&&(!best||Math.abs(a-S.budget)<Math.abs(best.a-S.budget)))best={k,a,raw,m,cd:label}}
-  return best}
-
-async function loadAlts(){
-  const tok=++S.tok,d=Math.max(1,+$('#range').value||25),lo=Math.max(0,S.budget-d),hi=S.budget+d;
-  const rlo=S.any?lo:lo/S.buy,rhi=S.any?hi/COND.DMG[0]:hi/S.buy;
-  Object.assign(S,{lo,hi,alts:[],shown:60,total:0,loading:true});
-  const q=VARS.map(k=>`tcgplayer.prices.${k}.market:[${rlo.toFixed(2)} TO ${rhi.toFixed(2)}]`).join(' OR ');
-  try{
-    let pages=1;
-    for(let page=1;page<=pages;page++){
-      const r=await api(q,100,page);if(tok!==S.tok)return;
-      S.total=r.totalCount;pages=Math.min(20,Math.ceil(r.totalCount/100));
-      status(`Loading alternatives… ${page} of ${pages}`);
-      for(const c of r.data){if(c.id===S.card.id)continue;const b=bestIn(c,lo,hi);if(b)S.alts.push({c,...b})}
-      if(page===pages)S.loading=false;
-      draw()}
-    S.loading=false;draw();
-    status(S.total>2000?`Loaded the first 2,000 of ${S.total} database matches. Narrow the range to see the rest.`:'');
-  }catch(err){if(tok===S.tok){S.loading=false;draw();status(`Some results didn't load (${err.message}). Tap Find again to retry.`)}}}
+// ---- Alternatives: every card with any printing priced within +/- $range ----
+function findAlts(){
+  const d=Math.max(1,+$('#range').value||25),lo=Math.max(0,S.budget-d),hi=S.budget+d;
+  S.lo=lo;S.hi=hi;S.shown=60;S.alts=[];
+  for(const c of DATA.cards){
+    if(c.i===S.card.i)continue;
+    let best=null;
+    for(const k of c.vk){const a=c.v[k][0];if(a>=lo&&a<=hi&&(!best||Math.abs(a-S.budget)<Math.abs(best.a-S.budget)))best={k,a}}
+    if(best)S.alts.push({c,...best})}}
 
 function draw(){
   const s=$('#sort').value,T=S.budget,a=S.alts.slice();
   a.sort(s==='lo'?(x,y)=>x.a-y.a:s==='hi'?(x,y)=>y.a-x.a:s==='az'?(x,y)=>x.c.name.localeCompare(y.c.name):(x,y)=>Math.abs(x.a-T)-Math.abs(y.a-T));
-  const bc=$('#buy').selectedOptions[0].text;
-  $('#h').textContent=`${a.length} cards at about ${money(S.lo)} to ${money(S.hi)} (TCGplayer market${S.loading?', still loading…':''})`;
-  $('#sim').innerHTML=a.slice(0,S.shown).map(x=>`<a class="item" target="_blank" rel="noopener" href="${esc(x.c.tcgplayer.url)}"><img src="${esc(x.c.images.small)}" loading="lazy" alt=""><b>${esc(x.c.name)}</b><div class="mu">${esc(x.c.set.name)} #${esc(x.c.number)}<br>${esc(VL[x.k]||x.k)}${S.any?' · '+esc(x.cd):''}</div><div>${money(x.a)}</div><div class="mu">as of ${esc(x.c.tcgplayer.updatedAt||'?')}</div></a>`).join('')||'<p class="mu">'+(S.loading?'Loading…':'No cards in this range.')+'</p>';
+  $('#h').textContent=`${a.length} cards from ${money(S.lo)} to ${money(S.hi)} (TCGplayer market)`;
+  $('#sim').innerHTML=a.slice(0,S.shown).map(x=>`<a class="item" target="_blank" rel="noopener" href="${esc(x.c.url)}"><img src="${esc(x.c.img)}" loading="lazy" alt=""><b>${esc(x.c.name)}</b><div class="mu">${esc(x.c.set)} #${esc(x.c.number)}<br>${esc(x.k)}</div><div>${money(x.a)}</div></a>`).join('')||'<p class="mu">No cards in this range. Try a wider range.</p>';
   const left=a.length-S.shown;
-  $('#more').hidden=S.loading||left<=0;$('#more').textContent=`Show more (${left} left)`}
+  $('#more').hidden=left<=0;$('#more').textContent=`Show more (${left} left)`}
 
-for(const id of ['cond','buy','range'])$('#'+id).onchange=()=>{if(S.card)render()};
+$('#range').onchange=()=>{if(S.card){findAlts();draw()}};
+loadData().catch(e=>status(e.message));
 </script></body></html>
