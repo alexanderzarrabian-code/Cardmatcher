@@ -658,9 +658,9 @@ function tResults(){
   box.innerHTML=`<p class="mu">${items.length} card${items.length===1?'':'s'} ${T.mode==='about'?`within ±${money(rg)} of ${money(target)}`:`up to ${money(target)}`} (Near Mint market price)</p><div class="grid">${items.slice(0,T.shown).map((x,n)=>`<div class="item"><a target="_blank" rel="noopener" href="${esc(link(x.c,x.k))}" style="color:inherit;text-decoration:none"><img src="${esc(x.c.img)}" loading="lazy" alt=""><b>${esc(x.c.name)}</b><div class="mu">${esc(x.c.set)}${x.c.lang==='jp'?'<span class="lang">JP</span>':''} #${esc(x.c.number)}<br>Near Mint · ${esc(x.k)}</div><div><span class="tag">${money(x.a)}</span></div></a><button class="chip" data-act="get" data-n="${n}" style="margin-top:6px;width:100%">＋ Get this</button></div>`).join('')}</div>${items.length>T.shown?'<button class="btn" data-act="more" style="margin-top:10px">Show more</button>':''}`}
 
 // generic card picker (search by name, pick a printing)
-async function tPick(cb){
+async function tPick(cb,back){
   modal(`<h3>Add a card</h3><input id="tq" type="text" placeholder="Pokémon name (add a number like 4/102 if you want)" style="width:100%"><div class="row mu" style="align-items:center;flex-wrap:wrap">Show <button class="chip on" data-pl="en">English</button><button class="chip" data-pl="jp">Japanese</button><button class="chip" data-pl="both">Both</button></div><p class="mu" id="tpm">Loading cards…</p><div id="tpr"></div><button class="btn alt" id="tno" style="margin-top:8px">Cancel</button>`);
-  $('#tno').onclick=()=>closeModal();
+  $('#tno').onclick=()=>{closeModal();if(back)setTimeout(back,450)};
   let pl='en',list=[],t=null,shown=40;
   try{await loadData()}catch(e){$('#tpm').textContent=e.message;return}
   $('#tpm').textContent='Type a name to search.';
@@ -674,17 +674,17 @@ async function tPick(cb){
     $('#tpm').textContent=list.length?`${list.length} matches${list.length>shown?', showing '+shown:''}`:'No cards found.';
     $('#tpr').innerHTML=L.map((c,n)=>`<button class="item" data-n="${n}" style="display:flex;gap:10px;margin-bottom:8px;align-items:center"><img src="${esc(c.img)}" loading="lazy" alt="" style="width:56px;flex:0 0 56px"><div><b style="margin:0">${esc(c.name)}</b><div class="mu">${esc(c.set)}${c.lang==='jp'?'<span class="lang">JP</span>':''} · #${esc(c.number)}</div>${snip(c)}</div></button>`).join('')+(list.length>shown?'<button class="btn" id="tpmore" style="margin:4px 0 8px">Show more</button>':'');
     if($('#tpmore'))$('#tpmore').onclick=()=>{shown+=40;run(true)};
-    document.querySelectorAll('#tpr .item').forEach(el=>el.onclick=()=>tChoose(L[el.dataset.n],cb))};
+    document.querySelectorAll('#tpr .item').forEach(el=>el.onclick=()=>tChoose(L[el.dataset.n],cb,back))};
   $('#tq').oninput=()=>{clearTimeout(t);t=setTimeout(run,200)};
   document.querySelectorAll('#modal .chip[data-pl]').forEach(c=>c.onclick=async()=>{
     pl=c.dataset.pl;document.querySelectorAll('#modal .chip[data-pl]').forEach(x=>x.classList.toggle('on',x===c));
     if(pl!=='en'&&!DATA.jp.length){$('#tpm').textContent='Loading Japanese prices…';try{await loadJP()}catch(e){$('#tpm').textContent=e.message;pl='en';document.querySelectorAll('#modal .chip[data-pl]').forEach(x=>x.classList.toggle('on',x.dataset.pl==='en'));return}}
     run()});
   setTimeout(()=>{const q=$('#tq');if(q)q.focus()},50)}
-function tChoose(c,cb){
+function tChoose(c,cb,back){
   if(c.vk.length===1){closeModal();cb(c,c.vk[0]);return}
   modal(`<h3>${esc(c.name)}</h3><p class="mu">${esc(c.set)} · #${esc(c.number)}<br>Which printing? (Near Mint market price)</p>${c.vk.map((k,n)=>`<button class="btn alt" data-k="${n}" style="margin-bottom:8px">${esc(k)} · ${c.v[k][0]>0?money(c.v[k][0]):'no price'}${shaky(c,k)?' ⚠':''}</button>`).join('')}<button class="btn" id="tno2">Cancel</button>`);
-  $('#tno2').onclick=()=>closeModal();
+  $('#tno2').onclick=()=>{closeModal();if(back)setTimeout(back,450)};
   document.querySelectorAll('#modal [data-k]').forEach(el=>el.onclick=()=>{closeModal();cb(c,c.vk[+el.dataset.k])})}
 
 // scanning
@@ -795,7 +795,7 @@ async function bPhotoFill(b,file){
     if($('#pfall'))$('#pfall').onclick=()=>{for(const rv of review.slice()){if(!rv.pairs.length)continue;const p=rv.pairs[0];pg[rv.pos-1]={i:p.c.i,k:p.k,a:p.c.v[p.k][0]||0,q:1};review.splice(review.indexOf(rv),1);placed++;guessed++}bSave();bRender();draw()};
     document.querySelectorAll('#modal .pair').forEach(el=>el.onclick=()=>{const rv=review[+el.dataset.ri],p=rv.pairs[+el.dataset.pi];pg[rv.pos-1]={i:p.c.i,k:p.k,a:p.c.v[p.k][0]||0};review.splice(+el.dataset.ri,1);placed++;bSave();bRender();draw()});
     document.querySelectorAll('#modal [data-more]').forEach(el=>el.onclick=()=>{const sc=document.querySelector('#modal .sheet').scrollTop;review[+el.dataset.more].shown+=12;draw();document.querySelector('#modal .sheet').scrollTop=sc});
-    document.querySelectorAll('#modal [data-find]').forEach(el=>el.onclick=()=>{const rv=review[+el.dataset.find];tPick((c,k)=>{pg[rv.pos-1]={i:c.i,k,a:c.v[k][0]||0};const ix=review.indexOf(rv);if(ix>=0)review.splice(ix,1);placed++;bSave();bRender();setTimeout(draw,350)})});
+    document.querySelectorAll('#modal [data-find]').forEach(el=>el.onclick=()=>{const rv=review[+el.dataset.find];tPick((c,k)=>{pg[rv.pos-1]={i:c.i,k,a:c.v[k][0]||0};const ix=review.indexOf(rv);if(ix>=0)review.splice(ix,1);placed++;bSave();bRender();setTimeout(draw,450)},draw)});
     document.querySelectorAll('#modal [data-skip]').forEach(el=>el.onclick=()=>{review.splice(+el.dataset.skip,1);draw()})};
   draw()}
 
