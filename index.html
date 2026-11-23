@@ -78,7 +78,7 @@ label.mu{color:var(--mu)}
 .bgrid{display:grid;gap:6px;background:rgba(32,24,74,.6);border:3px solid var(--line);border-radius:14px;padding:8px;margin:8px 0}
 .pk{position:relative;aspect-ratio:5/7;border:2px dashed var(--line);border-radius:8px;background:rgba(11,8,32,.6);padding:0;overflow:hidden;color:var(--mu);font-size:24px;cursor:pointer}
 .pk.has{border:2px solid transparent}.pk.sel{outline:3px solid var(--ac)}.pk img{width:100%;height:100%;object-fit:cover;display:block}
-.pk .pp{position:absolute;left:0;right:0;bottom:0;background:rgba(5,46,42,.9);color:#7ff;font:800 11px system-ui;text-align:center;padding:2px 0}
+.pk .qm{position:absolute;top:2px;right:3px;background:#f59e0b;color:#1b1048;font:900 11px system-ui;border-radius:9px;padding:0 6px;box-shadow:0 0 6px #000}.pk .pp{position:absolute;left:0;right:0;bottom:0;background:rgba(5,46,42,.9);color:#7ff;font:800 11px system-ui;text-align:center;padding:2px 0}
 .chip:disabled{opacity:.35}
 #modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:50;overflow:auto}
 #modal .sheet{max-width:520px;margin:6vh auto;background:#14103a;border:2px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--shadow)}
@@ -198,10 +198,10 @@ function crop(img,x,y,w,h,outW,mode){
   g.putImageData(d,0,0);return c}
 const SCAN_URL='https://cardscan.alexanderzarrabian.workers.dev';
 async function claudeRead(img,opt,retried){
-  opt=opt||{};const maxd=opt.page?1600:1200;
+  opt=opt||{};const maxd=opt.page?2000:1200;
   const sc=Math.min(1,maxd/Math.max(img.width,img.height)),c=document.createElement('canvas');
   c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);c.getContext('2d').drawImage(img,0,0,c.width,c.height);
-  const b64=c.toDataURL('image/jpeg',opt.page?.8:.85).split(',')[1];
+  const b64=c.toDataURL('image/jpeg',opt.page?.82:.85).split(',')[1];
   const body={image:b64};if(opt.page){body.mode='page';body.cols=opt.cols;body.rows=opt.rows}
   const hdr={'content-type':'application/json'};let pass='';try{pass=localStorage.getItem('bb_pass')||''}catch(e){}if(pass)hdr['x-pass']=pass;
   const r=await fetch(SCAN_URL,{method:'POST',headers:hdr,body:JSON.stringify(body)});
@@ -451,7 +451,7 @@ async function bRender(load){
     if(!r)return `<button class="pk" data-i="${i}">＋</button>`;
     if(!c)return `<button class="pk has" data-i="${i}"><span style="font-size:11px">card not found</span></button>`;
     const val=c.v[r.k]?c.v[r.k][0]:0;
-    return `<button class="pk has${r.w?' wish':''}${BD.sel&&BD.sel.p===BD.page&&BD.sel.i===i?' sel':''}" data-i="${i}"><img src="${esc(c.img)}" alt="${esc(c.name)}" loading="lazy">${r.w?'<span class="heart">♡</span>':''}<span class="pp">${val>0?money(val):'—'}${shaky(c,r.k)?' ⚠':''}</span></button>`}).join('')}</div>
+    return `<button class="pk has${r.w?' wish':''}${BD.sel&&BD.sel.p===BD.page&&BD.sel.i===i?' sel':''}" data-i="${i}"><img src="${esc(c.img)}" alt="${esc(c.name)}" loading="lazy">${r.w?'<span class="heart">♡</span>':''}${r.q?'<span class="qm">check</span>':''}<span class="pp">${val>0?money(val):'—'}${shaky(c,r.k)?' ⚠':''}</span></button>`}).join('')}</div>
   <p class="hint">Press and hold a card to drag it · Near Mint prices · ⚠ = uncertain</p>`;
   $('#bsel').onchange=e=>{BD.cur=e.target.value;BD.page=0;BD.sel=null;bSave();bRender()};
   $('#bnew').onclick=bNewDlg;
@@ -493,9 +493,12 @@ function bPocket(b,i){
   if(!r){bPicker(b,i);return}
   const c=cardById(r.i),cur=refVal(r),gain=(Number.isFinite(r.a)&&r.a>0&&cur>0)?cur-r.a:null;
   modal(`<h3>${c?esc(c.name):'Card'}${r.w?' <span class="mu">♡ wishlist</span>':''}</h3>${c?`<p class="mu">${esc(c.set)}${c.lang==='jp'?' · JP':''} · #${esc(c.number)}<br>Near Mint · ${esc(r.k)} · ${money(cur)}${gain!==null&&Math.abs(gain)>=0.005?`<br>Added at ${money(r.a)} · ${gain>=0?'▲':'▼'} ${money(Math.abs(gain))} since`:''}</p>`:''}
+  ${r.q&&c&&c.vk.length>1?`<div class="review"><b>⚠ I guessed the printing from your photo</b><div class="mu">Tap the right one:</div>${c.vk.map((k,n)=>`<button class="item" data-pk="${n}" style="${k===r.k?'outline:2px solid var(--ac)':''}">${esc(k)} · ${c.v[k][0]>0?money(c.v[k][0]):'no price'}</button>`).join('')}<button class="chip" id="qok">Looks right</button></div>`:''}
   ${r.w?'':'<button class="btn" id="tr">🔄 Trade this card</button>'}<button class="btn alt" id="wl" style="margin-top:8px">${r.w?'I own this now':'♡ Mark as wishlist'}</button><button class="btn alt" id="mv" style="margin-top:8px">Move / swap</button><button class="btn alt" id="rp" style="margin-top:8px">Replace card</button>${c?`<a class="btn alt" style="margin-top:8px;text-decoration:none" target="_blank" rel="noopener" href="${esc(link(c,r.k))}">Open on TCGplayer</a>`:''}<button class="btn" id="rm" style="margin-top:8px;background:#b91c1c">Remove from pocket</button><button class="btn alt" id="no" style="margin-top:8px">Close</button>`);
   $('#no').onclick=()=>closeModal();
   if($('#tr'))$('#tr').onclick=()=>{T.mine.push({i:r.i,k:r.k});tSave();T.msg='Added '+(c?c.name:'card')+' to your Trade stack.';closeModal();showTab('trade')};
+  document.querySelectorAll('#modal [data-pk]').forEach(el=>el.onclick=()=>{r.k=c.vk[+el.dataset.pk];if(!r.w)r.a=c.v[r.k][0]||0;delete r.q;bSave();closeModal();bRender()});
+  if($('#qok'))$('#qok').onclick=()=>{delete r.q;bSave();closeModal();bRender()};
   $('#wl').onclick=()=>{if(r.w){delete r.w;r.a=refVal(r)||r.a}else r.w=1;bSave();closeModal();bRender()};
   $('#mv').onclick=()=>{BD.sel={p:BD.page,i};closeModal();bRender()};
   $('#rp').onclick=()=>bPicker(b,i);
@@ -746,6 +749,21 @@ function bPhotoMenu(b){
   $('#no').onclick=()=>closeModal();
   for(const id of ['#pfile','#pfile2']){const f=$(id);f.onchange=()=>{const file=f.files[0];f.value='';if(file)bPhotoFill(b,file)}}}
 
+// choose which printing a scanned card most likely is; sure=false means it was a guess
+function pfPick(c,finish){
+  const vk=c.vk;if(vk.length===1)return {k:vk[0],sure:true};
+  const f=String(finish||'').toLowerCase();let hits=[];
+  if(/reverse/.test(f))hits=vk.filter(k=>/reverse/i.test(k));
+  else if(/holo|foil/.test(f))hits=vk.filter(k=>/holo/i.test(k)&&!/reverse/i.test(k));
+  else if(/plain|non|normal|matte/.test(f))hits=vk.filter(k=>!/holo/i.test(k));
+  if(hits.length===1)return {k:hits[0],sure:true};
+  const pool=hits.length?hits:vk;
+  return {k:pool.find(k=>!/holo/i.test(k))||pool.find(k=>!/reverse/i.test(k))||pool[0],sure:false}}
+// use the set name the scan guessed to cut down same-name cards (only if it leaves something)
+function pfNarrow(list,r){
+  const w=String(r.set_name||'').toLowerCase().replace(/[^a-z0-9 ]/g,' ').split(/\s+/).filter(x=>x.length>2&&!/^(the|and|set|tcg|pokemon)$/.test(x));
+  if(list.length<2||!w.length)return list;
+  const t=list.filter(c=>w.every(x=>c.s.toLowerCase().includes(x)));return t.length?t:list}
 async function bPhotoFill(b,file){
   const pageIdx=BD.page,pg=b.pages[pageIdx],N=b.cols*b.rows;
   modal(`<h3>Reading your page…</h3><p class="mu">This takes a few seconds.</p>`);
@@ -758,20 +776,23 @@ async function bPhotoFill(b,file){
     await loadData();
     if(cards.some(c=>/japan|chin|korea|other/i.test(String(c.language||''))))try{await loadJP()}catch(e){}
   }catch(err){modal(`<h3>Couldn't read the page</h3><p class="mu">${esc(err.message||err)}</p><button class="btn" id="no">OK</button>`);$('#no').onclick=()=>closeModal();return}
-  let placed=0,kept=0,empty=0;const review=[];
+  let placed=0,kept=0,empty=0,guessed=0;const review=[];
   for(const c of cards){
     const pos=parseInt(c.pos,10);if(!(pos>=1&&pos<=N))continue;
     if(c.empty||(!c.name&&!c.name_english&&!c.number)){empty++;continue}
     if(pg[pos-1]){kept++;continue}
-    const m=await tMatch(c);const label=(c.name_english||c.name||'?')+(c.number?' '+c.number+(c.set_total?'/'+c.set_total:''):'');
-    if(m.list.length===1&&m.list[0].vk.length===1&&(m.exact||!m.num)&&!m.foreign){const k=m.list[0].vk[0];pg[pos-1]={i:m.list[0].i,k,a:m.list[0].v[k][0]||0};placed++}
-    else review.push({pos,label,note:!m.list.length?'No match found.':m.foreign?"This language isn't on TCGplayer, so there's no exact price. Pick a similar card:":'Which one is it?',pairs:tPairs(m.list,80),shown:8})}
+    const m=await tMatch(c);if(!m.foreign)m.list=pfNarrow(m.list,c);const label=(c.name_english||c.name||'?')+(c.number?' '+c.number+(c.set_total?'/'+c.set_total:''):'');
+    if(m.list.length===1&&(m.exact||!m.num)&&!m.foreign){const pk=pfPick(m.list[0],c.finish),k=pk.k;pg[pos-1]=Object.assign({i:m.list[0].i,k,a:m.list[0].v[k][0]||0},pk.sure?{}:{q:1});placed++;if(!pk.sure)guessed++}
+    else{let pairs=tPairs(m.list,80);if(!m.foreign&&pairs.length){const f=pairs[0].c,best=pfPick(f,c.finish);pairs.sort((x,y)=>(x.c===f&&x.k===best.k?0:1)-(y.c===f&&y.k===best.k?0:1))}
+      review.push({pos,label,finish:c.finish,note:!m.list.length?'No match found.':m.foreign?"This language isn't on TCGplayer, so there's no exact price. Pick a similar card:":'Best guess is first. Which one is it?',pairs,shown:8})}}
   bSave();bRender();
   const draw=()=>{
-    modal(`<h3>Page read</h3><p class="mu">${placed} card${placed===1?'':'s'} placed${kept?` · ${kept} pocket${kept===1?'':'s'} already had a card`:''}${empty?` · ${empty} empty`:''}${review.length?` · ${review.length} need a quick look`:''}.</p>
+    modal(`<h3>Page read</h3><p class="mu">${placed} card${placed===1?'':'s'} placed${guessed?` (${guessed} marked <b style="color:#f59e0b">check</b>: I guessed the printing, tap them to confirm)`:''}${kept?` · ${kept} pocket${kept===1?'':'s'} already had a card`:''}${empty?` · ${empty} empty`:''}${review.length?` · ${review.length} need a quick look`:''}.</p>
     ${review.map((rv,ri)=>`<div class="review"><b>Pocket ${rv.pos}: ${esc(rv.label)}</b><div class="mu">${esc(rv.note)}</div>${rv.pairs.slice(0,rv.shown).map((p,pi)=>`<button class="item pair" data-ri="${ri}" data-pi="${pi}"><img src="${esc(p.c.img)}" loading="lazy" alt=""><div style="flex:1;min-width:0"><b style="margin:0">${esc(p.c.name)}</b>${p.c.lang==='jp'?'<span class="lang">JP</span>':''}<div class="mu">${esc(p.c.set)} · #${esc(p.c.number)}<br>${esc(p.k)}</div></div><span class="tag">${p.c.v[p.k][0]>0?money(p.c.v[p.k][0]):'—'}</span></button>`).join('')}<div class="row">${rv.pairs.length>rv.shown?`<button class="chip" data-more="${ri}">Show more (${rv.pairs.length-rv.shown} left)</button>`:''}<button class="chip" data-find="${ri}">🔍 Search for it</button><button class="chip" data-skip="${ri}">Skip</button></div></div>`).join('')}
+    ${review.some(r=>r.pairs.length)?`<button class="btn alt" id="pfall" style="margin-top:8px">✨ Place all best guesses</button>`:''}
     <button class="btn" id="no" style="margin-top:8px">Done</button>`);
     $('#no').onclick=()=>closeModal();
+    if($('#pfall'))$('#pfall').onclick=()=>{for(const rv of review.slice()){if(!rv.pairs.length)continue;const p=rv.pairs[0];pg[rv.pos-1]={i:p.c.i,k:p.k,a:p.c.v[p.k][0]||0,q:1};review.splice(review.indexOf(rv),1);placed++;guessed++}bSave();bRender();draw()};
     document.querySelectorAll('#modal .pair').forEach(el=>el.onclick=()=>{const rv=review[+el.dataset.ri],p=rv.pairs[+el.dataset.pi];pg[rv.pos-1]={i:p.c.i,k:p.k,a:p.c.v[p.k][0]||0};review.splice(+el.dataset.ri,1);placed++;bSave();bRender();draw()});
     document.querySelectorAll('#modal [data-more]').forEach(el=>el.onclick=()=>{const sc=document.querySelector('#modal .sheet').scrollTop;review[+el.dataset.more].shown+=12;draw();document.querySelector('#modal .sheet').scrollTop=sc});
     document.querySelectorAll('#modal [data-find]').forEach(el=>el.onclick=()=>{const rv=review[+el.dataset.find];tPick((c,k)=>{pg[rv.pos-1]={i:c.i,k,a:c.v[k][0]||0};const ix=review.indexOf(rv);if(ix>=0)review.splice(ix,1);placed++;bSave();bRender();setTimeout(draw,350)})});
