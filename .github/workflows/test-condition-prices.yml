@@ -1,0 +1,45 @@
+name: Test condition prices
+
+# One-off test: asks PokemonPriceTracker for per-condition prices of two cards
+# and saves the raw answers to ppt-test.json. Costs about 2 credits.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Look up two cards
+        env:
+          PPT_KEY: ${{ secrets.PPT_KEY }}
+        run: |
+          mkdir -p out
+          for id in 86905 676096; do
+            code=$(curl -s -o "out/$id.json" -w "%{http_code}" \
+              -H "Authorization: Bearer $PPT_KEY" \
+              "https://www.pokemonpricetracker.com/api/v2/cards?tcgPlayerId=$id&limit=1")
+            echo "$id -> HTTP $code"
+          done
+          python3 - <<'PY'
+          import json, os
+          res = {}
+          for id in ("86905", "676096"):
+              raw = open(f"out/{id}.json").read()
+              try:
+                  res[id] = json.loads(raw)
+              except Exception:
+                  res[id] = {"raw": raw[:2000]}
+          json.dump(res, open("ppt-test.json", "w"), indent=1)
+          PY
+      - name: Save result
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add ppt-test.json
+          git commit -m "Save condition price test" || echo "nothing to commit"
+          git push
