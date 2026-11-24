@@ -100,6 +100,7 @@ label.mu{color:var(--mu)}
 .tl{display:flex;gap:10px;align-items:center;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:8px;margin-bottom:8px;position:relative}.tl img{width:46px;flex:0 0 46px;border-radius:5px}.tl b{font-size:15px}.tl .mu{font-size:12px}
 .tag{display:inline-block;font-size:11px;font-weight:800;border-radius:999px;padding:2px 8px;margin-left:6px;background:var(--line);color:var(--fg)}.tag.hit{background:var(--aqua);color:#06281d}
 .lbadge{position:absolute;top:2px;left:2px;z-index:2;background:var(--ac);color:#10192e;font-size:10px;font-weight:800;border-radius:999px;padding:1px 6px;box-shadow:0 0 6px #000}
+details.fold{margin:10px 0}details.fold>summary{cursor:pointer;font-weight:800;font-size:17px;list-style:none;padding:12px 14px;background:var(--card);border:2px solid var(--line);border-radius:12px;display:flex;justify-content:space-between;align-items:center;gap:8px}details.fold>summary::-webkit-details-marker{display:none}details.fold>summary::after{content:'▾';color:var(--mu)}details.fold[open]>summary::after{content:'▴'}details.fold[open]>summary{border-color:var(--ac)}.foldbody{padding-top:8px}
 </style></head><body>
 <div class="banner"><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><h1>Binder Buddy</h1><p>Snap a card. Find its price twins.</p></div>
 <div class="tabs"><button class="tab on" data-tab="binders">📒 Binders</button><button class="tab" data-tab="find">🔍 Look up</button><button class="tab" data-tab="trade">🔄 Trade</button><button class="tab" data-tab="friends">👥 Friends</button></div>
@@ -1090,17 +1091,15 @@ function fvTradeHtml(l){
   const lists=(l.lists&&l.lists.length)?l.lists:((l.trade&&l.trade.length)?[{name:'For trade',items:l.trade}]:[]);
   let h='';
   if(l.rel==='friend'||isMe){
-    if(!lists.length)h+=`<h3>For trade or sale <span class="mu">(0)</span></h3><p class="mu">${isMe?'Nothing shared yet. Use the Trade tab, or tap a binder card → List for trade or sale.':'Nothing listed right now.'}</p>`;
+    if(!lists.length)h+=`<details class="fold"><summary>For trade or sale <span class="mu">(0)</span></summary><div class="foldbody"><p class="mu">${isMe?'Nothing shared yet. Use the Trade tab, or tap a binder card → List for trade or sale.':'Nothing listed right now.'}</p></div></details>`;
     for(const ls of lists){
-      h+=`<h3>${esc(ls.name||'For trade')} <span class="mu">(${ls.items.length})</span></h3>`;
-      h+=ls.items.map(r=>{
+      h+=`<details class="fold"><summary>${esc(ls.name||'For trade')} <span class="mu">(${ls.items.length})</span></summary><div class="foldbody">`+ls.items.map(r=>{
         const c=cardById(r.i),m=c&&c.v[r.k]?c.v[r.k][0]:0,lbl={trade:'Trade',sale:'Sale',either:'Trade or sale'}[r.m]||'Trade or sale';
         const hit=!isMe&&wish.has(r.i);
         const price=r.p>0?money(r.p)+'<br><span class="mu">asking</span>':(m>0?money(m):'—');
-        return fvCardRow(r,`<span class="tag">${lbl}</span>${hit?'<span class="tag hit">You want this ♡</span>':''}`,price)}).join('')}
+        return fvCardRow(r,`<span class="tag">${lbl}</span>${hit?'<span class="tag hit">You want this ♡</span>':''}`,price)}).join('')+'</div></details>'}
   }
-  h+=`<h3>Looking for <span class="mu">(${wants.length})</span></h3>`;
-  h+=wants.length?wants.map(r=>fvCardRow(r,`<span class="tag">♡</span>${!isMe&&mine.has(r.i)?'<span class="tag hit">You have this</span>':''}`)).join(''):`<p class="mu">No ♡ cards in ${isMe?'your shared':'their visible'} binders. Mark a card as wishlist in a shared binder and it shows up here.</p>`;
+  h+=`<details class="fold"><summary>Looking for <span class="mu">(${wants.length})</span></summary><div class="foldbody">`+(wants.length?wants.map(r=>fvCardRow(r,`<span class="tag">♡</span>${!isMe&&mine.has(r.i)?'<span class="tag hit">You have this</span>':''}`)).join(''):`<p class="mu">No ♡ cards in ${isMe?'your shared':'their visible'} binders. Mark a card as wishlist in a shared binder and it shows up here.</p>`)+'</div></details>';
   return h}
 
 async function fvProfile(my){
