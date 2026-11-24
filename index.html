@@ -104,6 +104,17 @@ details.fold{margin:10px 0}details.fold>summary{cursor:pointer;font-weight:800;f
 #helpbtn{position:absolute;right:14px;top:12px;width:32px;height:32px;border-radius:50%;border:2px solid var(--ac);background:transparent;color:var(--ac);font-weight:800;font-size:16px;cursor:pointer;z-index:2}
 .hstep{text-align:center;padding:6px 4px}.hstep .big{font-size:46px;line-height:1.1}.hstep h3{margin:8px 0 6px}.hdots{display:flex;gap:6px;justify-content:center;margin:12px 0}.hdots i{width:8px;height:8px;border-radius:50%;background:var(--line)}.hdots i.on{background:var(--ac)}
 .fbadge{position:absolute;top:4px;left:4px;z-index:2;background:var(--aqua);color:#06281d;font-size:11px;font-weight:800;border-radius:999px;padding:2px 8px;box-shadow:0 0 6px #000}
+.fbadge.want{background:var(--ac);color:#10192e}
+.mbadge{position:absolute;top:2px;right:2px;z-index:3;font-size:10px;font-weight:800;border-radius:999px;padding:1px 6px;box-shadow:0 0 6px #000;max-width:92%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mbadge.want{background:var(--ac);color:#10192e}.mbadge.have{background:var(--aqua);color:#06281d}
+.pk.match{border:2px solid var(--ac);box-shadow:0 0 12px rgba(245,197,66,.65)}
+.tag.hot{background:var(--ac);color:#10192e}
+.tl.hot{border-color:var(--ac)}
+details.fold.match>summary{border-color:var(--ac);color:var(--ac)}
+.panel.match{border-color:var(--aqua)}.panel.match:empty{display:none}
+.mh{margin:12px 0 6px;font-size:15px}
+.gh{grid-column:1/-1;font-weight:800;color:var(--ac);margin:8px 0 2px;font-size:15px}
+.review.mt.have{border-color:var(--aqua)}.review.mt.want{border-color:var(--ac)}
 </style></head><body>
 <div class="banner"><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><button id="helpbtn" aria-label="How it works" title="How it works">?</button><h1>Binder Buddy</h1><p>Snap a card. Find its price twins.</p></div>
 <div class="tabs"><button class="tab on" data-tab="binders">📒 Binders</button><button class="tab" data-tab="find">🔍 Look up</button><button class="tab" data-tab="trade">🔄 Trade</button><button class="tab" data-tab="friends">👥 Friends</button></div>
@@ -400,6 +411,7 @@ function render(){
   $('#out').innerHTML=`${S.list.length>1?'<button class="chip" id="back">← Back to matches</button>':''}
   <div class="hero"><img src="${esc(c.img)}" alt=""><div><b>${esc(c.name)}</b><div class="mu">${esc(c.set)}${c.lang==='jp'?'<span class="lang">JP</span>':''} · #${esc(c.number)} · ${esc(c.rarity)}</div><div class="price">${money(p)}</div><div class="mu"><b>Near Mint · ${esc(S.v)}</b><br>TCGplayer market price. Other conditions sell for less.</div>${shaky(c,S.v)?'<div class="warn">⚠ Price uncertain: market and lowest listing disagree a lot. Check TCGplayer.</div>':''}<div class="mu">Lowest listing ${v[1]!=null?money(v[1]):'n/a'} · prices as of ${esc(asOf())}</div><a href="${esc(link(c,S.v))}" target="_blank" rel="noopener" class="mu">Open this version on TCGplayer ↗</a></div></div>
   <div class="chips">${c.vk.map(k=>`<button class="chip" data-v="${esc(k)}" style="${k===S.v?'border-color:var(--ac);color:var(--ac)':''}">${esc(k)} · NM ${money(mk(c,k))}${shaky(c,k)?' ⚠':''}</button>`).join('')}</div>
+  <div class="panel match" id="frp"></div>
   <details class="fold" open id="rfold"><summary><span id="h"></span></summary><div class="foldbody">
   <p class="mu" style="margin:0 0 8px">Each price is the TCGplayer market price for Near Mint in the printing shown. Tap a card to open that version on TCGplayer.</p>
   <div class="row mu">Sort <select id="sort"><option value="near">Closest price</option><option value="lo">Low to high</option><option value="hi">High to low</option><option value="az">A to Z</option></select></div>
@@ -409,7 +421,7 @@ function render(){
   if($('#back'))$('#back').onclick=picker;
   document.querySelectorAll('.chip[data-v]').forEach(b=>b.onclick=()=>{S.v=b.dataset.v;render()});
   $('#sort').onchange=draw;$('#incl').onchange=e=>{S.incl=e.target.checked;findAlts();draw()};$('#more').onclick=()=>{S.shown+=60;draw()};
-  findAlts();draw()}
+  findAlts();draw();fillFriendPanel()}
 
 // ---- Alternatives: every card with any printing priced within +/- $range ----
 function findAlts(){
@@ -425,11 +437,11 @@ function draw(){
   const s=$('#sort').value,T=S.budget,a=fApply(S.alts,S.f);
   fRender($('#fbar'),S.f,S.alts,()=>{S.shown=60;draw()});
   a.sort(s==='lo'?(x,y)=>x.a-y.a:s==='hi'?(x,y)=>y.a-x.a:s==='az'?(x,y)=>x.c.name.localeCompare(y.c.name):(x,y)=>Math.abs(x.a-T)-Math.abs(y.a-T));
-  a.splice(0,a.length,...ftFirst(a));
+  WS_CUR=myWishSet();a.splice(0,a.length,...ftFirst(a));const nf=FT.by.size?FT.nf:0;
   $('#h').textContent=`${a.length}${a.length!==S.alts.length?' of '+S.alts.length:''} cards from ${money(S.lo)} to ${money(S.hi)} (Near Mint market price)`;
-  $('#sim').innerHTML=a.slice(0,S.shown).map(x=>`<a class="item" target="_blank" rel="noopener" href="${esc(link(x.c,x.k))}"${ftAttr(x.c)}>${ftBadge(x.c)}<img src="${esc(x.c.img)}" loading="lazy" alt=""><b>${esc(x.c.name)}</b><div class="mu">${esc(x.c.set)}${x.c.lang==='jp'?'<span class="lang">JP</span>':''} #${esc(x.c.number)}<br>Near Mint · ${esc(x.k)}</div><div><span class="tag">${money(x.a)}</span>${shaky(x.c,x.k)?' <span class="warn">⚠ uncertain</span>':''}</div></a>`).join('')||'<p class="mu">No cards in this range. Try a wider range.</p>';
+  $('#sim').innerHTML=a.slice(0,S.shown).map((x,n)=>(nf&&n===0?'<div class="gh">👥 On your friends\' lists ('+nf+')</div>':'')+(nf&&n===nf?'<div class="gh">Other cards</div>':'')+`<a class="item" target="_blank" rel="noopener" href="${esc(link(x.c,x.k))}"${ftAttr(x.c)}>${ftBadge(x.c)}<img src="${esc(x.c.img)}" loading="lazy" alt=""><b>${esc(x.c.name)}</b><div class="mu">${esc(x.c.set)}${x.c.lang==='jp'?'<span class="lang">JP</span>':''} #${esc(x.c.number)}<br>Near Mint · ${esc(x.k)}</div><div><span class="tag">${money(x.a)}</span>${shaky(x.c,x.k)?' <span class="warn">⚠ uncertain</span>':''}</div></a>`).join('')||'<p class="mu">No cards in this range. Try a wider range.</p>';
   const left=a.length-S.shown;
-  $('#more').hidden=left<=0;$('#more').textContent=`Show more (${left} left)`}
+  $('#more').hidden=left<=0;$('#more').textContent=`Show more (${left} left)`;WS_CUR=null}
 
 // Update results as you type (not only when you tap away from the box)
 let rangeTimer;
@@ -440,18 +452,23 @@ loadData().catch(e=>status(e.message));
 
 // ================= Friends' trade lists: banners and sorting =================
 const MODE_TXT={trade:'Trade',sale:'Sale',either:'Trade or sale'};
-const FT={items:[],by:new Map(),t:0,busy:false};
+const FT={items:[],by:new Map(),t:0,busy:false,sig:''};
+const FW={items:[],by:new Map()};
+var WS_CUR=null;
+function fwSet(items){FW.items=items;FW.by=new Map();for(const x of items){if(!FW.by.has(x.i))FW.by.set(x.i,[]);FW.by.get(x.i).push(x)}}
 function ftSet(items){FT.items=items;FT.by=new Map();for(const x of items){if(!FT.by.has(x.i))FT.by.set(x.i,[]);FT.by.get(x.i).push(x)}}
 async function ftLoad(force){
-  if(!ACC.handle){if(FT.items.length)ftSet([]);return}
-  if(FT.busy||(!force&&Date.now()-FT.t<90000))return;
+  if(!ACC.handle){if(FT.items.length||FW.items.length){ftSet([]);fwSet([]);tabLabel()}return}
+  if(FT.busy||(!force&&Date.now()-FT.t<((FT.items.length||FW.items.length)?90000:8000)))return;
   FT.busy=true;
-  try{const r=await api('friend_trade');ftSet(r.items||[]);FT.t=Date.now()}catch(e){}
+  try{const [r,w]=await Promise.all([api('friend_trade'),api('friend_wants')]);ftSet(r.items||[]);fwSet(w.wants||[]);FT.t=Date.now()}catch(e){}
   FT.busy=false;
-  try{if(!$('#findView').hidden&&S.card)draw();if(!$('#tradeView').hidden)tResults()}catch(e){}}
-const ftBadge=c=>{const a=FT.by.get(c.i);if(!a)return '';const o=[...new Set(a.map(x=>x.o))];return `<span class="fbadge">👥 @${esc(o[0])}${o.length>1?' +'+(o.length-1):''}</span>`};
+  tabLabel();
+  const sig=FT.items.length+':'+FW.items.length;const changed=sig!==FT.sig;FT.sig=sig;
+  try{if(!$('#findView').hidden&&S.card){draw();fillFriendPanel()}if(!$('#tradeView').hidden)tResults();if(changed&&!$('#binderView').hidden&&!BD.sel&&!DR.on)bRender()}catch(e){}}
+const ftBadge=c=>{const a=FT.by.get(c.i);if(!a)return '';const o=[...new Set(a.map(x=>x.o))],w=(WS_CUR||myWishSet()).has(c.i);return `<span class="fbadge${w?' want':''}">${w?'♡ ':'👥 '}@${esc(o[0])}${o.length>1?' +'+(o.length-1):''}${w?' has it!':''}</span>`};
 const ftAttr=c=>FT.by.has(c.i)?` data-fl="${c.i}"`:'';
-const ftFirst=arr=>{if(!FT.by.size)return arr;const a=[],b=[];for(const x of arr)(FT.by.has(x.c.i)?a:b).push(x);return a.concat(b)};
+const ftFirst=arr=>{if(!FT.by.size)return arr;const ws=WS_CUR||myWishSet(),a=[],a2=[],b=[];for(const x of arr)(FT.by.has(x.c.i)?(ws.has(x.c.i)?a:a2):b).push(x);FT.nf=a.length+a2.length;return a.concat(a2,b)};
 function ftGo(owner,list){closeModal();setTimeout(()=>{showTab('friends');fvGo('profile',{handle:owner,focus:list})},350)}
 function ftDlg(i){
   const c=cardById(i),a=FT.by.get(i)||[];if(!c||!a.length)return;
@@ -459,6 +476,47 @@ function ftDlg(i){
   $('#ftno').onclick=()=>closeModal();
   document.querySelectorAll('#modal [data-n]').forEach(b=>b.onclick=()=>{const x=a[+b.dataset.n];ftGo(x.o,x.l)})}
 document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('a[data-fl]');if(!a)return;e.preventDefault();ftDlg(+a.dataset.fl)});
+
+// ---- what matches between me and my friends ----
+const iOwnSet=()=>{const s=new Set();for(const b of BD.binders)for(const pg of b.pages)for(const r of pg)if(r&&!r.w)s.add(r.i);return s};
+const iListSet=()=>new Set(T.lists.flatMap(l=>l.items).map(x=>x.i));
+function matchCalc(){
+  const wish=myWishSet(),own=iOwnSet(),listed=iListSet();
+  const have=FT.items.filter(x=>wish.has(x.i));
+  const wm=new Map();
+  for(const x of FW.items){if(!(own.has(x.i)||listed.has(x.i)))continue;
+    let e=wm.get(x.i);if(!e){e={i:x.i,k:x.k,o:[],listed:listed.has(x.i)};wm.set(x.i,e)}if(!e.o.includes(x.o))e.o.push(x.o)}
+  return {have,want:[...wm.values()]}}
+const matchCount=()=>{if(!ACC.handle)return 0;const m=matchCalc();return m.have.length+m.want.length};
+let FVREQ=0;
+function tabLabel(){const t=document.querySelector('.tab[data-tab="friends"]');if(!t)return;const mc=matchCount();t.textContent='👥 Friends'+(FVREQ?' ('+FVREQ+')':'')+(mc?' 🎯'+mc:'')}
+const owners=a=>[...new Set(a.map(x=>x.o))];
+const ownTxt=a=>{const o=owners(a);return '@'+esc(o[0])+(o.length>1?' +'+(o.length-1):'')};
+function pkMk(r){ // marker on a binder pocket
+  if(!r||!ACC.handle)return {cls:'',html:''};
+  if(r.w){const a=FT.by.get(r.i);return a?{cls:' match',html:`<span class="mbadge have">👥 ${ownTxt(a)} has it</span>`}:{cls:'',html:''}}
+  const a=FW.by.get(r.i);return a?{cls:' match',html:`<span class="mbadge want">🎁 ${ownTxt(a)} wants</span>`}:{cls:'',html:''}}
+function sheetMatch(r){
+  if(!r||!ACC.handle)return '';
+  if(r.w){const a=FT.by.get(r.i);return a?`<div class="review mt have"><b>👥 ${ownTxt(a)} ${owners(a).length>1?'have':'has'} this card for trade</b><button class="btn" id="sheetft" style="margin-top:6px">See who and go to their list</button></div>`:''}
+  const a=FW.by.get(r.i);return a?`<div class="review mt want"><b>🎁 ${ownTxt(a)} ${owners(a).length>1?'are':'is'} looking for this card</b><div class="mu">${isListed(r)?'It is on your trade list.':'Not on your trade list yet. Tap List for trade below.'}</div></div>`:''}
+function friendPanelInner(c){
+  if(!ACC.handle)return '<p class="mu" style="margin:0">Sign in on the Friends tab to see which friends have this card or want it.</p>';
+  const have=FT.by.get(c.i)||[],want=FW.by.get(c.i)||[];
+  if(!have.length&&!want.length)return '<p class="mu" style="margin:0">None of your friends have this listed or are looking for it.</p>';
+  return (have.length?`<b>👥 Friends who have it (${have.length})</b>`+have.map(x=>{const m=c.v[x.k]?c.v[x.k][0]:0;return `<div class="frow" style="margin-top:6px"><div style="flex:1;min-width:0"><b>@${esc(x.o)}</b> <span class="tag">${MODE_TXT[x.m]||'Trade or sale'}</span><div class="mu">${esc(x.ln)} · ${esc(x.k)} · ${x.p>0?money(x.p)+' asking':(m>0?money(m)+' market':'no price')}</div></div><button class="chip on" data-fgo="${esc(x.o)}|${esc(x.l)}">Go to list</button></div>`}).join(''):'')
+   +(want.length?`<div style="margin-top:${have.length?10:0}px"><b>🎁 Friends looking for it (${owners(want).length})</b><div class="mu">${owners(want).map(o=>'@'+esc(o)).join(', ')}</div></div>`:'')}
+function fillFriendPanel(){const e=$('#frp');if(e&&S.card)e.innerHTML=friendPanelInner(S.card)}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-fgo]');if(!b)return;const [o,l]=b.dataset.fgo.split('|');ftGo(o,l)});
+function matchPanel(){
+  const m=matchCalc(),n=m.have.length+m.want.length;
+  if(!n)return `<details class="fold match"><summary>🎯 Matches <span class="mu">(none yet)</span></summary><div class="foldbody"><p class="mu">When a friend lists a card you ♡, or a friend wants a card you own or have listed, it shows up here.</p></div></details>`;
+  const haveRows=m.have.map(x=>{const c=cardById(x.i);if(!c)return '';const mk=c.v[x.k]?c.v[x.k][0]:0;
+    return `<div class="tl hot"><img src="${esc(c.img)}" alt="" loading="lazy"><div style="flex:1;min-width:0"><b>${esc(c.name)}</b>${c.lang==='jp'?'<span class="lang">JP</span>':''}<span class="tag hit">${MODE_TXT[x.m]||'Trade or sale'}</span><div class="mu">${esc(c.set)} · ${esc(x.k)}<br><b>@${esc(x.o)}</b> · ${esc(x.ln)} · ${x.p>0?money(x.p)+' asking':(mk>0?money(mk):'—')}</div></div><button class="chip on" data-fgo="${esc(x.o)}|${esc(x.l)}">View</button></div>`}).join('');
+  const wantRows=m.want.map(e=>{const c=cardById(e.i);if(!c)return '';const mk=c.v[e.k]?c.v[e.k][0]:0;
+    return `<div class="tl hot"><img src="${esc(c.img)}" alt="" loading="lazy"><div style="flex:1;min-width:0"><b>${esc(c.name)}</b>${c.lang==='jp'?'<span class="lang">JP</span>':''}<span class="tag">${e.listed?'On your trade list':'In your binder'}</span><div class="mu">${esc(c.set)}<br>Wanted by ${e.o.map(o=>'<b>@'+esc(o)+'</b>').join(', ')}${mk>0?' · '+money(mk):''}</div></div>${e.listed?'':`<button class="chip on" data-mlist="${e.i}">List it</button>`}</div>`}).join('');
+  return `<details class="fold match" open><summary>🎯 Matches <span class="mu">(${n})</span></summary><div class="foldbody">${m.have.length?`<h4 class="mh">👥 Friends have cards you want (${m.have.length})</h4>${haveRows}`:''}${m.want.length?`<h4 class="mh">🎁 Friends want cards you have (${m.want.length})</h4>${wantRows}`:''}</div></details>`}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-mlist]');if(!b)return;const i=+b.dataset.mlist,c=cardById(i);if(!c)return;tListDlg({i,k:(FW.by.get(i)||[]).map(x=>x.k).find(k=>c.v[k])||c.vk[0]},c)});
 
 // ================= Accounts, friends and sharing =================
 const AK='bb_acct';
@@ -468,6 +526,7 @@ const accSave=()=>{try{if(ACC.handle)localStorage.setItem(AK,JSON.stringify({han
 const FV={view:'home',handle:'',owner:'',id:'',page:0,rid:0};
 function toast(msg){let t=$('#toast');if(!t){t=document.createElement('div');t.id='toast';document.body.appendChild(t)}t.textContent=msg;t.className='show';clearTimeout(t._t);t._t=setTimeout(()=>{t.className=''},3400)}
 async function api(a,body,retried){
+  if(/^friend_(add|accept|remove)$|^(signup|login|sync|unshare|trade_sync)$/.test(a)&&typeof FT!=='undefined')FT.t=0;
   const hdr={'content-type':'application/json'};let pass='';try{pass=localStorage.getItem('bb_pass')||''}catch(e){}if(pass)hdr['x-pass']=pass;
   if(ACC.handle&&a!=='signup'&&a!=='login')hdr['x-auth']=ACC.handle+':'+ACC.code;
   let r,j={};
@@ -533,7 +592,7 @@ function showTab(t,fromPop){
   if(t==='binders')bRender(true);
   if(t==='trade')tRender(true);
   if(t==='friends')fvRender();
-  if(t==='find'||t==='trade'||t==='friends')ftLoad()}
+  if(t==='find'||t==='trade'||t==='friends'||t==='binders')ftLoad()}
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{if(b.dataset.tab==='friends'&&NAV.tab==='friends'&&FV.view!=='home'){fvGo('home');return}showTab(b.dataset.tab)});
 
 async function bEnsureData(){
@@ -572,7 +631,7 @@ async function bRender(load){
     if(!r)return `<button class="pk" data-i="${i}">＋</button>`;
     if(!c)return `<button class="pk has" data-i="${i}"><span style="font-size:11px">card not found</span></button>`;
     const val=c.v[r.k]?c.v[r.k][0]:0;
-    return `<button class="pk has${r.w?' wish':''}${BD.sel&&BD.sel.p===BD.page&&BD.sel.i===i?' sel':''}" data-i="${i}"><img src="${esc(c.img)}" alt="${esc(c.name)}" loading="lazy">${r.w?'<span class="heart">♡</span>':''}${isListed(r)?'<span class="lbadge">🏷 Listed</span>':''}${r.q?'<span class="qm">check</span>':''}<span class="pp">${val>0?money(val):'—'}${shaky(c,r.k)?' ⚠':''}</span></button>`}).join('')}</div>
+    return `<button class="pk has${r.w?' wish':''}${pkMk(r).cls}${BD.sel&&BD.sel.p===BD.page&&BD.sel.i===i?' sel':''}" data-i="${i}"><img src="${esc(c.img)}" alt="${esc(c.name)}" loading="lazy">${r.w?'<span class="heart">♡</span>':''}${pkMk(r).html}${isListed(r)?'<span class="lbadge">🏷 Listed</span>':''}${r.q?'<span class="qm">check</span>':''}<span class="pp">${val>0?money(val):'—'}${shaky(c,r.k)?' ⚠':''}</span></button>`}).join('')}</div>
   <p class="hint">Press and hold a card to drag it. Hold it at the screen edge to turn the page · Near Mint prices · ⚠ = uncertain</p>`;
   $('#bsel').onchange=e=>{BD.cur=e.target.value;BD.page=0;BD.sel=null;bSave();bRender()};
   $('#bnew').onclick=bNewDlg;
@@ -633,9 +692,11 @@ function bPocket(b,i){
   if(!r){bPicker(b,i);return}
   const c=cardById(r.i),cur=refVal(r),gain=(Number.isFinite(r.a)&&r.a>0&&cur>0)?cur-r.a:null;
   modal(`<h3>${c?esc(c.name):'Card'}${r.w?' <span class="mu">♡ wishlist</span>':''}</h3>${c?`<p class="mu">${esc(c.set)}${c.lang==='jp'?' · JP':''} · #${esc(c.number)}<br>Near Mint · ${esc(r.k)} · ${money(cur)}${gain!==null&&Math.abs(gain)>=0.005?`<br>Added at ${money(r.a)} · ${gain>=0?'▲':'▼'} ${money(Math.abs(gain))} since`:''}</p>`:''}
+  ${sheetMatch(r)}
   ${r.q&&c&&c.vk.length>1?`<div class="review"><b>⚠ I guessed the printing from your photo</b><div class="mu">Tap the right one:</div>${c.vk.map((k,n)=>`<button class="item" data-pk="${n}" style="${k===r.k?'outline:2px solid var(--ac)':''}">${esc(k)} · ${c.v[k][0]>0?money(c.v[k][0]):'no price'}</button>`).join('')}<button class="chip" id="qok">Looks right</button></div>`:''}
   ${r.w?'':`<button class="btn" id="tr">${isListed(r)?'🏷 Listed · manage lists':'🔄 List for trade or sale'}</button>`}<button class="btn alt" id="wl" style="margin-top:8px">${r.w?'I own this now':'♡ Mark as wishlist'}</button><button class="btn alt" id="mv" style="margin-top:8px">Move / swap on this page</button>${b.pages.length>1?'<button class="btn alt" id="mtp" style="margin-top:8px">Move to another page</button>':''}<button class="btn alt" id="rp" style="margin-top:8px">Replace card</button>${c?`<a class="btn alt" style="margin-top:8px;text-decoration:none" target="_blank" rel="noopener" href="${esc(link(c,r.k))}">Open on TCGplayer</a>`:''}<button class="btn" id="rm" style="margin-top:8px;background:#b91c1c">Remove from pocket</button><button class="btn alt" id="no" style="margin-top:8px">Close</button>`);
   $('#no').onclick=()=>closeModal();
+  if($('#sheetft'))$('#sheetft').onclick=()=>{closeModal();setTimeout(()=>ftDlg(r.i),450)};
   if($('#tr'))$('#tr').onclick=()=>{closeModal();setTimeout(()=>tListDlg(r,c),450)};
   document.querySelectorAll('#modal [data-pk]').forEach(el=>el.onclick=()=>{r.k=c.vk[+el.dataset.pk];if(!r.w)r.a=c.v[r.k][0]||0;delete r.q;bSave();closeModal();bRender()});
   if($('#qok'))$('#qok').onclick=()=>{delete r.q;bSave();closeModal();bRender()};
@@ -804,7 +865,7 @@ function tRow(r,side,i){
   const c=cardById(r.i);
   if(!c)return `<div class="trow"><div class="mu" style="flex:1">card not found</div><button class="x" data-act="rm" data-side="${side}" data-i="${i}">✕</button></div>`;
   const m=c.v[r.k]?c.v[r.k][0]:0;
-  return `<div class="trow"><img src="${esc(c.img)}" alt="" loading="lazy"><div style="flex:1;min-width:0"><b>${esc(c.name)}</b>${c.lang==='jp'?'<span class="lang">JP</span>':''}<div class="mu">${esc(c.set)} · #${esc(c.number)}<br>${esc(r.k)}</div></div><div class="tp">${m>0?money(m):'—'}${shaky(c,r.k)?'<br><span class="warn">⚠</span>':''}</div><button class="x" data-act="rm" data-side="${side}" data-i="${i}" aria-label="Remove">✕</button></div>${side==='mine'?`<div class="tmeta"><button class="chip on" data-act="tmode" data-i="${i}">${MODE_LBL[r.m||'either']} ⇄</button>${(r.m==='sale'||r.m==='either')?`<span class="mu">Price $</span><input class="tpr" data-i="${i}" type="number" inputmode="decimal" min="0" step="0.01" placeholder="${m>0?m.toFixed(2):'ask'}" value="${r.p>0?r.p:''}">`:''}</div>`:''}`}
+  return `<div class="trow"><img src="${esc(c.img)}" alt="" loading="lazy"><div style="flex:1;min-width:0"><b>${esc(c.name)}</b>${c.lang==='jp'?'<span class="lang">JP</span>':''}${side==='mine'&&ACC.handle&&FW.by.has(r.i)?`<span class="tag hot">🎁 ${ownTxt(FW.by.get(r.i))} wants this</span>`:''}<div class="mu">${esc(c.set)} · #${esc(c.number)}<br>${esc(r.k)}</div></div><div class="tp">${m>0?money(m):'—'}${shaky(c,r.k)?'<br><span class="warn">⚠</span>':''}</div><button class="x" data-act="rm" data-side="${side}" data-i="${i}" aria-label="Remove">✕</button></div>${side==='mine'?`<div class="tmeta"><button class="chip on" data-act="tmode" data-i="${i}">${MODE_LBL[r.m||'either']} ⇄</button>${(r.m==='sale'||r.m==='either')?`<span class="mu">Price $</span><input class="tpr" data-i="${i}" type="number" inputmode="decimal" min="0" step="0.01" placeholder="${m>0?m.toFixed(2):'ask'}" value="${r.p>0?r.p:''}">`:''}</div>`:''}`}
 const MODE_LBL={trade:'🔄 Trade',sale:'💵 Sale',either:'🔄💵 Trade or sale'};
 const MODE_NEXT={either:'trade',trade:'sale',sale:'either'};
 
@@ -853,10 +914,10 @@ function tResults(){
       else if(m<=target&&(!best||m>best.a))best={c,k,a:m}}
     if(best)items.push(best)}
   items.sort((x,y)=>T.mode==='about'?Math.abs(x.a-target)-Math.abs(y.a-target)||y.a-x.a:y.a-x.a);
-  fRender(fb,T.f,items,()=>{T.shown=40;tResults()});
-  const all=items.length,L=fApply(items,T.f);items.length=0;items.push(...ftFirst(L));
+  fRender(fb,T.f,items,()=>{T.shown=40;tResults()});WS_CUR=myWishSet();
+  const all=items.length,L=fApply(items,T.f);items.length=0;items.push(...ftFirst(L));const nf=FT.by.size?FT.nf:0;
   T.results=items;
-  box.innerHTML=`<p class="mu">${items.length}${items.length!==all?' of '+all:''} card${all===1?'':'s'} ${T.mode==='about'?`within ±${money(rg)} of ${money(target)}`:`up to ${money(target)}`} (Near Mint market price)</p><div class="grid">${items.slice(0,T.shown).map((x,n)=>`<div class="item"><a target="_blank" rel="noopener" href="${esc(link(x.c,x.k))}"${ftAttr(x.c)} style="color:inherit;text-decoration:none">${ftBadge(x.c)}<img src="${esc(x.c.img)}" loading="lazy" alt=""><b>${esc(x.c.name)}</b><div class="mu">${esc(x.c.set)}${x.c.lang==='jp'?'<span class="lang">JP</span>':''} #${esc(x.c.number)}<br>Near Mint · ${esc(x.k)}</div><div><span class="tag">${money(x.a)}</span></div></a><button class="chip" data-act="get" data-n="${n}" style="margin-top:6px;width:100%">＋ Get this</button></div>`).join('')}</div>${items.length>T.shown?'<button class="btn" data-act="more" style="margin-top:10px">Show more</button>':''}`}
+  box.innerHTML=`<p class="mu">${items.length}${items.length!==all?' of '+all:''} card${all===1?'':'s'} ${T.mode==='about'?`within ±${money(rg)} of ${money(target)}`:`up to ${money(target)}`} (Near Mint market price)</p><div class="grid">${items.slice(0,T.shown).map((x,n)=>(nf&&n===0?'<div class="gh">👥 From your friends\' lists ('+nf+')</div>':'')+(nf&&n===nf?'<div class="gh">Other cards</div>':'')+`<div class="item"><a target="_blank" rel="noopener" href="${esc(link(x.c,x.k))}"${ftAttr(x.c)} style="color:inherit;text-decoration:none">${ftBadge(x.c)}<img src="${esc(x.c.img)}" loading="lazy" alt=""><b>${esc(x.c.name)}</b><div class="mu">${esc(x.c.set)}${x.c.lang==='jp'?'<span class="lang">JP</span>':''} #${esc(x.c.number)}<br>Near Mint · ${esc(x.k)}</div><div><span class="tag">${money(x.a)}</span></div></a><button class="chip" data-act="get" data-n="${n}" style="margin-top:6px;width:100%">＋ Get this</button></div>`).join('')}</div>${items.length>T.shown?'<button class="btn" data-act="more" style="margin-top:10px">Show more</button>':''}`;WS_CUR=null}
 
 // generic card picker (search by name, pick a printing)
 async function tPick(cb,back){
@@ -1045,7 +1106,7 @@ const visLabel=v=>v==='public'?'🌐 Public':v==='friends'?'👥 Friends only':'
 const fmtCode=c=>String(c).replace(/(.{5})(?=.)/g,'$1-');
 const ago=ts=>{const m=Math.max(0,Math.floor((Date.now()-ts)/60000));if(m<1)return'just now';if(m<60)return m+' min ago';const h=Math.floor(m/60);if(h<24)return h+' h ago';const d=Math.floor(h/24);return d+' day'+(d>1?'s':'')+' ago'};
 const tcgImg=i=>'https://tcgplayer-cdn.tcgplayer.com/product/'+(+i)+'_200w.jpg';
-const fvBadge=n=>{const t=document.querySelector('.tab[data-tab="friends"]');if(t)t.textContent='👥 Friends'+(n?' ('+n+')':'')};
+const fvBadge=n=>{FVREQ=n||0;tabLabel()};
 
 function accDlg(done){
   modal(`<h3>Pick a handle</h3><p class="mu">This is how friends find you. Use 3 to 20 letters, numbers or underscores. No email needed.</p><input id="ah" type="text" placeholder="e.g. alex_cards" maxlength="20" autocapitalize="none" autocorrect="off" spellcheck="false" style="width:100%"><p class="mu" id="aerr" style="color:#ff9b9b;min-height:1.2em"></p><button class="btn" id="aok">Create account</button><button class="btn alt" id="alog" style="margin-top:8px">I already have an account</button><button class="btn alt" id="ano" style="margin-top:8px">Cancel</button>`);
@@ -1107,7 +1168,9 @@ async function fvHome(my){
   el.innerHTML='<p class="mu">Loading…</p>';
   let m;try{m=await api('me')}catch(e){if(my!==FV.rid)return;el.innerHTML=`<h3>Friends</h3><p class="mu">${esc(e.message)}</p><button class="btn alt" id="facc">Account</button>`;$('#facc').onclick=acctMenu;return}
   if(my!==FV.rid)return;fvBadge(m.incoming.length);
+  await ftLoad(true);await fvNeed([...FT.items,...FW.items]);if(my!==FV.rid)return;fvBadge(m.incoming.length);
   el.innerHTML=`<div class="row" style="align-items:center;justify-content:space-between;margin-top:4px"><h3 style="margin:0">@${esc(m.handle)}</h3><button class="chip" id="facc">Account</button></div>
+  ${matchPanel()}
   ${m.incoming.length?`<h3>Friend requests</h3>${m.incoming.map(h=>`<div class="frow"><b>@${esc(h)}</b><span><button class="chip on" data-acc="${esc(h)}">Accept</button> <button class="chip" data-dec="${esc(h)}">Decline</button></span></div>`).join('')}`:''}
   <h3>Your friends</h3>${m.friends.length?m.friends.map(h=>`<button class="frow btnrow" data-open="${esc(h)}"><b>@${esc(h)}</b><span class="mu">View binders ›</span></button>`).join(''):'<p class="mu">No friends yet. Add one by handle below.</p>'}
   <h3>Add a friend</h3><div class="row"><input id="fadd" type="text" placeholder="their handle" maxlength="21" autocapitalize="none" autocorrect="off" spellcheck="false"><button class="btn" id="fsend" style="flex:0 0 90px;padding:10px">Send</button></div><p class="mu" id="fmsg" style="min-height:1.2em"></p>
@@ -1227,7 +1290,7 @@ async function fvBinder(my){
     modal(`<h3>${esc(c.name)}${r.w?' <span class="mu">♡ looking for this</span>':''}</h3><p class="mu">${esc(c.set)}${c.lang==='jp'?' · JP':''} · #${esc(c.number)}<br>Near Mint · ${esc(r.k)} · ${money(refVal(r))}</p><a class="btn alt" style="text-decoration:none" target="_blank" rel="noopener" href="${esc(link(c,r.k))}">Open on TCGplayer</a><button class="btn" id="no" style="margin-top:8px">Close</button>`);
     $('#no').onclick=()=>closeModal()})}
 
-if(ACC.handle)api('me').then(m=>fvBadge(m.incoming.length)).catch(()=>{});
+if(ACC.handle){api('me').then(m=>fvBadge(m.incoming.length)).catch(()=>{});ftLoad(true)}
 
 // ================= How it works, share links, deep links =================
 const HELP_STEPS=[
