@@ -99,6 +99,7 @@ label.mu{color:var(--mu)}
 .tmeta{display:flex;gap:8px;align-items:center;margin:-4px 0 10px 4px;flex-wrap:wrap}.tmeta .chip{font-size:13px}.tpr{width:96px;padding:6px 8px;text-align:center;font-weight:800}
 .tl{display:flex;gap:10px;align-items:center;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:8px;margin-bottom:8px;position:relative}.tl img{width:46px;flex:0 0 46px;border-radius:5px}.tl b{font-size:15px}.tl .mu{font-size:12px}
 .tag{display:inline-block;font-size:11px;font-weight:800;border-radius:999px;padding:2px 8px;margin-left:6px;background:var(--line);color:var(--fg)}.tag.hit{background:var(--aqua);color:#06281d}
+.lbadge{position:absolute;top:2px;left:2px;z-index:2;background:var(--ac);color:#10192e;font-size:10px;font-weight:800;border-radius:999px;padding:1px 6px;box-shadow:0 0 6px #000}
 </style></head><body>
 <div class="banner"><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><h1>Binder Buddy</h1><p>Snap a card. Find its price twins.</p></div>
 <div class="tabs"><button class="tab on" data-tab="binders">📒 Binders</button><button class="tab" data-tab="find">🔍 Look up</button><button class="tab" data-tab="trade">🔄 Trade</button><button class="tab" data-tab="friends">👥 Friends</button></div>
@@ -543,7 +544,7 @@ async function bRender(load){
     if(!r)return `<button class="pk" data-i="${i}">＋</button>`;
     if(!c)return `<button class="pk has" data-i="${i}"><span style="font-size:11px">card not found</span></button>`;
     const val=c.v[r.k]?c.v[r.k][0]:0;
-    return `<button class="pk has${r.w?' wish':''}${BD.sel&&BD.sel.p===BD.page&&BD.sel.i===i?' sel':''}" data-i="${i}"><img src="${esc(c.img)}" alt="${esc(c.name)}" loading="lazy">${r.w?'<span class="heart">♡</span>':''}${r.q?'<span class="qm">check</span>':''}<span class="pp">${val>0?money(val):'—'}${shaky(c,r.k)?' ⚠':''}</span></button>`}).join('')}</div>
+    return `<button class="pk has${r.w?' wish':''}${BD.sel&&BD.sel.p===BD.page&&BD.sel.i===i?' sel':''}" data-i="${i}"><img src="${esc(c.img)}" alt="${esc(c.name)}" loading="lazy">${r.w?'<span class="heart">♡</span>':''}${isListed(r)?'<span class="lbadge">🏷 Listed</span>':''}${r.q?'<span class="qm">check</span>':''}<span class="pp">${val>0?money(val):'—'}${shaky(c,r.k)?' ⚠':''}</span></button>`}).join('')}</div>
   <p class="hint">Press and hold a card to drag it. Hold it at the screen edge to turn the page · Near Mint prices · ⚠ = uncertain</p>`;
   $('#bsel').onchange=e=>{BD.cur=e.target.value;BD.page=0;BD.sel=null;bSave();bRender()};
   $('#bnew').onclick=bNewDlg;
@@ -604,9 +605,9 @@ function bPocket(b,i){
   const c=cardById(r.i),cur=refVal(r),gain=(Number.isFinite(r.a)&&r.a>0&&cur>0)?cur-r.a:null;
   modal(`<h3>${c?esc(c.name):'Card'}${r.w?' <span class="mu">♡ wishlist</span>':''}</h3>${c?`<p class="mu">${esc(c.set)}${c.lang==='jp'?' · JP':''} · #${esc(c.number)}<br>Near Mint · ${esc(r.k)} · ${money(cur)}${gain!==null&&Math.abs(gain)>=0.005?`<br>Added at ${money(r.a)} · ${gain>=0?'▲':'▼'} ${money(Math.abs(gain))} since`:''}</p>`:''}
   ${r.q&&c&&c.vk.length>1?`<div class="review"><b>⚠ I guessed the printing from your photo</b><div class="mu">Tap the right one:</div>${c.vk.map((k,n)=>`<button class="item" data-pk="${n}" style="${k===r.k?'outline:2px solid var(--ac)':''}">${esc(k)} · ${c.v[k][0]>0?money(c.v[k][0]):'no price'}</button>`).join('')}<button class="chip" id="qok">Looks right</button></div>`:''}
-  ${r.w?'':'<button class="btn" id="tr">🔄 List for trade or sale</button>'}<button class="btn alt" id="wl" style="margin-top:8px">${r.w?'I own this now':'♡ Mark as wishlist'}</button><button class="btn alt" id="mv" style="margin-top:8px">Move / swap on this page</button>${b.pages.length>1?'<button class="btn alt" id="mtp" style="margin-top:8px">Move to another page</button>':''}<button class="btn alt" id="rp" style="margin-top:8px">Replace card</button>${c?`<a class="btn alt" style="margin-top:8px;text-decoration:none" target="_blank" rel="noopener" href="${esc(link(c,r.k))}">Open on TCGplayer</a>`:''}<button class="btn" id="rm" style="margin-top:8px;background:#b91c1c">Remove from pocket</button><button class="btn alt" id="no" style="margin-top:8px">Close</button>`);
+  ${r.w?'':`<button class="btn" id="tr">${isListed(r)?'🏷 Listed · manage lists':'🔄 List for trade or sale'}</button>`}<button class="btn alt" id="wl" style="margin-top:8px">${r.w?'I own this now':'♡ Mark as wishlist'}</button><button class="btn alt" id="mv" style="margin-top:8px">Move / swap on this page</button>${b.pages.length>1?'<button class="btn alt" id="mtp" style="margin-top:8px">Move to another page</button>':''}<button class="btn alt" id="rp" style="margin-top:8px">Replace card</button>${c?`<a class="btn alt" style="margin-top:8px;text-decoration:none" target="_blank" rel="noopener" href="${esc(link(c,r.k))}">Open on TCGplayer</a>`:''}<button class="btn" id="rm" style="margin-top:8px;background:#b91c1c">Remove from pocket</button><button class="btn alt" id="no" style="margin-top:8px">Close</button>`);
   $('#no').onclick=()=>closeModal();
-  if($('#tr'))$('#tr').onclick=()=>{T.mine.push({i:r.i,k:r.k,m:'either'});tSave();T.msg='Added '+(c?c.name:'card')+' to your trade list. Set Trade, Sale or both below.';closeModal();showTab('trade')};
+  if($('#tr'))$('#tr').onclick=()=>{closeModal();setTimeout(()=>tListDlg(r,c),450)};
   document.querySelectorAll('#modal [data-pk]').forEach(el=>el.onclick=()=>{r.k=c.vk[+el.dataset.pk];if(!r.w)r.a=c.v[r.k][0]||0;delete r.q;bSave();closeModal();bRender()});
   if($('#qok'))$('#qok').onclick=()=>{delete r.q;bSave();closeModal();bRender()};
   $('#wl').onclick=()=>{if(r.w){delete r.w;r.a=refVal(r)||r.a}else r.w=1;bSave();closeModal();bRender()};
@@ -720,12 +721,38 @@ function bWireDrag(b){DR.b=b;document.querySelectorAll('.pk.has').forEach(el=>{
 
 // ================= Trade (scan a stack, see its value, find cards worth about that) =================
 const TK='bb_trade_v1';
-const T={share:true,mine:[],theirs:[],pct:100,incl:false,mode:'about',range:5,lang:'en',review:[],msg:'',shown:40,results:[],rid:0};
-function tLoad(){try{const j=JSON.parse(localStorage.getItem(TK)||'null');if(j){T.mine=Array.isArray(j.mine)?j.mine:[];T.theirs=Array.isArray(j.theirs)?j.theirs:[];T.pct=+j.pct||100;T.incl=!!j.incl;T.share=j.share!==false}}catch(e){}}
-function tSave(){try{localStorage.setItem(TK,JSON.stringify({v:1,mine:T.mine,theirs:T.theirs,pct:T.pct,incl:T.incl,share:T.share!==false}))}catch(e){}tradeSyncSoon()}
+const T={lists:[],cur:'',mine:[],theirs:[],pct:100,incl:false,mode:'about',range:5,lang:'en',review:[],msg:'',shown:40,results:[],rid:0};
+function tNewId(){return 'l'+Date.now().toString(36)+Math.random().toString(36).slice(2,5)}
+function tSetCur(id){const l=T.lists.find(x=>x.id===id)||T.lists[0];T.cur=l.id;T.mine=l.items}
+const tCurList=()=>T.lists.find(x=>x.id===T.cur)||T.lists[0];
+function tLoad(){try{const j=JSON.parse(localStorage.getItem(TK)||'null');if(j){
+  if(Array.isArray(j.lists)&&j.lists.length){T.lists=j.lists.map(l=>({id:String(l.id),name:String(l.name||'List').slice(0,40),items:Array.isArray(l.items)?l.items:[],share:l.share!==false}));T.cur=j.cur}
+  else T.lists=[{id:'main',name:'My trade list',items:Array.isArray(j.mine)?j.mine:[],share:j.share!==false}];
+  T.theirs=Array.isArray(j.theirs)?j.theirs:[];T.pct=+j.pct||100;T.incl=!!j.incl}}catch(e){}
+  if(!T.lists.length)T.lists=[{id:'main',name:'My trade list',items:[],share:true}];
+  tSetCur(T.cur)}
+function tSave(){try{localStorage.setItem(TK,JSON.stringify({v:2,lists:T.lists,cur:T.cur,theirs:T.theirs,pct:T.pct,incl:T.incl}))}catch(e){}tradeSyncSoon()}
 let TSYNC=null;
-function tradeList(){return T.mine.map(r=>{const o={i:r.i,k:r.k,m:r.m||'either'};if(r.p>0)o.p=r.p;return o})}
-function tradeSyncSoon(force){if(!ACC.handle)return;clearTimeout(TSYNC);TSYNC=setTimeout(()=>{api('trade_sync',{list:T.share===false?null:tradeList()}).catch(()=>{})},1500)}
+function tradeSyncSoon(){if(!ACC.handle)return;clearTimeout(TSYNC);TSYNC=setTimeout(()=>{
+  const lists=T.lists.filter(l=>l.share!==false&&l.items.length).map(l=>({id:l.id,name:l.name,items:l.items.map(r=>{const o={i:r.i,k:r.k,m:r.m||'either'};if(r.p>0)o.p=r.p;return o})}));
+  api('trade_sync',{lists}).catch(()=>{})},1500)}
+const isListed=r=>!!r&&!r.w&&T.lists.some(l=>l.items.some(x=>x.i===r.i&&x.k===r.k));
+function tNameDlg(title,init,okLabel,cb,back){
+  modal(`<h3>${title}</h3><input id="lnm" type="text" maxlength="40" value="${esc(init||'')}" placeholder="e.g. Card show Dec 14" style="width:100%"><button class="btn" id="lok" style="margin-top:10px">${okLabel}</button><button class="btn alt" id="lcancel" style="margin-top:8px">Cancel</button>`);
+  const go=()=>{const v=$('#lnm').value.trim().slice(0,40);if(!v){$('#lnm').focus();return}closeModal();cb(v)};
+  $('#lok').onclick=go;$('#lnm').onkeydown=e=>{if(e.key==='Enter')go()};
+  $('#lcancel').onclick=()=>{closeModal();if(back)setTimeout(back,450)};
+  setTimeout(()=>{const q=$('#lnm');if(q){q.focus();q.select()}},60)}
+function tNewList(cb,back){tNameDlg('New list','','Create list',name=>{const l={id:tNewId(),name,items:[],share:true};T.lists.push(l);tSave();cb(l)},back)}
+// choose which lists a binder card is on
+function tListDlg(r,c){
+  const on=l=>l.items.some(x=>x.i===r.i&&x.k===r.k);
+  modal(`<h3>List for trade or sale</h3><p class="mu">${c?esc(c.name):'Card'} · ${esc(r.k)}<br>Tap a list to add or remove this card.</p>${T.lists.map(l=>`<button class="btn${on(l)?'':' alt'}" data-l="${esc(l.id)}" style="margin-bottom:8px">${on(l)?'✓ ':''}${esc(l.name)} <span class="mu">(${l.items.length})</span></button>`).join('')}<button class="btn alt" id="lnew" style="margin-bottom:8px">＋ New list</button><button class="btn" id="ldone">Done</button>`);
+  document.querySelectorAll('#modal [data-l]').forEach(b=>b.onclick=()=>{const l=T.lists.find(x=>x.id===b.dataset.l);if(!l)return;
+    const n=l.items.findIndex(x=>x.i===r.i&&x.k===r.k);if(n>=0)l.items.splice(n,1);else l.items.push({i:r.i,k:r.k,m:'either'});
+    tSave();tListDlg(r,c)});
+  $('#lnew').onclick=()=>{closeModal();setTimeout(()=>tNewList(l=>{l.items.push({i:r.i,k:r.k,m:'either'});tSave();tListDlg(r,c)},()=>tListDlg(r,c)),450)};
+  $('#ldone').onclick=()=>{closeModal();bRender()}}
 function tSum(list){let val=0,skipped=0;for(const r of list){const c=cardById(r.i);if(!c||!c.v[r.k])continue;const m=c.v[r.k][0];if(!(m>0))continue;if(!T.incl&&shaky(c,r.k)){skipped++;continue}val+=m}return {val,skipped}}
 const tPool=()=>T.lang==='jp'?DATA.jp:T.lang==='both'?DATA.cards.concat(DATA.jp):DATA.cards;
 async function tEnsure(){try{await loadData()}catch(e){T.msg=e.message}
@@ -744,8 +771,11 @@ async function tRender(load){
   if(load)await tEnsure();
   const v=$('#tradeView');if(!v)return;
   const a=tSum(T.mine),b=tSum(T.theirs),tv=a.val*T.pct/100,diff=tv-b.val;
-  v.innerHTML=`<h3 style="margin-top:6px">Cards I'm offering <span class="mu">(${T.mine.length} card${T.mine.length===1?'':'s'})</span></h3>
-  ${ACC.handle?`<label class="mu" style="display:block;margin:0 0 8px"><input type="checkbox" id="tshare"${T.share!==false?' checked':''}> Friends can see this list on my profile</label>`:'<p class="mu" style="margin:0 0 8px">Sign in from the Friends tab to let friends see this list.</p>'}
+  const cl=tCurList();
+  v.innerHTML=`<div class="chips" style="margin-top:4px">${T.lists.map(l=>`<button class="chip${l.id===T.cur?' on':''}" data-act="tlist" data-id="${esc(l.id)}">${esc(l.name)} (${l.items.length})</button>`).join('')}<button class="chip" data-act="tnew">＋ New list</button></div>
+  <h3 style="margin-top:10px">${esc(cl.name)} <span class="mu">(${T.mine.length} card${T.mine.length===1?'':'s'})</span></h3>
+  <div class="chips" style="margin-bottom:8px"><button class="chip" data-act="trename">✎ Rename</button><button class="chip" data-act="tdel">🗑 Delete list</button></div>
+  ${ACC.handle?`<label class="mu" style="display:block;margin:0 0 8px"><input type="checkbox" id="tshare"${cl.share!==false?' checked':''}> Friends can see this list on my profile</label>`:'<p class="mu" style="margin:0 0 8px">Sign in from the Friends tab to let friends see your lists.</p>'}
   <div class="cams"><label class="btn" for="tfile">📷 Scan card</label><label class="btn alt" for="tfile2">🖼️ Scan photos</label></div>
   <input id="tfile" class="pick" type="file" accept="image/*" capture="environment"><input id="tfile2" class="pick" type="file" accept="image/*" multiple>
   <button class="btn alt" data-act="addmine" style="margin-bottom:8px">＋ Add by name</button>
@@ -849,13 +879,17 @@ function tWire(){
   if(f1)f1.onchange=()=>{const fs=[...f1.files];f1.value='';tScanFiles(fs)};
   if(f2)f2.onchange=()=>{const fs=[...f2.files];f2.value='';tScanFiles(fs)};
   const pct=$('#tpct');if(pct)pct.onchange=()=>{const n=parseFloat(pct.value);T.pct=n>0&&n<=200?n:100;tSave();tRender()};
-  const sh=$('#tshare');if(sh)sh.onchange=()=>{T.share=sh.checked;tSave();toast(sh.checked?'Friends can see this list':'List hidden from friends')};
+  const sh=$('#tshare');if(sh)sh.onchange=()=>{tCurList().share=sh.checked;tSave();toast(sh.checked?'Friends can see this list':'List hidden from friends')};
   document.querySelectorAll('#tradeView .tpr').forEach(inp=>inp.onchange=()=>{const r=T.mine[+inp.dataset.i];if(!r)return;const n=parseFloat(inp.value);if(n>0)r.p=Math.round(n*100)/100;else delete r.p;tSave()});
   const inc=$('#tinc');if(inc)inc.onchange=()=>{T.incl=inc.checked;tSave();tRender()};
   const rg=$('#trng');if(rg)rg.oninput=()=>{T.range=parseFloat(rg.value)||0;T.shown=40;tResults()}}
 $('#tradeView').addEventListener('click',async e=>{
   const el=e.target.closest('[data-act]');if(!el)return;const act=el.dataset.act;
   if(act==='rm'){T[el.dataset.side].splice(+el.dataset.i,1);tSave();tRender()}
+  else if(act==='tlist'){tSetCur(el.dataset.id);tSave();tRender()}
+  else if(act==='tnew')tNewList(l=>{tSetCur(l.id);tSave();tRender()});
+  else if(act==='trename'){const l=tCurList();tNameDlg('Rename list',l.name,'Save',v=>{l.name=v;tSave();tRender()})}
+  else if(act==='tdel'){const l=tCurList();if(!confirm('Delete the list "'+l.name+'"? The cards in it are not deleted from your binders.'))return;T.lists=T.lists.filter(x=>x!==l);if(!T.lists.length)T.lists=[{id:tNewId(),name:'My trade list',items:[],share:true}];tSetCur(T.lists[0].id);tSave();tRender()}
   else if(act==='tmode'){const r=T.mine[+el.dataset.i];if(r){r.m=MODE_NEXT[r.m||'either'];tSave();tRender()}}
   else if(act==='addmine')tPick((c,k)=>{T.mine.push({i:c.i,k});tSave();tRender()});
   else if(act==='addtheirs')tPick((c,k)=>{T.theirs.push({i:c.i,k});tSave();tRender()});
@@ -994,7 +1028,7 @@ async function restoreShared(){
       const g=await api('get_binder',{owner:ACC.handle,id:x.id});if(!bValid(g.data))continue;
       const c=bClean(g.data);c.id=x.id;c.name=String(g.name||c.name).slice(0,40);c.vis=x.vis;BD.binders.push(c);n++}
     if(n){bSave();toast('Restored '+n+' shared binder'+(n>1?'s':''))}
-    if(!T.mine.length&&Array.isArray(l.trade)&&l.trade.length){T.mine=l.trade.map(r=>({i:r.i,k:r.k,m:r.m||'either',p:r.p})).filter(r=>r.i&&r.k);T.share=true;try{localStorage.setItem(TK,JSON.stringify({v:1,mine:T.mine,theirs:T.theirs,pct:T.pct,incl:T.incl,share:true}))}catch(e){}}}catch(e){}}
+    if(!T.lists.some(x=>x.items.length)&&Array.isArray(l.lists)&&l.lists.length){T.lists=l.lists.map(x=>({id:String(x.id),name:String(x.name||'List').slice(0,40),items:(x.items||[]).filter(r=>r.i&&r.k).map(r=>({i:r.i,k:r.k,m:r.m||'either',p:r.p})),share:true}));tSetCur(T.lists[0].id);tSave()}}catch(e){}}
 function acctMenu(){
   modal(`<h3>@${esc(ACC.handle)}</h3><button class="btn alt mbtn" id="acode">Show my recovery code</button><button class="btn alt mbtn" id="aout">Sign out on this phone</button><button class="btn mbtn" id="no">Close</button>`);
   $('#no').onclick=()=>closeModal();
@@ -1051,16 +1085,19 @@ function fvCardRow(r,tag,extra){
   const m=c.v[r.k]?c.v[r.k][0]:0;
   return `<a class="tl" style="text-decoration:none;color:inherit" target="_blank" rel="noopener" href="${esc(link(c,r.k))}"><img src="${esc(c.img)}" alt="" loading="lazy"><div style="flex:1;min-width:0"><b>${esc(c.name)}</b>${c.lang==='jp'?'<span class="lang">JP</span>':''}${tag||''}<div class="mu">${esc(c.set)} · #${esc(c.number)}<br>${esc(r.k)}</div></div><div class="tp">${extra||(m>0?money(m):'—')}</div></a>`}
 function fvTradeHtml(l){
-  const mine=new Set(T.mine.map(r=>r.i)),wish=myWishSet(),trade=l.trade||[],wants=l.wants||[];
+  const mine=new Set(T.lists.flatMap(x=>x.items).map(r=>r.i)),wish=myWishSet(),wants=l.wants||[];
   const isMe=l.rel==='self';
+  const lists=(l.lists&&l.lists.length)?l.lists:((l.trade&&l.trade.length)?[{name:'For trade',items:l.trade}]:[]);
   let h='';
   if(l.rel==='friend'||isMe){
-    h+=`<h3>For trade or sale <span class="mu">(${trade.length})</span></h3>`;
-    h+=trade.length?trade.map(r=>{
-      const c=cardById(r.i),m=c&&c.v[r.k]?c.v[r.k][0]:0,lbl={trade:'Trade',sale:'Sale',either:'Trade or sale'}[r.m]||'Trade or sale';
-      const hit=!isMe&&wish.has(r.i);
-      const price=r.p>0?money(r.p)+'<br><span class="mu">asking</span>':(m>0?money(m):'—');
-      return fvCardRow(r,`<span class="tag">${lbl}</span>${hit?'<span class="tag hit">You want this ♡</span>':''}`,price)}).join(''):`<p class="mu">${isMe?'Nothing listed yet. Use the Trade tab, or tap a binder card → List for trade or sale.':'Nothing listed right now.'}</p>`;
+    if(!lists.length)h+=`<h3>For trade or sale <span class="mu">(0)</span></h3><p class="mu">${isMe?'Nothing shared yet. Use the Trade tab, or tap a binder card → List for trade or sale.':'Nothing listed right now.'}</p>`;
+    for(const ls of lists){
+      h+=`<h3>${esc(ls.name||'For trade')} <span class="mu">(${ls.items.length})</span></h3>`;
+      h+=ls.items.map(r=>{
+        const c=cardById(r.i),m=c&&c.v[r.k]?c.v[r.k][0]:0,lbl={trade:'Trade',sale:'Sale',either:'Trade or sale'}[r.m]||'Trade or sale';
+        const hit=!isMe&&wish.has(r.i);
+        const price=r.p>0?money(r.p)+'<br><span class="mu">asking</span>':(m>0?money(m):'—');
+        return fvCardRow(r,`<span class="tag">${lbl}</span>${hit?'<span class="tag hit">You want this ♡</span>':''}`,price)}).join('')}
   }
   h+=`<h3>Looking for <span class="mu">(${wants.length})</span></h3>`;
   h+=wants.length?wants.map(r=>fvCardRow(r,`<span class="tag">♡</span>${!isMe&&mine.has(r.i)?'<span class="tag hit">You have this</span>':''}`)).join(''):`<p class="mu">No ♡ cards in ${isMe?'your shared':'their visible'} binders. Mark a card as wishlist in a shared binder and it shows up here.</p>`;
