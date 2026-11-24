@@ -116,6 +116,8 @@ details.fold.match>summary{border-color:var(--ac);color:var(--ac)}
 .gh{grid-column:1/-1;font-weight:800;color:var(--ac);margin:8px 0 2px;font-size:15px}
 .review.mt.have{border-color:var(--aqua)}.review.mt.want{border-color:var(--ac)}
 .bell{background:var(--ac);color:#10192e;border-radius:999px;padding:1px 8px;font-size:12px;font-weight:800;margin-left:6px}
+.tab{white-space:nowrap}.nb{display:inline-block;min-width:18px;margin-left:4px;padding:0 6px;border-radius:999px;background:var(--line);color:var(--fg);font-size:12px;font-weight:800;line-height:18px}.nb.hot{background:var(--ac);color:#10192e}
+.mprev{display:block;font-size:13px;font-weight:600;color:var(--fg);margin-top:4px;white-space:normal}details.match[open] .mprev{display:none}
 </style></head><body>
 <div class="banner"><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><button id="helpbtn" aria-label="How it works" title="How it works">?</button><h1>Binder Buddy</h1><p>Snap a card. Find its price twins.</p></div>
 <div class="tabs"><button class="tab on" data-tab="binders">📒 Binders</button><button class="tab" data-tab="find">🔍 Look up</button><button class="tab" data-tab="trade">🔄 Trade</button><button class="tab" data-tab="friends">👥 Friends</button></div>
@@ -495,7 +497,7 @@ const matchNew=()=>{if(!ACC.handle)return 0;const sn=mSeenGet();return matchKeys
 function matchMarkSeen(){try{localStorage.setItem('bb_match_seen',JSON.stringify(matchKeys()))}catch(e){}tabLabel()}
 document.addEventListener('toggle',e=>{if(e.target&&e.target.classList&&e.target.classList.contains('match')&&e.target.open){matchMarkSeen();const b=e.target.querySelector('.bell');if(b)b.remove()}},true);
 let FVREQ=0;
-function tabLabel(){const t=document.querySelector('.tab[data-tab="friends"]');if(!t)return;const mc=matchCount();t.textContent='👥 Friends'+(FVREQ?' ('+FVREQ+')':'')+(mc?(matchNew()?' 🔔'+matchNew():' 🎯'+mc):'')}
+function tabLabel(){const t=document.querySelector('.tab[data-tab="friends"]');if(!t)return;const mc=matchCount();const nn=matchNew(),bd=FVREQ?'<span class="nb">'+FVREQ+'</span>':(mc?'<span class="nb'+(nn?' hot':'')+'">'+(nn?'🔔 '+nn:mc)+'</span>':'');t.innerHTML='👥 Friends'+bd}
 const owners=a=>[...new Set(a.map(x=>x.o))];
 const ownTxt=a=>{const o=owners(a);return '@'+esc(o[0])+(o.length>1?' +'+(o.length-1):'')};
 function pkMk(r){ // marker on a binder pocket
@@ -514,6 +516,12 @@ function friendPanelInner(c){
    +(want.length?`<div style="margin-top:${have.length?10:0}px"><b>🎁 Friends looking for it (${owners(want).length})</b><div class="mu">${owners(want).map(o=>'@'+esc(o)).join(', ')}</div></div>`:'')}
 function fillFriendPanel(){const e=$('#frp');if(e&&S.card)e.innerHTML=friendPanelInner(S.card)}
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-fgo]');if(!b)return;const [o,l]=b.dataset.fgo.split('|');ftGo(o,l)});
+function matchPreview(m){
+  const f=[];const a=m.have[0],w=m.want[0];
+  if(a){const c=cardById(a.i);f.push('@'+esc(a.o)+' has '+(c?esc(c.name):'a card')+' you ♡')}
+  if(w){const c=cardById(w.i);f.push('@'+esc(w.o[0])+' wants your '+(c?esc(c.name):'card'))}
+  const more=m.have.length+m.want.length-f.length;
+  return f.length?'<div class="mprev">'+f.join(' · ')+(more>0?' · +'+more+' more':'')+'</div>':''}
 function matchPanel(){
   const m=matchCalc(),n=m.have.length+m.want.length;
   if(!n)return `<details class="fold match"><summary>🎯 Matches <span class="mu">(none yet)</span></summary><div class="foldbody"><p class="mu">When a friend lists a card you ♡, or a friend wants a card you own or have listed, it shows up here.</p></div></details>`;
@@ -521,7 +529,7 @@ function matchPanel(){
     return `<div class="tl hot"><img src="${esc(c.img)}" alt="" loading="lazy"><div style="flex:1;min-width:0"><b>${esc(c.name)}</b>${c.lang==='jp'?'<span class="lang">JP</span>':''}<span class="tag hit">${MODE_TXT[x.m]||'Trade or sale'}</span><div class="mu">${esc(c.set)} · ${esc(x.k)}<br><b>@${esc(x.o)}</b> · ${esc(x.ln)} · ${x.p>0?money(x.p)+' asking':(mk>0?money(mk):'—')}</div></div><button class="chip on" data-fgo="${esc(x.o)}|${esc(x.l)}">View</button></div>`}).join('');
   const wantRows=m.want.map(e=>{const c=cardById(e.i);if(!c)return '';const mk=c.v[e.k]?c.v[e.k][0]:0;
     return `<div class="tl hot"><img src="${esc(c.img)}" alt="" loading="lazy"><div style="flex:1;min-width:0"><b>${esc(c.name)}</b>${c.lang==='jp'?'<span class="lang">JP</span>':''}<span class="tag">${e.listed?'On your trade list':'In your binder'}</span><div class="mu">${esc(c.set)}<br>Wanted by ${e.o.map(o=>'<b>@'+esc(o)+'</b>').join(', ')}${mk>0?' · '+money(mk):''}</div></div>${e.listed?'':`<button class="chip on" data-mlist="${e.i}">List it</button>`}</div>`}).join('');
-  return `<details class="fold match"><summary>🎯 Matches <span class="mu">(${n})</span>${matchNew()?' <span class="bell">🔔 '+matchNew()+' new</span>':''}</summary><div class="foldbody">${m.have.length?`<h4 class="mh">👥 Friends have cards you want (${m.have.length})</h4>${haveRows}`:''}${m.want.length?`<h4 class="mh">🎁 Friends want cards you have (${m.want.length})</h4>${wantRows}`:''}</div></details>`}
+  return `<details class="fold match"><summary>🎯 Matches <span class="mu">(${n})</span>${matchNew()?' <span class="bell">🔔 '+matchNew()+' new</span>':''}${matchPreview(m)}</summary><div class="foldbody">${m.have.length?`<h4 class="mh">👥 Friends have cards you want (${m.have.length})</h4>${haveRows}`:''}${m.want.length?`<h4 class="mh">🎁 Friends want cards you have (${m.want.length})</h4>${wantRows}`:''}</div></details>`}
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-mlist]');if(!b)return;const i=+b.dataset.mlist,c=cardById(i);if(!c)return;tListDlg({i,k:(FW.by.get(i)||[]).map(x=>x.k).find(k=>c.v[k])||c.vk[0]},c)});
 
 // ================= Accounts, friends and sharing =================
@@ -1142,8 +1150,9 @@ async function restoreShared(){
     if(n){bSave();toast('Restored '+n+' shared binder'+(n>1?'s':''))}
     if(!T.lists.some(x=>x.items.length)&&Array.isArray(l.lists)&&l.lists.length){T.lists=l.lists.map(x=>({id:String(x.id),name:String(x.name||'List').slice(0,40),items:(x.items||[]).filter(r=>r.i&&r.k).map(r=>({i:r.i,k:r.k,m:r.m||'either',p:r.p})),vis:x.vis||'friends'}));tSetCur(T.lists[0].id);tSave()}}catch(e){}}
 function acctMenu(){
-  modal(`<h3>@${esc(ACC.handle)}</h3><button class="btn alt mbtn" id="acode">Show my recovery code</button><button class="btn alt mbtn" id="aout">Sign out on this phone</button><button class="btn mbtn" id="no">Close</button>`);
+  modal(`<h3>@${esc(ACC.handle)}</h3><button class="btn alt mbtn" id="aprof">See my profile as others do</button><button class="btn alt mbtn" id="acode">Show my recovery code</button><button class="btn alt mbtn" id="aout">Sign out on this phone</button><button class="btn mbtn" id="no">Close</button>`);
   $('#no').onclick=()=>closeModal();
+  $('#aprof').onclick=()=>{closeModal();setTimeout(()=>{showTab('friends');fvGo('profile',{handle:ACC.handle})},350)};
   $('#acode').onclick=()=>codeDlg(null,false);
   $('#aout').onclick=()=>{closeModal();setTimeout(()=>{
     if(!confirm('Sign out? Your binders stay on this phone. Make sure you saved your recovery code, or you will not be able to sign back in.'))return;
@@ -1175,14 +1184,17 @@ async function fvHome(my){
   let m;try{m=await api('me')}catch(e){if(my!==FV.rid)return;el.innerHTML=`<h3>Friends</h3><p class="mu">${esc(e.message)}</p><button class="btn alt" id="facc">Account</button>`;$('#facc').onclick=acctMenu;return}
   if(my!==FV.rid)return;fvBadge(m.incoming.length);
   await ftLoad(true);await fvNeed([...FT.items,...FW.items]);if(my!==FV.rid)return;fvBadge(m.incoming.length);
+  const mc=matchCalc();
   el.innerHTML=`<div class="row" style="align-items:center;justify-content:space-between;margin-top:4px"><h3 style="margin:0">@${esc(m.handle)}</h3><button class="chip" id="facc">Account</button></div>
   ${matchPanel()}
   ${m.incoming.length?`<h3>Friend requests</h3>${m.incoming.map(h=>`<div class="frow"><b>@${esc(h)}</b><span><button class="chip on" data-acc="${esc(h)}">Accept</button> <button class="chip" data-dec="${esc(h)}">Decline</button></span></div>`).join('')}`:''}
-  <h3>Your friends</h3>${m.friends.length?m.friends.map(h=>`<button class="frow btnrow" data-open="${esc(h)}"><b>@${esc(h)}</b><span class="mu">View binders ›</span></button>`).join(''):'<p class="mu">No friends yet. Add one by handle below.</p>'}
-  <h3>Add a friend</h3><div class="row"><input id="fadd" type="text" placeholder="their handle" maxlength="21" autocapitalize="none" autocorrect="off" spellcheck="false"><button class="btn" id="fsend" style="flex:0 0 90px;padding:10px">Send</button></div><p class="mu" id="fmsg" style="min-height:1.2em"></p>
+  <div class="row" style="align-items:center;justify-content:space-between;margin:14px 0 8px"><h3 style="margin:0">Your friends</h3><button class="chip" id="faddtog">＋ Add</button></div>
+  ${m.friends.length?m.friends.map(h=>{const nt=FT.items.filter(x=>x.o===h).length,nw=FW.items.filter(x=>x.o===h).length,mm=mc.have.filter(x=>x.o===h).length+mc.want.filter(x=>x.o.includes(h)).length;
+    return `<button class="frow btnrow" data-open="${esc(h)}"><div style="min-width:0"><b>@${esc(h)}</b><div class="mu">${nt} for trade · ${nw} wants</div></div><span>${mm?`<span class="bell">🎯 ${mm}</span> `:''}<span class="mu">›</span></span></button>`}).join(''):'<p class="mu">No friends yet. Tap ＋ Add and enter a handle.</p>'}
+  <div id="faddbox"${m.friends.length||m.incoming.length?' hidden':''}><div class="row"><input id="fadd" type="text" placeholder="their handle" maxlength="21" autocapitalize="none" autocorrect="off" spellcheck="false"><button class="btn" id="fsend" style="flex:0 0 90px;padding:10px">Send</button></div><p class="mu" id="fmsg" style="min-height:1.2em"></p></div>
   ${m.outgoing.length?`<p class="mu">Waiting on: ${m.outgoing.map(h=>`@${esc(h)} <button class="chip" data-cancel="${esc(h)}">Cancel</button>`).join(' ')}</p>`:''}
-  <button class="btn alt" id="fvme" style="margin-top:6px">See my profile as others do</button><button class="btn alt" id="fvbrowse" style="margin-top:8px">🌐 Browse binders, trades &amp; wants</button>`;
-  $('#facc').onclick=acctMenu;$('#fvme').onclick=()=>fvGo('profile',{handle:ACC.handle});$('#fvbrowse').onclick=()=>fvGo('browse');
+  <button class="btn" id="fvbrowse" style="margin-top:14px">🌐 Browse binders, trades &amp; wants</button><p class="mu" style="margin:6px 2px 0;text-align:center">Public binders, trade lists and cards people are looking for.</p>`;
+  $('#facc').onclick=acctMenu;$('#fvbrowse').onclick=()=>fvGo('browse');$('#faddtog').onclick=()=>{const bx=$('#faddbox');bx.hidden=!bx.hidden;if(!bx.hidden)$('#fadd').focus()};
   const act=async(a,body,msg)=>{try{await api(a,body);if(msg)toast(msg)}catch(e){toast(e.message)}fvRender()};
   document.querySelectorAll('#friendsView [data-acc]').forEach(b=>b.onclick=()=>act('friend_accept',{from:b.dataset.acc},'You and @'+b.dataset.acc+' are friends'));
   document.querySelectorAll('#friendsView [data-dec]').forEach(b=>b.onclick=()=>act('friend_remove',{who:b.dataset.dec}));
