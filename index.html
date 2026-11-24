@@ -502,7 +502,7 @@ function showTab(t,fromPop){
   if(t==='binders')bRender(true);
   if(t==='trade')tRender(true);
   if(t==='friends')fvRender()}
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{if(b.dataset.tab==='friends'&&NAV.tab==='friends'&&FV.view!=='home'){fvGo('home');return}showTab(b.dataset.tab)});
 
 async function bEnsureData(){
   try{await loadData()}catch(e){status(e.message)}
@@ -1000,10 +1000,11 @@ function bVisDlg(b){
     if(v!=='private'&&!ACC.handle){accDlg(()=>setTimeout(apply,0));return}
     apply()})}
 
-function fvGo(view,args,fromPop){Object.assign(FV,{view,handle:'',owner:'',id:'',page:0},args||{});if(!fromPop)navPush();fvRender()}
+function fvBack(){if(FV.view==='binder')fvGo(FV.from==='browse'?'browse':'profile',FV.from==='browse'?{}:{handle:FV.owner});else fvGo('home')}
+function fvGo(view,args,fromPop){const from=FV.view;Object.assign(FV,{view,handle:'',owner:'',id:'',page:0},args||{});FV.from=from;if(!fromPop)navPush();fvRender()}
 const fvEl=()=>$('#friendsView');
 function fvRender(){const my=++FV.rid;({home:fvHome,profile:fvProfile,binder:fvBinder,browse:fvBrowse}[FV.view]||fvHome)(my)}
-function fvErr(msg){fvEl().innerHTML=`<button class="chip" id="fvback">← Back</button><p class="mu">${esc(msg)}</p>`;$('#fvback').onclick=()=>history.back()}
+function fvErr(msg){fvEl().innerHTML=`<button class="chip" id="fvback">← Back</button><p class="mu">${esc(msg)}</p>`;$('#fvback').onclick=fvBack}
 const coverHtml=a=>`<div class="cov">${(a||[]).slice(0,4).map(i=>`<img src="${esc(tcgImg(i))}" loading="lazy" alt="">`).join('')}</div>`;
 
 async function fvHome(my){
@@ -1037,7 +1038,7 @@ async function fvProfile(my){
   const relHtml=rel==='none'?(ACC.handle?'<button class="btn" id="frel">Add friend</button>':'<p class="mu">Pick a handle in Friends to add them.</p>'):rel==='in'?'<button class="btn" id="frel">Accept friend request</button>':rel==='out'?'<p class="mu">Friend request sent.</p>':rel==='friend'?'<div class="row" style="align-items:center;justify-content:space-between"><span class="mu">✓ Friends</span><button class="chip" id="frm">Remove friend</button></div>':'<p class="mu">This is how others see your profile.</p>';
   el.innerHTML=`<button class="chip" id="fvback">← Back</button><h3 style="margin-top:12px">@${esc(l.handle)}</h3>${relHtml}
   <h3>Binders</h3>${l.binders.length?l.binders.map(b=>`<button class="frow btnrow" data-b="${esc(b.id)}">${coverHtml(b.cover)}<div style="flex:1;min-width:0"><b>${esc(b.name)}</b><div class="mu">${b.cnt} card${b.cnt===1?'':'s'} · ${visLabel(b.vis)} · ${ago(b.updated)}</div></div><span class="mu">›</span></button>`).join(''):`<p class="mu">No binders to show yet.${rel==='friend'||rel==='self'?'':' Friends-only binders appear once you are friends.'}</p>`}`;
-  $('#fvback').onclick=()=>history.back();
+  $('#fvback').onclick=fvBack;
   document.querySelectorAll('#friendsView [data-b]').forEach(b=>b.onclick=()=>fvGo('binder',{owner:l.handle,id:b.dataset.b}));
   if($('#frel'))$('#frel').onclick=async()=>{try{const r=await api('friend_add',{to:l.handle});toast(r.rel==='friend'?'You are now friends':'Request sent');fvRender()}catch(e){toast(e.message)}};
   if($('#frm'))$('#frm').onclick=()=>{if(!confirm('Remove @'+l.handle+' from your friends?'))return;api('friend_remove',{who:l.handle}).then(()=>{toast('Removed');fvRender()}).catch(e=>toast(e.message))}}
@@ -1047,7 +1048,7 @@ async function fvBrowse(my){
   let r;try{r=await api('browse')}catch(e){if(my!==FV.rid)return;fvErr(e.message);return}
   if(my!==FV.rid)return;
   el.innerHTML=`<button class="chip" id="fvback">← Back</button><h3 style="margin-top:12px">Public binders</h3>${r.binders.length?r.binders.map((b,i)=>`<button class="frow btnrow" data-i="${i}">${coverHtml(b.cover)}<div style="flex:1;min-width:0"><b>${esc(b.name)}</b><div class="mu">@${esc(b.owner)} · ${b.cnt} card${b.cnt===1?'':'s'} · ${ago(b.updated)}</div></div><span class="mu">›</span></button>`).join(''):'<p class="mu">No public binders yet. Be the first: set one of yours to Public from its ⋯ menu.</p>'}`;
-  $('#fvback').onclick=()=>history.back();
+  $('#fvback').onclick=fvBack;
   document.querySelectorAll('#friendsView [data-i]').forEach(b=>b.onclick=()=>{const x=r.binders[+b.dataset.i];fvGo('binder',{owner:x.owner,id:x.id})})}
 
 const FVC={key:'',g:null,t:0};
@@ -1074,7 +1075,7 @@ async function fvBinder(my){
     return `<button class="pk has${r.w?' wish':''}" data-i="${i}"><img src="${esc(c.img)}" alt="${esc(c.name)}" loading="lazy">${r.w?'<span class="heart">♡</span>':''}<span class="pp">${val>0?money(val):'—'}${shaky(c,r.k)?' ⚠':''}</span></button>`}).join('')}</div>
   <p class="hint">♡ = looking for this card · Near Mint prices · ⚠ = uncertain</p>
   <button class="btn alt" id="fvcopy">Save a copy to my binders</button>`;
-  $('#fvback').onclick=()=>history.back();
+  $('#fvback').onclick=fvBack;
   $('#fbprev').onclick=()=>{FV.page--;fvRender()};$('#fbnext').onclick=()=>{FV.page++;fvRender()};
   $('#fvcopy').onclick=()=>{const nb=bClean(b);nb.name=(g.name+' (from @'+g.owner+')').slice(0,40);BD.binders.push(nb);bSave();toast('Saved to your binders')};
   document.querySelectorAll('#friendsView .pk.has[data-i]').forEach(btn=>btn.onclick=()=>{
