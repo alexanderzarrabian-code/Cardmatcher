@@ -115,6 +115,7 @@ details.fold.match>summary{border-color:var(--ac);color:var(--ac)}
 .mh{margin:12px 0 6px;font-size:15px}
 .gh{grid-column:1/-1;font-weight:800;color:var(--ac);margin:8px 0 2px;font-size:15px}
 .review.mt.have{border-color:var(--aqua)}.review.mt.want{border-color:var(--ac)}
+.bell{background:var(--ac);color:#10192e;border-radius:999px;padding:1px 8px;font-size:12px;font-weight:800;margin-left:6px}
 </style></head><body>
 <div class="banner"><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><button id="helpbtn" aria-label="How it works" title="How it works">?</button><h1>Binder Buddy</h1><p>Snap a card. Find its price twins.</p></div>
 <div class="tabs"><button class="tab on" data-tab="binders">📒 Binders</button><button class="tab" data-tab="find">🔍 Look up</button><button class="tab" data-tab="trade">🔄 Trade</button><button class="tab" data-tab="friends">👥 Friends</button></div>
@@ -488,8 +489,13 @@ function matchCalc(){
     let e=wm.get(x.i);if(!e){e={i:x.i,k:x.k,o:[],listed:listed.has(x.i)};wm.set(x.i,e)}if(!e.o.includes(x.o))e.o.push(x.o)}
   return {have,want:[...wm.values()]}}
 const matchCount=()=>{if(!ACC.handle)return 0;const m=matchCalc();return m.have.length+m.want.length};
+const mSeenGet=()=>{try{return new Set(JSON.parse(localStorage.getItem('bb_match_seen')||'[]'))}catch(e){return new Set()}};
+function matchKeys(m){m=m||matchCalc();return m.have.map(x=>'h|'+x.o+'|'+x.i+'|'+x.k).concat(m.want.flatMap(e=>e.o.map(o=>'w|'+o+'|'+e.i)))}
+const matchNew=()=>{if(!ACC.handle)return 0;const sn=mSeenGet();return matchKeys().filter(k=>!sn.has(k)).length};
+function matchMarkSeen(){try{localStorage.setItem('bb_match_seen',JSON.stringify(matchKeys()))}catch(e){}tabLabel()}
+document.addEventListener('toggle',e=>{if(e.target&&e.target.classList&&e.target.classList.contains('match')&&e.target.open){matchMarkSeen();const b=e.target.querySelector('.bell');if(b)b.remove()}},true);
 let FVREQ=0;
-function tabLabel(){const t=document.querySelector('.tab[data-tab="friends"]');if(!t)return;const mc=matchCount();t.textContent='👥 Friends'+(FVREQ?' ('+FVREQ+')':'')+(mc?' 🎯'+mc:'')}
+function tabLabel(){const t=document.querySelector('.tab[data-tab="friends"]');if(!t)return;const mc=matchCount();t.textContent='👥 Friends'+(FVREQ?' ('+FVREQ+')':'')+(mc?(matchNew()?' 🔔'+matchNew():' 🎯'+mc):'')}
 const owners=a=>[...new Set(a.map(x=>x.o))];
 const ownTxt=a=>{const o=owners(a);return '@'+esc(o[0])+(o.length>1?' +'+(o.length-1):'')};
 function pkMk(r){ // marker on a binder pocket
@@ -515,7 +521,7 @@ function matchPanel(){
     return `<div class="tl hot"><img src="${esc(c.img)}" alt="" loading="lazy"><div style="flex:1;min-width:0"><b>${esc(c.name)}</b>${c.lang==='jp'?'<span class="lang">JP</span>':''}<span class="tag hit">${MODE_TXT[x.m]||'Trade or sale'}</span><div class="mu">${esc(c.set)} · ${esc(x.k)}<br><b>@${esc(x.o)}</b> · ${esc(x.ln)} · ${x.p>0?money(x.p)+' asking':(mk>0?money(mk):'—')}</div></div><button class="chip on" data-fgo="${esc(x.o)}|${esc(x.l)}">View</button></div>`}).join('');
   const wantRows=m.want.map(e=>{const c=cardById(e.i);if(!c)return '';const mk=c.v[e.k]?c.v[e.k][0]:0;
     return `<div class="tl hot"><img src="${esc(c.img)}" alt="" loading="lazy"><div style="flex:1;min-width:0"><b>${esc(c.name)}</b>${c.lang==='jp'?'<span class="lang">JP</span>':''}<span class="tag">${e.listed?'On your trade list':'In your binder'}</span><div class="mu">${esc(c.set)}<br>Wanted by ${e.o.map(o=>'<b>@'+esc(o)+'</b>').join(', ')}${mk>0?' · '+money(mk):''}</div></div>${e.listed?'':`<button class="chip on" data-mlist="${e.i}">List it</button>`}</div>`}).join('');
-  return `<details class="fold match" open><summary>🎯 Matches <span class="mu">(${n})</span></summary><div class="foldbody">${m.have.length?`<h4 class="mh">👥 Friends have cards you want (${m.have.length})</h4>${haveRows}`:''}${m.want.length?`<h4 class="mh">🎁 Friends want cards you have (${m.want.length})</h4>${wantRows}`:''}</div></details>`}
+  return `<details class="fold match"><summary>🎯 Matches <span class="mu">(${n})</span>${matchNew()?' <span class="bell">🔔 '+matchNew()+' new</span>':''}</summary><div class="foldbody">${m.have.length?`<h4 class="mh">👥 Friends have cards you want (${m.have.length})</h4>${haveRows}`:''}${m.want.length?`<h4 class="mh">🎁 Friends want cards you have (${m.want.length})</h4>${wantRows}`:''}</div></details>`}
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-mlist]');if(!b)return;const i=+b.dataset.mlist,c=cardById(i);if(!c)return;tListDlg({i,k:(FW.by.get(i)||[]).map(x=>x.k).find(k=>c.v[k])||c.vk[0]},c)});
 
 // ================= Accounts, friends and sharing =================
