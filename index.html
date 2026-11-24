@@ -101,8 +101,10 @@ label.mu{color:var(--mu)}
 .tag{display:inline-block;font-size:11px;font-weight:800;border-radius:999px;padding:2px 8px;margin-left:6px;background:var(--line);color:var(--fg)}.tag.hit{background:var(--aqua);color:#06281d}
 .lbadge{position:absolute;top:2px;left:2px;z-index:2;background:var(--ac);color:#10192e;font-size:10px;font-weight:800;border-radius:999px;padding:1px 6px;box-shadow:0 0 6px #000}
 details.fold{margin:10px 0}details.fold>summary{cursor:pointer;font-weight:800;font-size:17px;list-style:none;padding:12px 14px;background:var(--card);border:2px solid var(--line);border-radius:12px;display:flex;justify-content:space-between;align-items:center;gap:8px}details.fold>summary::-webkit-details-marker{display:none}details.fold>summary::after{content:'▾';color:var(--mu)}details.fold[open]>summary::after{content:'▴'}details.fold[open]>summary{border-color:var(--ac)}.foldbody{padding-top:8px}
+#helpbtn{position:absolute;right:14px;top:12px;width:32px;height:32px;border-radius:50%;border:2px solid var(--ac);background:transparent;color:var(--ac);font-weight:800;font-size:16px;cursor:pointer;z-index:2}
+.hstep{text-align:center;padding:6px 4px}.hstep .big{font-size:46px;line-height:1.1}.hstep h3{margin:8px 0 6px}.hdots{display:flex;gap:6px;justify-content:center;margin:12px 0}.hdots i{width:8px;height:8px;border-radius:50%;background:var(--line)}.hdots i.on{background:var(--ac)}
 </style></head><body>
-<div class="banner"><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><h1>Binder Buddy</h1><p>Snap a card. Find its price twins.</p></div>
+<div class="banner"><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><button id="helpbtn" aria-label="How it works" title="How it works">?</button><h1>Binder Buddy</h1><p>Snap a card. Find its price twins.</p></div>
 <div class="tabs"><button class="tab on" data-tab="binders">📒 Binders</button><button class="tab" data-tab="find">🔍 Look up</button><button class="tab" data-tab="trade">🔄 Trade</button><button class="tab" data-tab="friends">👥 Friends</button></div>
 <div id="findView" hidden>
 <p class="hint" style="margin:0 0 8px">Scan or type a card to see its price and find cards worth about the same.</p>
@@ -112,8 +114,8 @@ details.fold{margin:10px 0}details.fold>summary{cursor:pointer;font-weight:800;f
 <input id="file2" class="pick" type="file" accept="image/*">
 <div class="row"><input id="name" type="text" placeholder="Card name"><input id="num" type="text" placeholder="e.g. 4/102"></div>
 <button class="btn" id="go">Find price &amp; alternatives</button>
-<div class="panel"><div class="prow"><span>Cards</span><div class="chips"><button class="chip on" data-lang="en">English</button><button class="chip" data-lang="jp">Japanese</button><button class="chip" data-lang="both">Both</button></div></div>
-<div class="prow"><span>Price range ± $</span><div class="stp"><button class="stpb" data-dir="-1" aria-label="Less">−</button><input id="range" type="number" inputmode="decimal" min="1" step="1" value="5"><button class="stpb" data-dir="1" aria-label="More">+</button></div></div></div>
+<details class="fold" id="fopt"><summary>⚙ Search options <span class="mu">language, price range</span></summary><div class="foldbody"><div class="panel"><div class="prow"><span>Cards</span><div class="chips"><button class="chip on" data-lang="en">English</button><button class="chip" data-lang="jp">Japanese</button><button class="chip" data-lang="both">Both</button></div></div>
+<div class="prow"><span>Price range ± $</span><div class="stp"><button class="stpb" data-dir="-1" aria-label="Less">−</button><input id="range" type="number" inputmode="decimal" min="1" step="1" value="5"><button class="stpb" data-dir="1" aria-label="More">+</button></div></div></div></div></details>
 <details class="mu" id="browse" style="margin-top:14px"><summary class="bsum">💰 Browse by price</summary>
 <div class="row" style="margin-top:8px"><input id="bmin" type="number" inputmode="decimal" placeholder="Min $"><input id="bmax" type="number" inputmode="decimal" placeholder="Max $"></div>
 <div class="row"><input id="bname" type="text" placeholder="Pokémon name (optional)"></div>
@@ -397,12 +399,12 @@ function render(){
   $('#out').innerHTML=`${S.list.length>1?'<button class="chip" id="back">← Back to matches</button>':''}
   <div class="hero"><img src="${esc(c.img)}" alt=""><div><b>${esc(c.name)}</b><div class="mu">${esc(c.set)}${c.lang==='jp'?'<span class="lang">JP</span>':''} · #${esc(c.number)} · ${esc(c.rarity)}</div><div class="price">${money(p)}</div><div class="mu"><b>Near Mint · ${esc(S.v)}</b><br>TCGplayer market price. Other conditions sell for less.</div>${shaky(c,S.v)?'<div class="warn">⚠ Price uncertain: market and lowest listing disagree a lot. Check TCGplayer.</div>':''}<div class="mu">Lowest listing ${v[1]!=null?money(v[1]):'n/a'} · prices as of ${esc(asOf())}</div><a href="${esc(link(c,S.v))}" target="_blank" rel="noopener" class="mu">Open this version on TCGplayer ↗</a></div></div>
   <div class="chips">${c.vk.map(k=>`<button class="chip" data-v="${esc(k)}" style="${k===S.v?'border-color:var(--ac);color:var(--ac)':''}">${esc(k)} · NM ${money(mk(c,k))}${shaky(c,k)?' ⚠':''}</button>`).join('')}</div>
-  <h3 id="h"></h3>
+  <details class="fold" open id="rfold"><summary><span id="h"></span></summary><div class="foldbody">
   <p class="mu" style="margin:0 0 8px">Each price is the TCGplayer market price for Near Mint in the printing shown. Tap a card to open that version on TCGplayer.</p>
   <div class="row mu">Sort <select id="sort"><option value="near">Closest price</option><option value="lo">Low to high</option><option value="hi">High to low</option><option value="az">A to Z</option></select></div>
   <label class="mu" style="display:block;margin:6px 0"><input type="checkbox" id="incl" ${S.incl?'checked':''}> Include cards with uncertain prices ⚠</label>
   <div id="fbar"></div>
-  <div class="grid" id="sim"></div><button class="btn" id="more" style="margin-top:10px" hidden></button>`;
+  <div class="grid" id="sim"></div><button class="btn" id="more" style="margin-top:10px" hidden></button></div></details>`;
   if($('#back'))$('#back').onclick=picker;
   document.querySelectorAll('.chip[data-v]').forEach(b=>b.onclick=()=>{S.v=b.dataset.v;render()});
   $('#sort').onchange=draw;$('#incl').onchange=e=>{S.incl=e.target.checked;findAlts();draw()};$('#more').onclick=()=>{S.shown+=60;draw()};
@@ -551,9 +553,10 @@ async function bRender(load){
   $('#bnew').onclick=bNewDlg;
   $('#bvis').onclick=()=>bVisDlg(b);
   $('#bmore').onclick=()=>{
-    modal(`<h3>${esc(b.name)}</h3><button class="btn alt mbtn" id="m1">Rename binder</button><button class="btn alt mbtn" id="mvis">👁 Who can see this: ${visLabel(b.vis||'private')}</button><button class="btn alt mbtn" id="mi">🖼️ Share this page as an image</button><button class="btn alt mbtn" id="m2">Share link (whole binder)</button><button class="btn alt mbtn" id="m3">Export (backup file)</button><button class="btn alt mbtn" id="m4">Import binders</button><button class="btn alt mbtn" id="m5"${b.pages.length<2?' disabled style="opacity:.4"':''}>Delete this page</button><button class="btn mbtn" id="m6" style="background:#b91c1c">Delete binder</button><button class="btn alt mbtn" id="m0">Close</button>`);
+    modal(`<h3>${esc(b.name)}</h3><button class="btn alt mbtn" id="m1">Rename binder</button><button class="btn alt mbtn" id="mvis">👁 Who can see this: ${visLabel(b.vis||'private')}</button><button class="btn alt mbtn" id="mi">🖼️ Share this page as an image</button>${ACC.handle&&b.vis&&b.vis!=='private'?'<button class="btn alt mbtn" id="mlive">🔗 Link to my live binder</button>':''}<button class="btn alt mbtn" id="m2">Share link (whole binder)</button><button class="btn alt mbtn" id="m3">Export (backup file)</button><button class="btn alt mbtn" id="m4">Import binders</button><button class="btn alt mbtn" id="m5"${b.pages.length<2?' disabled style="opacity:.4"':''}>Delete this page</button><button class="btn mbtn" id="m6" style="background:#b91c1c">Delete binder</button><button class="btn alt mbtn" id="m0">Close</button>`);
     $('#m0').onclick=()=>closeModal();
     $('#mvis').onclick=()=>bVisDlg(b);
+    if($('#mlive'))$('#mlive').onclick=()=>{closeModal();setTimeout(()=>shareUrl(binderLink(ACC.handle,b.id),b.name+' on Binder Buddy'),400)};
     $('#m1').onclick=()=>bNameDlg('Rename binder',b.name,n=>{b.name=n;bSave();bRender()});
     $('#mi').onclick=()=>bShareImage(b);
     $('#m2').onclick=()=>bShare(b);
@@ -722,7 +725,10 @@ function bWireDrag(b){DR.b=b;document.querySelectorAll('.pk.has').forEach(el=>{
 
 // ================= Trade (scan a stack, see its value, find cards worth about that) =================
 const TK='bb_trade_v1';
-const T={lists:[],cur:'',mine:[],theirs:[],pct:100,incl:false,mode:'about',range:5,lang:'en',review:[],msg:'',shown:40,results:[],rid:0};
+const T={f:{},fold:{},lists:[],cur:'',mine:[],theirs:[],pct:100,incl:false,mode:'about',range:5,lang:'en',review:[],msg:'',shown:40,results:[],rid:0};
+const FOLDK='bb_fold_v1';
+try{Object.assign(T.fold,JSON.parse(localStorage.getItem(FOLDK)||'{}'))}catch(e){}
+const tFold=(key,sum,body,def)=>`<details class="fold" data-fk="${key}"${(T.fold[key]===undefined?def:T.fold[key])?' open':''}><summary>${sum}</summary><div class="foldbody">${body}</div></details>`;
 function tNewId(){return 'l'+Date.now().toString(36)+Math.random().toString(36).slice(2,5)}
 function tSetCur(id){const l=T.lists.find(x=>x.id===id)||T.lists[0];T.cur=l.id;T.mine=l.items}
 const tCurList=()=>T.lists.find(x=>x.id===T.cur)||T.lists[0];
@@ -774,8 +780,7 @@ async function tRender(load){
   const a=tSum(T.mine),b=tSum(T.theirs),tv=a.val*T.pct/100,diff=tv-b.val;
   const cl=tCurList();
   v.innerHTML=`<div class="chips" style="margin-top:4px">${T.lists.map(l=>`<button class="chip${l.id===T.cur?' on':''}" data-act="tlist" data-id="${esc(l.id)}">${esc(l.name)} (${l.items.length})</button>`).join('')}<button class="chip" data-act="tnew">＋ New list</button></div>
-  <h3 style="margin-top:10px">${esc(cl.name)} <span class="mu">(${T.mine.length} card${T.mine.length===1?'':'s'})</span></h3>
-  <div class="chips" style="margin-bottom:8px"><button class="chip" data-act="trename">✎ Rename</button><button class="chip" data-act="tdel">🗑 Delete list</button></div>
+  ${tFold('offer',`${esc(cl.name)} <span class="mu">(${T.mine.length} card${T.mine.length===1?'':'s'})</span>`,`  <div class="chips" style="margin-bottom:8px"><button class="chip" data-act="trename">✎ Rename</button><button class="chip" data-act="tdel">🗑 Delete list</button></div>
   ${ACC.handle?`<label class="mu" style="display:block;margin:0 0 8px"><input type="checkbox" id="tshare"${cl.share!==false?' checked':''}> Friends can see this list on my profile</label>`:'<p class="mu" style="margin:0 0 8px">Sign in from the Friends tab to let friends see your lists.</p>'}
   <div class="cams"><label class="btn" for="tfile">📷 Scan card</label><label class="btn alt" for="tfile2">🖼️ Scan photos</label></div>
   <input id="tfile" class="pick" type="file" accept="image/*" capture="environment"><input id="tfile2" class="pick" type="file" accept="image/*" multiple>
@@ -783,28 +788,30 @@ async function tRender(load){
   ${T.msg?`<p class="mu" id="tmsg" style="color:#f5c542">${esc(T.msg)}</p>`:''}
   ${T.review.length?`<h3>Needs a quick look (${T.review.length})</h3>${T.review.map(rv=>`<div class="review"><div style="display:flex;gap:10px;align-items:center">${rv.thumb?`<img src="${rv.thumb}" alt="" style="width:64px;border-radius:6px">`:''}<div><b>${esc(rv.label||'Unknown card')}</b><div class="mu">${esc(rv.note||'Tap the right one:')}</div></div></div>${rv.pairs.map((p,n)=>`<button class="item pair" data-act="pair" data-r="${rv.id}" data-p="${n}"><img src="${esc(p.c.img)}" loading="lazy" alt=""><div style="flex:1;min-width:0"><b style="margin:0">${esc(p.c.name)}</b>${p.c.lang==='jp'?'<span class="lang">JP</span>':''}<div class="mu">${esc(p.c.set)} · #${esc(p.c.number)}<br>${esc(p.k)}</div></div><span class="tag">${p.c.v[p.k][0]>0?money(p.c.v[p.k][0]):'—'}</span></button>`).join('')}<div class="row"><button class="chip" data-act="manual" data-r="${rv.id}">Search by name</button><button class="chip" data-act="skip" data-r="${rv.id}">Skip</button></div></div>`).join('')}`:''}
   ${T.mine.length?T.mine.map((r,i)=>tRow(r,'mine',i)).join(''):'<p class="mu">Scan or add the cards you want to trade or sell. They do not need to be in a binder. Tap the label on a card to switch between Trade, Sale, or both.</p>'}
-  <div class="panel" style="margin-top:10px"><div class="prow"><span>Trade value %</span><input id="tpct" type="number" inputmode="decimal" min="1" max="200" value="${T.pct}"></div>
+`,true)}
+  ${tFold('calc',`Trade value ${money(tv)} <span class="mu">(${T.pct}%)</span>`,`<div class="panel"><div class="prow"><span>Trade value %</span><input id="tpct" type="number" inputmode="decimal" min="1" max="200" value="${T.pct}"></div>
   <div class="chips"><button class="chip${T.pct===100?' on':''}" data-act="pct" data-v="100">100%</button><button class="chip${T.pct===90?' on':''}" data-act="pct" data-v="90">90%</button><button class="chip${T.pct===80?' on':''}" data-act="pct" data-v="80">80%</button><button class="chip${T.pct===70?' on':''}" data-act="pct" data-v="70">70%</button><button class="chip${T.pct===60?' on':''}" data-act="pct" data-v="60">60%</button></div>
   <p class="btot" style="margin-bottom:0"><b style="font-size:20px">Trade value ${money(tv)}</b><br><span>Market total ${money(a.val)} × ${T.pct}%</span></p>
   ${a.skipped?`<p class="mu" style="text-align:center;margin:4px 0">${a.skipped} card${a.skipped>1?'s':''} left out because of an uncertain price (⚠).</p>`:''}
   <label class="mu" style="display:block;text-align:center;margin-top:4px"><input type="checkbox" id="tinc"${T.incl?' checked':''}> count uncertain-price cards</label></div>
-  <h3>Their side <span class="mu">(${T.theirs.length} card${T.theirs.length===1?'':'s'}, ${money(b.val)})</span></h3>
-  ${T.theirs.length?T.theirs.map((r,i)=>tRow(r,'theirs',i)).join(''):'<p class="mu">Optional: add the cards you would get, or tap ＋ Get on a card below.</p>'}
+`,false)}
+  ${tFold('their',`Their side <span class="mu">(${T.theirs.length} card${T.theirs.length===1?'':'s'}, ${money(b.val)})</span>`,`  ${T.theirs.length?T.theirs.map((r,i)=>tRow(r,'theirs',i)).join(''):'<p class="mu">Optional: add the cards you would get, or tap ＋ Get on a card below.</p>'}
   <button class="btn alt" data-act="addtheirs" style="margin:6px 0">＋ Add by name</button>
   ${T.mine.length?`<p class="btot"><b>${diff>=0?`You're ahead ${money(diff)}`:`You owe ${money(-diff)}`}</b><br><span>${T.theirs.length?'your trade value vs their market value':'nothing on their side yet'}</span></p>`:''}
-  <h3>Cards worth about ${money(Math.max(0,diff))}</h3>
-  <div class="panel"><div class="prow"><span>Cards</span><div class="chips"><button class="chip${T.lang==='en'?' on':''}" data-act="tlang" data-v="en">English</button><button class="chip${T.lang==='jp'?' on':''}" data-act="tlang" data-v="jp">Japanese</button><button class="chip${T.lang==='both'?' on':''}" data-act="tlang" data-v="both">Both</button></div></div>
+`,false)}
+  ${tFold('find',`Cards worth about ${money(Math.max(0,diff))}`,`  <div class="panel"><div class="prow"><span>Cards</span><div class="chips"><button class="chip${T.lang==='en'?' on':''}" data-act="tlang" data-v="en">English</button><button class="chip${T.lang==='jp'?' on':''}" data-act="tlang" data-v="jp">Japanese</button><button class="chip${T.lang==='both'?' on':''}" data-act="tlang" data-v="both">Both</button></div></div>
   <div class="prow"><span>Show</span><div class="chips"><button class="chip${T.mode==='about'?' on':''}" data-act="mode" data-v="about">About this value</button><button class="chip${T.mode==='upto'?' on':''}" data-act="mode" data-v="upto">Up to this value</button></div></div>
   ${T.mode==='about'?`<div class="prow"><span>Range ± $</span><div class="stp"><button class="stpb" data-dir="-1" aria-label="Less">−</button><input id="trng" type="number" inputmode="decimal" min="0" step="1" value="${T.range}"><button class="stpb" data-dir="1" aria-label="More">+</button></div></div>`:''}</div>
-  <div id="tres"></div>`;
+  <div id="tfbar"></div><div id="tres"></div>`,false)}`;
   tWire();tResults();
 }
 
 function tResults(){
   const box=$('#tres');if(!box)return;
   const a=tSum(T.mine),b=tSum(T.theirs),target=Math.max(0,a.val*T.pct/100-b.val);
-  if(!T.mine.length){box.innerHTML='<p class="mu">Add cards to your side to see what they could get you.</p>';return}
-  if(target<=0){box.innerHTML='<p class="mu">Nothing left to spend. Their side already covers your trade value.</p>';return}
+  const fb=$('#tfbar');
+  if(!T.mine.length){if(fb)fb.innerHTML='';box.innerHTML='<p class="mu">Add cards to your side to see what they could get you.</p>';return}
+  if(target<=0){if(fb)fb.innerHTML='';box.innerHTML='<p class="mu">Nothing left to spend. Their side already covers your trade value.</p>';return}
   const rg=Math.max(0,+T.range||0),items=[];
   for(const c of tPool()){let best=null;
     for(const k of c.vk){const m=c.v[k][0];if(!(m>0)||(!T.incl&&shaky(c,k)))continue;
@@ -812,8 +819,10 @@ function tResults(){
       else if(m<=target&&(!best||m>best.a))best={c,k,a:m}}
     if(best)items.push(best)}
   items.sort((x,y)=>T.mode==='about'?Math.abs(x.a-target)-Math.abs(y.a-target)||y.a-x.a:y.a-x.a);
+  fRender(fb,T.f,items,()=>{T.shown=40;tResults()});
+  const all=items.length,L=fApply(items,T.f);items.length=0;items.push(...L);
   T.results=items;
-  box.innerHTML=`<p class="mu">${items.length} card${items.length===1?'':'s'} ${T.mode==='about'?`within ±${money(rg)} of ${money(target)}`:`up to ${money(target)}`} (Near Mint market price)</p><div class="grid">${items.slice(0,T.shown).map((x,n)=>`<div class="item"><a target="_blank" rel="noopener" href="${esc(link(x.c,x.k))}" style="color:inherit;text-decoration:none"><img src="${esc(x.c.img)}" loading="lazy" alt=""><b>${esc(x.c.name)}</b><div class="mu">${esc(x.c.set)}${x.c.lang==='jp'?'<span class="lang">JP</span>':''} #${esc(x.c.number)}<br>Near Mint · ${esc(x.k)}</div><div><span class="tag">${money(x.a)}</span></div></a><button class="chip" data-act="get" data-n="${n}" style="margin-top:6px;width:100%">＋ Get this</button></div>`).join('')}</div>${items.length>T.shown?'<button class="btn" data-act="more" style="margin-top:10px">Show more</button>':''}`}
+  box.innerHTML=`<p class="mu">${items.length}${items.length!==all?' of '+all:''} card${all===1?'':'s'} ${T.mode==='about'?`within ±${money(rg)} of ${money(target)}`:`up to ${money(target)}`} (Near Mint market price)</p><div class="grid">${items.slice(0,T.shown).map((x,n)=>`<div class="item"><a target="_blank" rel="noopener" href="${esc(link(x.c,x.k))}" style="color:inherit;text-decoration:none"><img src="${esc(x.c.img)}" loading="lazy" alt=""><b>${esc(x.c.name)}</b><div class="mu">${esc(x.c.set)}${x.c.lang==='jp'?'<span class="lang">JP</span>':''} #${esc(x.c.number)}<br>Near Mint · ${esc(x.k)}</div><div><span class="tag">${money(x.a)}</span></div></a><button class="chip" data-act="get" data-n="${n}" style="margin-top:6px;width:100%">＋ Get this</button></div>`).join('')}</div>${items.length>T.shown?'<button class="btn" data-act="more" style="margin-top:10px">Show more</button>':''}`}
 
 // generic card picker (search by name, pick a printing)
 async function tPick(cb,back){
@@ -899,11 +908,12 @@ $('#tradeView').addEventListener('click',async e=>{
   else if(act==='mode'){T.mode=el.dataset.v;T.shown=40;tRender()}
   else if(act==='rng'){T.range=+el.dataset.v;T.shown=40;tRender()}
   else if(act==='more'){T.shown+=40;tResults()}
-  else if(act==='get'){const x=T.results[+el.dataset.n];if(x){T.theirs.push({i:x.c.i,k:x.k});tSave();tRender();window.scrollTo(0,0)}}
+  else if(act==='get'){const x=T.results[+el.dataset.n];if(x){T.theirs.push({i:x.c.i,k:x.k});tSave();toast('Added to their side: '+x.c.name);tRender()}}
   else if(act==='skip'){T.review=T.review.filter(r=>r.id!==+el.dataset.r);tRender()}
   else if(act==='pair'){const rv=T.review.find(r=>r.id===+el.dataset.r);if(!rv)return;const p=rv.pairs[+el.dataset.p];T.mine.push({i:p.c.i,k:p.k});T.review=T.review.filter(r=>r!==rv);tSave();tRender()}
   else if(act==='manual'){const id=+el.dataset.r;tPick((c,k)=>{T.mine.push({i:c.i,k});T.review=T.review.filter(r=>r.id!==id);tSave();tRender()})}});
 tLoad();
+$('#tradeView').addEventListener('toggle',e=>{const d=e.target;if(!d||!d.dataset||!d.dataset.fk)return;T.fold[d.dataset.fk]=d.open;try{localStorage.setItem(FOLDK,JSON.stringify(T.fold))}catch(err){}},true);
 
 // ================= Fill a binder page from a photo, and share a page as an image =================
 function bPhotoMenu(b){
@@ -1111,7 +1121,8 @@ async function fvProfile(my){
   const relHtml=rel==='none'?(ACC.handle?'<button class="btn" id="frel">Add friend</button>':'<p class="mu">Pick a handle in Friends to add them.</p>'):rel==='in'?'<button class="btn" id="frel">Accept friend request</button>':rel==='out'?'<p class="mu">Friend request sent.</p>':rel==='friend'?'<div class="row" style="align-items:center;justify-content:space-between"><span class="mu">✓ Friends</span><button class="chip" id="frm">Remove friend</button></div>':'<p class="mu">This is how others see your profile.</p>';
   el.innerHTML=`<button class="chip" id="fvback">← Back</button><h3 style="margin-top:12px">@${esc(l.handle)}</h3>${relHtml}
   <h3>Binders</h3>${l.binders.length?l.binders.map(b=>`<button class="frow btnrow" data-b="${esc(b.id)}">${coverHtml(b.cover)}<div style="flex:1;min-width:0"><b>${esc(b.name)}</b><div class="mu">${b.cnt} card${b.cnt===1?'':'s'} · ${visLabel(b.vis)} · ${ago(b.updated)}</div></div><span class="mu">›</span></button>`).join(''):`<p class="mu">No binders to show yet.${rel==='friend'||rel==='self'?'':' Friends-only binders appear once you are friends.'}</p>`}`;
-  el.insertAdjacentHTML('beforeend',fvTradeHtml(l));
+  el.insertAdjacentHTML('beforeend',fvTradeHtml(l)+'<button class="btn alt" id="fvplink" style="margin-top:10px">🔗 Share link to this profile</button>');
+  $('#fvplink').onclick=()=>shareUrl(profileLink(l.handle),'@'+l.handle+' on Binder Buddy');
   $('#fvback').onclick=fvBack;
   document.querySelectorAll('#friendsView [data-b]').forEach(b=>b.onclick=()=>fvGo('binder',{owner:l.handle,id:b.dataset.b}));
   if($('#frel'))$('#frel').onclick=async()=>{try{const r=await api('friend_add',{to:l.handle});toast(r.rel==='friend'?'You are now friends':'Request sent');fvRender()}catch(e){toast(e.message)}};
@@ -1148,9 +1159,10 @@ async function fvBinder(my){
     const val=c.v[r.k]?c.v[r.k][0]:0;
     return `<button class="pk has${r.w?' wish':''}" data-i="${i}"><img src="${esc(c.img)}" alt="${esc(c.name)}" loading="lazy">${r.w?'<span class="heart">♡</span>':''}<span class="pp">${val>0?money(val):'—'}${shaky(c,r.k)?' ⚠':''}</span></button>`}).join('')}</div>
   <p class="hint">♡ = looking for this card · Near Mint prices · ⚠ = uncertain</p>
-  <button class="btn alt" id="fvcopy">Save a copy to my binders</button>`;
+  <button class="btn alt" id="fvcopy">Save a copy to my binders</button><button class="btn alt" id="fvlink" style="margin-top:8px">🔗 Share link to this binder</button>`;
   $('#fvback').onclick=fvBack;
   $('#fbprev').onclick=()=>{FV.page--;fvRender()};$('#fbnext').onclick=()=>{FV.page++;fvRender()};
+  $('#fvlink').onclick=()=>shareUrl(binderLink(g.owner,FV.id),g.name+' on Binder Buddy');
   $('#fvcopy').onclick=()=>{const nb=bClean(b);nb.name=(g.name+' (from @'+g.owner+')').slice(0,40);BD.binders.push(nb);bSave();toast('Saved to your binders')};
   document.querySelectorAll('#friendsView .pk.has[data-i]').forEach(btn=>btn.onclick=()=>{
     const r=pg[+btn.dataset.i],c=r&&cardById(r.i);if(!c)return;
@@ -1158,5 +1170,36 @@ async function fvBinder(my){
     $('#no').onclick=()=>closeModal()})}
 
 if(ACC.handle)api('me').then(m=>fvBadge(m.incoming.length)).catch(()=>{});
+
+// ================= How it works, share links, deep links =================
+const HELP_STEPS=[
+ {e:'📒',t:'Your binders',d:'Build digital copies of your real binders. Add cards by name or by photo, drag to rearrange, and see what each page and the whole binder is worth at Near Mint market prices.'},
+ {e:'📷',t:'Fill a page from one photo',d:'Lay a binder page flat, snap one photo, and Binder Buddy reads all the pockets. It places the most likely printing of each card and flags the ones to double-check.'},
+ {e:'🔄',t:'Trade and sell lists',d:'Tap a card and choose List for trade or sale. Make a separate list for each card show or meetup, mark each card Trade, Sale or both, and set a price if you like.'},
+ {e:'👥',t:'Friends and sharing',d:'Pick a handle, with no email or sign-up. Each binder is Private, Friends only or Public. Friends can see your trade lists and the cards you are looking for (♡), and you can see theirs.'},
+];
+function helpDlg(i){
+  i=i||0;const st=HELP_STEPS[i],last=i===HELP_STEPS.length-1;
+  modal(`<div class="hstep"><div class="big">${st.e}</div><h3>${st.t}</h3><p class="mu">${st.d}</p></div><div class="hdots">${HELP_STEPS.map((_,n)=>`<i class="${n===i?'on':''}"></i>`).join('')}</div>
+  <button class="btn" id="hnext">${last?'Get started':'Next'}</button>${i>0?'<button class="btn alt" id="hback" style="margin-top:8px">Back</button>':(!last?'<button class="btn alt" id="hskip" style="margin-top:8px">Skip</button>':'')}`);
+  $('#hnext').onclick=()=>{if(last){helpDone()}else{closeModal();setTimeout(()=>helpDlg(i+1),300)}};
+  if($('#hback'))$('#hback').onclick=()=>{closeModal();setTimeout(()=>helpDlg(i-1),300)};
+  if($('#hskip'))$('#hskip').onclick=helpDone}
+function helpDone(){try{localStorage.setItem('bb_seen','1')}catch(e){}closeModal()}
+$('#helpbtn').onclick=()=>helpDlg(0);
+function linkBase(){return location.origin+location.pathname}
+async function shareUrl(url,title){
+  try{if(navigator.share){await navigator.share({url,title});return}}catch(e){if(e&&e.name==='AbortError')return}
+  try{await navigator.clipboard.writeText(url);toast('Link copied')}catch(e){modal(`<h3>Copy this link</h3><input id="lk" type="text" readonly value="${esc(url)}" style="width:100%"><button class="btn" id="lkx" style="margin-top:10px">Close</button>`);$('#lk').select();$('#lkx').onclick=()=>closeModal()}}
+const binderLink=(owner,id)=>linkBase()+'#b='+encodeURIComponent(owner)+'/'+encodeURIComponent(id);
+const profileLink=h=>linkBase()+'#u='+encodeURIComponent(h);
+function openDeepLink(){
+  let m=location.hash.match(/^#b=([^/]+)\/(.+)$/);
+  if(m){showTab('friends');fvGo('binder',{owner:decodeURIComponent(m[1]).toLowerCase(),id:decodeURIComponent(m[2])});return true}
+  m=location.hash.match(/^#u=(.+)$/);
+  if(m){showTab('friends');fvGo('profile',{handle:decodeURIComponent(m[1]).toLowerCase()});return true}
+  return false}
+
 bLoad();showTab('binders',true);bCheckShared();
+if(!openDeepLink()){let seen=false;try{seen=!!localStorage.getItem('bb_seen')}catch(e){}if(!seen&&!location.hash&&!BD.binders.some(b=>b.pages.some(p=>p.some(Boolean)))&&!ACC.handle)setTimeout(()=>helpDlg(0),700)}
 </script></body></html>
