@@ -950,11 +950,10 @@ function tListHtml(){
   ${T.msg?`<p class="mu" id="tmsg" style="color:var(--ac)">${esc(T.msg)}</p>`:''}
   ${T.review.length?`<h3>Needs a quick look (${T.review.length})</h3>${T.review.map(rv=>`<div class="review"><div style="display:flex;gap:10px;align-items:center">${rv.thumb?`<img src="${rv.thumb}" alt="" style="width:64px;border-radius:6px">`:''}<div><b>${esc(rv.label||'Unknown card')}</b><div class="mu">${esc(rv.note||'Tap the right one:')}</div></div></div>${rv.pairs.map((p,n)=>`<button class="item pair" data-act="pair" data-r="${rv.id}" data-p="${n}"><img src="${esc(p.c.img)}" loading="lazy" alt=""><div style="flex:1;min-width:0"><b style="margin:0">${esc(p.c.name)}</b>${p.c.lang==='jp'?'<span class="lang">JP</span>':''}<div class="mu">${esc(p.c.set)} · #${esc(p.c.number)}<br>${esc(p.k)}</div></div><div class="tp">${money(p.c.v[p.k][0])}</div></button>`).join('')}<div class="row"><button class="btn alt" data-act="manual" data-r="${rv.id}">Search by name</button><button class="btn alt" data-act="skip" data-r="${rv.id}">Skip</button></div></div>`).join('')}`:''}
   ${T.mine.length?T.mine.map((r,i)=>tRow(r,'mine',i)).join(''):'<p class="mu">Tap ＋ Add to scan or search the cards you want to trade or sell. They do not need to be in a binder. Tap a card to see its set, set a price, or switch between Trade, Sale, or both.</p>'}`,true)}
-  ${tFold('calc',`Trade math <span class="mu">${mathSum}</span>`,`<div class="panel"><div class="mu" style="margin:0 0 6px">Count my cards at</div>
+  ${tFold('calc',`Trade math <span class="mu">${mathSum}</span>`,`<div class="panel"><label class="mu" style="display:block;margin:0 0 6px"><input type="checkbox" id="tinc"${T.incl?' checked':''}> count uncertain-price cards${a.skipped?` <span class="warn">(${a.skipped} left out ⚠)</span>`:''}</label>
+  <div class="mu" style="margin:0 0 6px">Count my cards at</div>
   <div class="chips">${[100,90,80,70].map(n=>`<button class="chip${T.pct===n?' on':''}" data-act="pct" data-v="${n}">${n}%</button>`).join('')}</div>
-  <p class="btot" style="margin-bottom:0"><b style="font-size:20px">Trade value ${money(tv)}</b><br><span>Market total ${money(a.val)} × ${T.pct}%</span></p>
-  ${a.skipped?`<p class="mu" style="text-align:center;margin:4px 0">${a.skipped} card${a.skipped>1?'s':''} left out because of an uncertain price (⚠).</p>`:''}
-  <label class="mu" style="display:block;text-align:center;margin-top:4px"><input type="checkbox" id="tinc"${T.incl?' checked':''}> count uncertain-price cards</label></div>
+  <p class="btot" style="margin:8px 0 0"><b style="font-size:20px">Trade value ${money(tv)}</b></p></div>
   <h4 class="mh">Their side <span class="mu">(${T.theirs.length} card${T.theirs.length===1?'':'s'}, ${money(b.val)})</span></h4>
   ${T.theirs.length?T.theirs.map((r,i)=>tRow(r,'theirs',i)).join(''):'<p class="mu">Optional: add the cards you would get, or tap ＋ Get on a card below.</p>'}
   <button class="btn alt" data-act="addtheirs" style="margin:6px 0">＋ Add by name</button>
@@ -1524,9 +1523,17 @@ async function notifRender(){
 async function fvNeed(list){try{await loadData()}catch(e){return}
   if(list.some(r=>!cardById(r.i))&&!DATA.jp.length){try{await loadJP()}catch(e){}}}
 function myWishSet(){const s=new Set(T.wish.map(r=>r.i));for(const b of BD.binders)for(const pg of b.pages)for(const r of pg)if(r&&r.w)s.add(r.i);return s}
-function fvCardRow(r,tag,extra){
+function fvCardMenu(owner,i,k,pr,rel){
+  const c=cardById(i);if(!c)return;
+  const m=c.v[k]?c.v[k][0]:0;
+  modal(`<h3>${esc(c.name)}</h3><p class="mu">${esc(c.set)}${c.lang==='jp'?' · JP':''} · #${esc(c.number)}<br>${esc(k)} · ${pr>0?money(pr)+' asking':'Near Mint '+money(m)}${owner?'<br>@'+esc(owner):''}</p>${owner&&rel==='friend'?'<button class="btn" id="cmoffer">🤝 Make an offer</button>':(owner?'<p class="mu">Become friends with @'+esc(owner)+' to make an offer.</p>':'')}<a class="btn alt" style="text-decoration:none;margin-top:8px" target="_blank" rel="noopener" href="${esc(link(c,k))}">Open on TCGplayer</a><button class="btn alt" id="no" style="margin-top:8px">Close</button>`);
+  $('#no').onclick=()=>closeModal();
+  if($('#cmoffer'))$('#cmoffer').onclick=()=>offerStart(owner,{kind:'offer',get:[{i:+i,k,p:+pr||0}],fromModal:true})}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-fcard]');if(!b)return;const [o,i,k,pr,rel]=b.dataset.fcard.split('|');fvCardMenu(o,+i,k,+pr||0,rel)});
+function fvCardRow(r,tag,extra,own){
   const c=cardById(r.i);if(!c)return '';
   const m=c.v[r.k]?c.v[r.k][0]:0;
+  if(own)return `<button class="tl" data-fcard="${esc(own.o)}|${r.i}|${esc(r.k)}|${r.p>0?r.p:0}|${own.rel||''}" style="text-align:left;width:100%;color:inherit;font:inherit;cursor:pointer"><img src="${esc(c.img)}" alt="" loading="lazy"><div style="flex:1;min-width:0"><b>${esc(c.name)}</b>${c.lang==='jp'?'<span class="lang">JP</span>':''}${tag||''}<div class="mu">${esc(c.set)} · #${esc(c.number)}<br>${esc(r.k)}</div></div><div class="tp">${extra||(m>0?money(m):'—')}</div></button>`;
   return `<a class="tl" style="text-decoration:none;color:inherit" target="_blank" rel="noopener" href="${esc(link(c,r.k))}"><img src="${esc(c.img)}" alt="" loading="lazy"><div style="flex:1;min-width:0"><b>${esc(c.name)}</b>${c.lang==='jp'?'<span class="lang">JP</span>':''}${tag||''}<div class="mu">${esc(c.set)} · #${esc(c.number)}<br>${esc(r.k)}</div></div><div class="tp">${extra||(m>0?money(m):'—')}</div></a>`}
 function fvTradeHtml(l){
   const mine=new Set(T.lists.flatMap(x=>x.items).map(r=>r.i)),wish=myWishSet(),wants=l.wants||[];
@@ -1540,7 +1547,7 @@ function fvTradeHtml(l){
         const c=cardById(r.i),m=c&&c.v[r.k]?c.v[r.k][0]:0,lbl={trade:'Trade',sale:'Sale',either:'Trade or sale'}[r.m]||'Trade or sale';
         const hit=!isMe&&wish.has(r.i);
         const price=r.p>0?money(r.p)+'<br><span class="mu">asking</span>':(m>0?money(m):'—');
-        return fvCardRow(r,`<span class="tag">${lbl}</span>${hit?'<span class="tag hit">You want this ♡</span>':''}`,price)}).join('')+'</div></details>'}
+        return fvCardRow(r,`<span class="tag">${lbl}</span>${hit?'<span class="tag hit">You want this ♡</span>':''}`,price,isMe?null:{o:l.handle,rel:l.rel})}).join('')+'</div></details>'}
   }
   h+=`<details class="fold"><summary>Looking for <span class="mu">(${wants.length})</span></summary><div class="foldbody">`+(wants.length?wants.map(r=>fvCardRow(r,`<span class="tag">♡</span>${!isMe&&mine.has(r.i)?'<span class="tag hit">You have this</span>':''}`)).join(''):`<p class="mu">No ♡ cards in ${isMe?'your shared':'their visible'} binders. Mark a card as wishlist in a shared binder and it shows up here.</p>`)+'</div></details>';
   return h}
@@ -1553,7 +1560,7 @@ async function fvProfile(my){
   const rel=l.rel;
   const relHtml=rel==='none'?(ACC.handle?'<button class="btn" id="frel">Add friend</button>':'<p class="mu">Create an account in Friends to add them.</p>'):rel==='in'?'<button class="btn" id="frel">Accept friend request</button>':rel==='out'?'<p class="mu">Friend request sent.</p>':rel==='friend'?'<div class="row" style="align-items:center;justify-content:space-between"><span class="mu">✓ Friends</span><span><button class="chip" id="fmmsg">💬 Message</button> <button class="chip" id="frm">Remove friend</button></span></div>':'<p class="mu">This is how others see your profile.</p>';
   el.innerHTML=`<button class="chip" id="fvback">← Back</button><h3 style="margin-top:12px">@${esc(l.handle)}</h3>${relHtml}
-  ${rel==='friend'?'<div class="row"><button class="btn" id="fmoffer">🤝 Make an offer</button><button class="btn alt" id="fmreq">🙋 Request a card</button></div>':''}
+  ${rel==='friend'?'<button class="btn" id="fmoffer">🤝 Make an offer</button>':''}
   <h3>Binders</h3>${l.binders.length?l.binders.map(b=>`<button class="frow btnrow" data-b="${esc(b.id)}">${coverHtml(b.cover)}<div style="flex:1;min-width:0"><b>${esc(b.name)}</b><div class="mu">${b.cnt} card${b.cnt===1?'':'s'} · ${visLabel(b.vis)} · ${ago(b.updated)}</div></div><span class="mu">›</span></button>`).join(''):`<p class="mu">No binders to show yet.${rel==='friend'||rel==='self'?'':' Friends-only binders appear once you are friends.'}</p>`}`;
   el.insertAdjacentHTML('beforeend',fvTradeHtml(l)+'<button class="btn alt" id="fvplink" style="margin-top:10px">🔗 Share link to this profile</button>');
   if(FV.focus){const d=el.querySelector('details[data-lid="'+FV.focus+'"]');if(d){d.open=true;setTimeout(()=>d.scrollIntoView({block:'start'}),50)}}
@@ -1561,7 +1568,6 @@ async function fvProfile(my){
   $('#fvback').onclick=fvBack;
   document.querySelectorAll('#friendsView [data-b]').forEach(b=>b.onclick=()=>fvGo('binder',{owner:l.handle,id:b.dataset.b}));
   if($('#fmoffer'))$('#fmoffer').onclick=()=>offerStart(l.handle,{kind:'offer'});
-  if($('#fmreq'))$('#fmreq').onclick=()=>offerStart(l.handle,{kind:'request'});
   if($('#frel'))$('#frel').onclick=async()=>{try{const r=await api('friend_add',{to:l.handle});toast(r.rel==='friend'?'You are now friends':'Request sent');fvRender()}catch(e){toast(e.message)}};
   if($('#fmmsg'))$('#fmmsg').onclick=()=>{MSG.with=l.handle;showTab('msg')};
   if($('#frm'))$('#frm').onclick=()=>{if(!confirm('Remove @'+l.handle+' from your friends?'))return;api('friend_remove',{who:l.handle}).then(()=>{toast('Removed');fvRender()}).catch(e=>toast(e.message))}}
@@ -1590,7 +1596,7 @@ async function fvBrowse(my){
     if(tab==='trade'){
       const owners=r.owners.map(o=>{const lists=o.lists.map(l=>({...l,items:l.items.filter(x=>nameOk(x.i))})).filter(l=>l.items.length);
         const n=lists.reduce((t,l)=>t+l.items.length,0),hits=lists.reduce((t,l)=>t+l.items.filter(x=>wish.has(x.i)).length,0);return {...o,lists,n,hits}}).filter(o=>o.n).sort((x,y)=>y.hits-x.hits||y.n-x.n);
-      body.innerHTML=owners.length?owners.map(o=>`<details class="fold"${FV.bq||o.hits?' open':''}><summary>@${esc(o.owner)} <span class="mu">(${o.n} card${o.n===1?'':'s'}${o.hits?' · '+o.hits+' you want':''}${o.rel==='friend'?' · 👥':''})</span></summary><div class="foldbody">${o.lists.map(l=>`<div class="mu" style="margin:4px 0 6px"><b>${esc(l.name)}</b> · ${visLabel(l.vis)}</div>${l.items.map(x=>{const c=cardById(x.i),m=c&&c.v[x.k]?c.v[x.k][0]:0;return fvCardRow(x,`<span class="tag">${MODE_TXT[x.m]||'Trade or sale'}</span>${wish.has(x.i)?'<span class="tag hit">You want this ♡</span>':''}`,x.p>0?money(x.p)+'<br><span class="mu">asking</span>':(m>0?money(m):'—'))}).join('')}`).join('')}<button class="btn alt" data-prof="${esc(o.owner)}" style="margin-top:6px">Open @${esc(o.owner)}'s profile</button></div></details>`).join(''):`<p class="mu">${FV.bq?'No matches.':'No trade lists to show yet. Lists set to Public (or shared with friends) appear here.'}</p>`;
+      body.innerHTML=owners.length?owners.map(o=>`<details class="fold"${FV.bq||o.hits?' open':''}><summary>@${esc(o.owner)} <span class="mu">(${o.n} card${o.n===1?'':'s'}${o.hits?' · '+o.hits+' you want':''}${o.rel==='friend'?' · 👥':''})</span></summary><div class="foldbody">${o.lists.map(l=>`<div class="mu" style="margin:4px 0 6px"><b>${esc(l.name)}</b> · ${visLabel(l.vis)}</div>${l.items.map(x=>{const c=cardById(x.i),m=c&&c.v[x.k]?c.v[x.k][0]:0;return fvCardRow(x,`<span class="tag">${MODE_TXT[x.m]||'Trade or sale'}</span>${wish.has(x.i)?'<span class="tag hit">You want this ♡</span>':''}`,x.p>0?money(x.p)+'<br><span class="mu">asking</span>':(m>0?money(m):'—'),{o:o.owner,rel:o.rel})}).join('')}`).join('')}<button class="btn alt" data-prof="${esc(o.owner)}" style="margin-top:6px">Open @${esc(o.owner)}'s profile</button></div></details>`).join(''):`<p class="mu">${FV.bq?'No matches.':'No trade lists to show yet. Lists set to Public (or shared with friends) appear here.'}</p>`;
       document.querySelectorAll('#friendsView [data-prof]').forEach(b=>b.onclick=()=>fvGo('profile',{handle:b.dataset.prof}));return}
     const rows=r.wants.filter(x=>nameOk(x.i)).map(x=>({...x,has:mine.has(x.i)})).sort((x,y)=>(y.has-x.has)||(y.o.length-x.o.length));
     body.innerHTML=rows.length?rows.slice(0,150).map(x=>fvCardRow(x,`<span class="tag">♡ ${x.o.length}</span>${x.has?'<span class="tag hit">You have this</span>':''}<div class="mu" style="margin:2px 0">Wanted by ${x.o.slice(0,4).map(o=>'@'+esc(o)).join(', ')}${x.o.length>4?' +'+(x.o.length-4):''}</div>`)).join('')+(rows.length>150?'<p class="mu">Showing the first 150. Search to narrow down.</p>':''):`<p class="mu">${FV.bq?'No matches.':'No wishlist cards yet. Cards marked ♡ in Public binders and your friends binders show up here.'}</p>`};
@@ -1627,8 +1633,8 @@ async function fvBinder(my){
   $('#fvcopy').onclick=()=>{const nb=bClean(b);nb.name=(g.name+' (from @'+g.owner+')').slice(0,40);BD.binders.push(nb);bSave();toast('Saved to your binders')};
   document.querySelectorAll('#friendsView .pk.has[data-i]').forEach(btn=>btn.onclick=()=>{
     const r=pg[+btn.dataset.i],c=r&&cardById(r.i);if(!c)return;
-    modal(`<h3>${esc(c.name)}${r.w?' <span class="mu">♡ looking for this</span>':''}</h3><p class="mu">${esc(c.set)}${c.lang==='jp'?' · JP':''} · #${esc(c.number)}<br>Near Mint · ${esc(r.k)} · ${money(refVal(r))}</p><a class="btn alt" style="text-decoration:none" target="_blank" rel="noopener" href="${esc(link(c,r.k))}">Open on TCGplayer</a><button class="btn" id="no" style="margin-top:8px">Close</button>`);
-    $('#no').onclick=()=>closeModal()})}
+    if(r.w){modal(`<h3>${esc(c.name)} <span class="mu">♡ looking for this</span></h3><p class="mu">${esc(c.set)}${c.lang==='jp'?' · JP':''} · #${esc(c.number)}<br>Near Mint · ${esc(r.k)} · ${money(refVal(r))}</p><a class="btn alt" style="text-decoration:none" target="_blank" rel="noopener" href="${esc(link(c,r.k))}">Open on TCGplayer</a><button class="btn alt" id="no" style="margin-top:8px">Close</button>`);$('#no').onclick=()=>closeModal();return}
+    fvCardMenu(g.owner,r.i,r.k,0,g.rel)})}
 
 if(ACC.handle){api('me').then(m=>fvBadge(m.incoming.length,m.inbox,m.dm)).catch(()=>{});ftLoad(true)}
 
@@ -1644,7 +1650,7 @@ const TOUR=[
  {tab:'trade',sel:'.seg',alt:'.tab[data-tab="trade"]',t:'♡ Wishlist',d:'Switch to Wishlist to save cards you want. Friends can see it, and Matches tells you when a friend has one.'},
  {tab:'trade',sel:'details[data-fk="calc"]',alt:'.tab[data-tab="trade"]',t:'🧮 Trade math',d:'Open this to compare both sides of a trade. Pick 100, 90, 80 or 70% to count your cards at a discount.'},
  {tab:'friends',sel:'#fvstart',alt:'.tab[data-tab="friends"]',t:'👥 Friends',d:'Create a free account with email or Google, then add friends by handle. Look inside their binders and trade lists, and check 🎯 Matches for swaps that work for both of you.'},
- {tab:'friends',sel:'.tab[data-tab="friends"]',t:'🤝 Offers and requests',d:'On a friend\'s profile, tap Make an offer or Request a card. They can accept, counter or decline. If a deal falls through, either of you can cancel it.'},
+ {tab:'friends',sel:'.tab[data-tab="friends"]',t:'🤝 Offers and requests',d:'On a friend\'s profile, tap Make an offer, or tap any of their cards and choose Make an offer. They can accept, counter or decline. If a deal falls through, either of you can cancel it.'},
  {tab:'msg',sel:'.tab[data-tab="msg"]',t:'💬 Messages',d:'Chat with friends to set up a meetup. Your offers and requests are in here too.'},
  {tab:'msg',sel:'#bellbtn',t:'🔔 Notifications',d:'Friend requests, offers waiting on you, replies and new matches all show up here. The number tells you how many are new.'},
  {tab:'msg',sel:'#themebtn',t:'🎨 Colors',d:'Pick a color theme that is easy on your eyes, or choose your own accent color.'}
