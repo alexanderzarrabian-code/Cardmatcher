@@ -103,6 +103,21 @@ label.mu{color:var(--mu)}
 details.fold{margin:10px 0}details.fold>summary{cursor:pointer;font-weight:800;font-size:17px;list-style:none;padding:12px 14px;background:var(--card);border:2px solid var(--line);border-radius:12px;display:flex;justify-content:space-between;align-items:center;gap:8px}details.fold>summary::-webkit-details-marker{display:none}details.fold>summary::after{content:'▾';color:var(--mu)}details.fold[open]>summary::after{content:'▴'}details.fold[open]>summary{border-color:var(--ac)}.foldbody{padding-top:8px}
 #themebtn{position:absolute;left:14px;top:12px;width:32px;height:32px;border-radius:50%;border:2px solid var(--ac);background:transparent;font-size:15px;cursor:pointer;z-index:2;padding:0}
 .swg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.sw{border:2px solid var(--line);border-radius:12px;padding:8px;background:var(--card);color:var(--fg);font:700 14px system-ui;text-align:left;cursor:pointer}.sw.on{border-color:var(--ac)}.sw i{display:inline-block;width:16px;height:16px;border-radius:50%;margin-right:3px;vertical-align:-3px;border:1px solid rgba(128,128,128,.5)}
+#bellbtn{position:absolute;right:54px;top:12px;width:32px;height:32px;border-radius:50%;border:2px solid var(--ac);background:transparent;font-size:14px;cursor:pointer;z-index:2;padding:0;line-height:1}
+#bellbtn .nb{position:absolute;top:-7px;right:-7px;margin:0;min-width:16px;padding:0 4px;font-size:10px;line-height:16px}
+.mlog{display:flex;flex-direction:column;gap:6px;margin:8px 0 10px;min-height:120px}
+.mb{max-width:82%;padding:8px 12px;border-radius:16px;background:var(--card);border:1px solid var(--line);align-self:flex-start;word-wrap:break-word;overflow-wrap:anywhere}
+.mb.me{align-self:flex-end;background:var(--ac);color:var(--onac);border-color:transparent}
+.mb small{display:block;opacity:.65;font-size:11px;margin-top:2px}
+.bsm{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px 12px;margin:10px 0 6px}
+.bsm .big{font-size:22px;font-weight:800;line-height:1.1}.bsm .sub{font-size:12.5px;color:var(--mu);margin-top:2px}
+.bnav{display:flex;align-items:center;justify-content:center;gap:10px;margin:8px 0 6px}
+#coach{position:fixed;inset:0;z-index:70}
+#coachhl{position:fixed;border-radius:14px;border:2px solid var(--ac);box-shadow:0 0 0 9999px rgba(0,0,0,.74);pointer-events:none;transition:all .25s ease}
+#coachcard{position:fixed;left:12px;right:12px;max-width:480px;margin:0 auto;background:var(--surf);border:2px solid var(--ac);border-radius:16px;padding:14px;box-shadow:var(--shadow)}
+#coachcard h3{margin:0 0 6px}#coachcard p{margin:0 0 10px}
+#coachcard .crow{display:flex;gap:8px;align-items:center}#coachcard .crow .btn{margin:0;padding:10px}
+#coachcard .cn{font-size:12px;color:var(--mu);flex:1}
 #helpbtn{position:absolute;right:14px;top:12px;width:32px;height:32px;border-radius:50%;border:2px solid var(--ac);background:transparent;color:var(--ac);font-weight:800;font-size:16px;cursor:pointer;z-index:2}
 .hstep{text-align:center;padding:6px 4px}.hstep .big{font-size:46px;line-height:1.1}.hstep h3{margin:8px 0 6px}.hdots{display:flex;gap:6px;justify-content:center;margin:12px 0}.hdots i{width:8px;height:8px;border-radius:50%;background:var(--line)}.hdots i.on{background:var(--ac)}
 .fbadge{position:absolute;top:4px;left:4px;z-index:2;background:var(--aqua);color:#06281d;font-size:11px;font-weight:800;border-radius:999px;padding:2px 8px;box-shadow:0 0 6px #000}
@@ -131,9 +146,9 @@ label.ofr{cursor:pointer}label.ofr input{width:22px;height:22px;flex:0 0 22px;ac
 .trow2 .rbody{padding:2px 10px 10px 48px;font-size:13px}.trow2[open]{border-color:var(--ac)}.chip.sm{font-size:12px;padding:4px 10px}details.pset{display:inline-block}details.pset>summary{list-style:none;cursor:pointer}details.pset>summary::-webkit-details-marker{display:none}
 details.fold>summary .lname{display:inline;font-size:17px}
 details.pset[open]{display:block;width:100%}
-.tab[data-tab="notif"]{flex:0 0 58px}.tab[data-tab="notif"] .nb{margin-left:2px;padding:0 5px}
+.tab[data-tab="msg"]{flex:0 0 58px}.tab[data-tab="msg"] .nb{margin-left:2px;padding:0 5px}
 .nitem{display:flex;align-items:center;gap:10px;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:10px;margin-bottom:8px;cursor:pointer}.nitem.new{border-color:var(--ac)}.nitem .ni{font-size:20px;flex:0 0 26px;text-align:center}.nitem .nt{flex:1;min-width:0;font-size:15px;font-weight:700}.nitem .nt .mu{display:block;font-weight:400;font-size:13px}.nitem .dot{width:9px;height:9px;border-radius:50%;background:var(--ac);flex:0 0 9px}
-.tabs{gap:5px!important;padding-left:8px!important;padding-right:8px!important}.tab{font-size:12px!important;min-width:0;overflow:hidden;padding:10px 1px!important}.tab[data-tab="notif"]{flex:0 0 52px}
+.tabs{gap:5px!important;padding-left:8px!important;padding-right:8px!important}.tab{font-size:12px!important;min-width:0;overflow:hidden;padding:10px 1px!important}.tab[data-tab="msg"]{flex:0 0 52px}
 </style>
 <script>
 var THEMES={gold:{n:'Soft Gold',bg:'#141a24',bg2:'#10151e',surf:'#1e2634',line:'#364257',ac:'#d9b45a',mu:'#9aa3b5',alt:'#222b3a',altl:'#445068',ban1:'#1d2636',ban2:'#171e2b'},
@@ -151,8 +166,8 @@ function themeApply(t){t=t||themeLoad();var base=THEMES.gold,pr=Object.assign({}
 try{themeApply()}catch(e){}
 </script>
 </head><body>
-<div class="banner"><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><button id="themebtn" aria-label="Colors" title="Colors">🎨</button><button id="helpbtn" aria-label="How it works" title="How it works">?</button><h1>Binder Buddy</h1><p>Snap a card. Find its price twins.</p></div>
-<div class="tabs"><button class="tab on" data-tab="binders">📒 Binders</button><button class="tab" data-tab="find">🔍 Look up</button><button class="tab" data-tab="trade">🔄 Trade</button><button class="tab" data-tab="friends">👥 Friends</button><button class="tab" data-tab="notif" id="notifTab" aria-label="Notifications">🔔</button></div>
+<div class="banner"><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><button id="themebtn" aria-label="Colors" title="Colors">🎨</button><button id="bellbtn" aria-label="Notifications" title="Notifications">🔔</button><button id="helpbtn" aria-label="How it works" title="How it works">?</button><h1>Binder Buddy</h1><p>Snap a card. Find its price twins.</p></div>
+<div class="tabs"><button class="tab on" data-tab="binders">📒 Binders</button><button class="tab" data-tab="find">🔍 Look up</button><button class="tab" data-tab="trade">🔄 Trade</button><button class="tab" data-tab="friends">👥 Friends</button><button class="tab" data-tab="msg" id="msgTab" aria-label="Messages">💬</button></div>
 <div id="findView" hidden>
 <p class="hint" style="margin:0 0 8px">Scan or type a card to see its price and find cards worth about the same.</p>
 <div class="cams"><label class="btn" for="file">📷 Take photo</label>
@@ -176,6 +191,7 @@ try{themeApply()}catch(e){}
 <div id="tradeView" hidden></div>
 <div id="friendsView" hidden></div>
 <div id="notifView" hidden></div>
+<div id="msgView" hidden></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.1.1/tesseract.min.js"></script>
 <script>
 const $=s=>document.querySelector(s);
@@ -532,9 +548,9 @@ function matchKeys(m){m=m||matchCalc();return m.have.map(x=>'h|'+x.o+'|'+x.i+'|'
 const matchNew=()=>{if(!ACC.handle)return 0;const sn=mSeenGet();return matchKeys().filter(k=>!sn.has(k)).length};
 function matchMarkSeen(){try{localStorage.setItem('bb_match_seen',JSON.stringify(matchKeys()))}catch(e){}tabLabel()}
 document.addEventListener('toggle',e=>{if(e.target&&e.target.classList&&e.target.classList.contains('match')&&e.target.open){matchMarkSeen();const b=e.target.querySelector('.bell');if(b)b.remove()}},true);
-let FVREQ=0;
+let FVREQ=0,FVDM=0;
 function notifCount(){return ACC.handle?FVREQ+FVOFF+matchNew():0}
-function tabLabel(){const t=document.querySelector('.tab[data-tab="notif"]');if(!t)return;const n=notifCount();t.innerHTML='🔔'+(n?'<span class="nb hot">'+n+'</span>':'')}
+function tabLabel(){const n=notifCount(),b=document.getElementById('bellbtn');if(b)b.innerHTML='🔔'+(n?'<span class="nb hot">'+(n>9?'9+':n)+'</span>':'');const t=document.querySelector('.tab[data-tab="msg"]');if(t)t.innerHTML='💬'+(FVDM?'<span class="nb hot">'+FVDM+'</span>':'')}
 const owners=a=>[...new Set(a.map(x=>x.o))];
 const ownTxt=a=>{const o=owners(a);return '@'+esc(o[0])+(o.length>1?' +'+(o.length-1):'')};
 function pkMk(r){ // marker on a binder pocket
@@ -639,14 +655,16 @@ try{history.replaceState({tab:'binders',page:0,cur:null},'')}catch(e){}
 // tabs
 function showTab(t,fromPop){
   if(!fromPop&&NAV.tab!==t){NAV.tab=t;navPush()}NAV.tab=t;
-  $('#findView').hidden=t!=='find';$('#binderView').hidden=t!=='binders';$('#tradeView').hidden=t!=='trade';$('#friendsView').hidden=t!=='friends';$('#notifView').hidden=t!=='notif';
+  $('#findView').hidden=t!=='find';$('#binderView').hidden=t!=='binders';$('#tradeView').hidden=t!=='trade';$('#friendsView').hidden=t!=='friends';$('#notifView').hidden=t!=='notif';$('#msgView').hidden=t!=='msg';
   document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
   if(t==='binders')bRender(true);
   if(t==='trade')tRender(true);
   if(t==='friends')fvRender();
   if(t==='notif')notifRender();
+  if(t==='msg')msgRender();
   if(t==='find'||t==='trade'||t==='friends'||t==='binders')ftLoad()}
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{if(b.dataset.tab==='friends'&&NAV.tab==='friends'&&FV.view!=='home'){fvGo('home');return}showTab(b.dataset.tab)});
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{if(b.dataset.tab==='friends'&&NAV.tab==='friends'&&FV.view!=='home'){fvGo('home');return}if(b.dataset.tab==='msg'&&NAV.tab==='msg'&&MSG.with){MSG.with='';msgRender();return}showTab(b.dataset.tab)});
+$('#bellbtn').onclick=()=>showTab('notif');
 
 async function bEnsureData(){
   try{await loadData()}catch(e){status(e.message)}
@@ -667,17 +685,16 @@ async function bRender(load){
   if(load){await bEnsureData();bSnap()}
   const v=$('#binderView');
   if(!BD.binders.length){
-    v.innerHTML=`<h3>Your binders</h3><p class="mu">Make mock binder pages: pick cards, place them in pockets, and see the page value. Saved on this phone.</p><button class="btn" id="bnew">＋ Make your first binder</button><div class="row" style="margin-top:10px"><button class="chip" id="bimp">Import</button></div><input id="bimpf" type="file" accept=".json,application/json" hidden>`;
+    v.innerHTML=`<h3>Your binders</h3><p class="mu">Make mock binder pages: pick cards, place them in pockets, and see the page value. Saved on this phone.</p><button class="btn" id="bnew">＋ Make your first binder</button>`;
     $('#bnew').onclick=bNewDlg;bWireImport();return}
   const b=curB()||BD.binders[0];BD.cur=b.id;
   if(BD.page>=b.pages.length)BD.page=b.pages.length-1;if(BD.page<0)BD.page=0;
   const pg=b.pages[BD.page];
   const pv=pg.reduce((s,r)=>s+ownVal(r),0),tv=b.pages.reduce((s,p)=>s+p.reduce((t,r)=>t+ownVal(r),0),0),wl=b.pages.reduce((s,p)=>s+p.reduce((t,r)=>t+wishVal(r),0),0),cnt=b.pages.reduce((s,p)=>s+p.filter(r=>r&&!r.w).length,0),wc=b.pages.reduce((s,p)=>s+p.filter(r=>r&&r.w).length,0);
-  v.innerHTML=`<div class="row" style="align-items:center"><select id="bsel">${BD.binders.map(x=>`<option value="${esc(x.id)}"${x.id===b.id?' selected':''}>${esc(x.name)}</option>`).join('')}</select><button class="chip" id="bnew">＋ New</button><button class="chip" id="bmore" aria-label="More">⋯ More</button></div><input id="bimpf" type="file" accept=".json,application/json" hidden>
-  <div style="text-align:center;margin-top:6px"><button class="chip" id="bvis">${visLabel(b.vis||'private')}${(b.vis&&b.vis!=='private'&&!ACC.handle)?' · sign in to sync':''}</button></div>
-  <p class="btot"><b>Page ${money(pv)}</b> · Binder ${money(tv)} · ${cnt} card${cnt===1?'':'s'}${wc?`<br><span>♡ Wishlist ${money(wl)} · ${wc} card${wc===1?'':'s'}</span>`:''}</p>${bTrend(b,tv)}
-  <div class="row" style="align-items:center;justify-content:center;gap:10px;margin:6px 0"><button class="chip" id="bprev"${BD.page===0?' disabled':''}>◀</button><b>Page ${BD.page+1} of ${b.pages.length}</b><button class="chip" id="bnext"${BD.page>=b.pages.length-1?' disabled':''}>▶</button></div>
-  <div class="acts"><button class="chip" id="bfill">📷 Fill page from photo</button><button class="chip" id="bmovep">↔ Move page</button><button class="chip" id="baddp">＋ Add page</button></div>
+  v.innerHTML=`<div class="row" style="align-items:center"><select id="bsel">${BD.binders.map(x=>`<option value="${esc(x.id)}"${x.id===b.id?' selected':''}>${esc(x.name)}</option>`).join('')}</select><button class="chip" id="bnew" aria-label="New binder">＋</button><button class="chip" id="bmore" aria-label="More">⋯</button></div>
+  <div class="bsm"><div><div class="big">${money(tv)}</div><div class="sub">${cnt} card${cnt===1?'':'s'} · page ${money(pv)}${wc?` · ♡ ${wc} (${money(wl)})`:''}</div></div><button class="chip" id="bvis">${visLabel(b.vis||'private')}${(b.vis&&b.vis!=='private'&&!ACC.handle)?' · sign in':''}</button></div>${bTrend(b,tv)}
+  <div class="bnav"><button class="chip" id="bprev"${BD.page===0?' disabled':''}>◀</button><b>Page ${BD.page+1} of ${b.pages.length}</b><button class="chip" id="bnext"${BD.page>=b.pages.length-1?' disabled':''}>▶</button><button class="chip" id="baddp" aria-label="Add page">＋ Page</button></div>
+  <div class="acts"><button class="chip" id="bfill">📷 Fill page from photo</button><button class="chip" id="bmovep">↔ Move page</button></div>
   ${BD.sel?'<p class="mu" style="text-align:center;color:var(--ac);margin:4px 0">Moving a card: tap the pocket to move it to. <button class="chip" id="bcancel">Cancel</button></p>':''}
   <div class="bgrid" style="grid-template-columns:repeat(${b.cols},1fr);max-width:${b.cols*98+16+(b.cols-1)*6}px">${pg.map((r,i)=>{
     const c=r&&cardById(r.i);
@@ -690,17 +707,13 @@ async function bRender(load){
   $('#bnew').onclick=bNewDlg;
   $('#bvis').onclick=()=>bVisDlg(b);
   $('#bmore').onclick=()=>{
-    modal(`<h3>${esc(b.name)}</h3><button class="btn alt mbtn" id="m1">Rename binder</button><button class="btn alt mbtn" id="mvis">👁 Who can see this: ${visLabel(b.vis||'private')}</button><button class="btn alt mbtn" id="mi">🖼️ Share this page as an image</button>${ACC.handle&&b.vis&&b.vis!=='private'?'<button class="btn alt mbtn" id="mlive">🔗 Link to my live binder</button>':''}<button class="btn alt mbtn" id="m2">Share link (whole binder)</button><button class="btn alt mbtn" id="m3">Export (backup file)</button><button class="btn alt mbtn" id="m4">Import binders</button><button class="btn alt mbtn" id="m5"${b.pages.length<2?' disabled style="opacity:.4"':''}>Delete this page</button><button class="btn mbtn" id="m6" style="background:#a84444">Delete binder</button><button class="btn alt mbtn" id="m0">Close</button>`);
+    modal(`<h3>${esc(b.name)}</h3><button class="btn alt mbtn" id="m1">Rename binder</button><button class="btn alt mbtn" id="mvis">👁 Who can see this: ${visLabel(b.vis||'private')}</button><button class="btn alt mbtn" id="mshare">🔗 Share binder link</button><button class="btn alt mbtn" id="m5"${b.pages.length<2?' disabled style="opacity:.4"':''}>Delete this page</button><button class="btn mbtn" id="m6" style="background:#a84444;color:#fff">Delete binder</button><button class="btn alt mbtn" id="m0">Close</button>`);
     $('#m0').onclick=()=>closeModal();
     $('#mvis').onclick=()=>bVisDlg(b);
-    if($('#mlive'))$('#mlive').onclick=()=>{closeModal();setTimeout(()=>shareUrl(binderLink(ACC.handle,b.id),b.name+' on Binder Buddy'),400)};
+    $('#mshare').onclick=()=>{if(ACC.handle&&b.vis&&b.vis!=='private'){closeModal();setTimeout(()=>shareUrl(binderLink(ACC.handle,b.id),b.name+' on Binder Buddy'),400)}else bShare(b)};
     $('#m1').onclick=()=>bNameDlg('Rename binder',b.name,n=>{b.name=n;bSave();bRender()});
-    $('#mi').onclick=()=>bShareImage(b);
-    $('#m2').onclick=()=>bShare(b);
-    $('#m3').onclick=()=>{closeModal();bExport()};
-    $('#m4').onclick=()=>{closeModal();const f=$('#bimpf');if(f)f.click()};
     $('#m5').onclick=()=>{if(b.pages.length<2)return;closeModal();setTimeout(()=>{if(pg.some(Boolean)&&!confirm('Delete this page and its cards?'))return;b.pages.splice(BD.page,1);BD.page=Math.max(0,BD.page-1);BD.sel=null;bSave();bRender()},150)};
-    $('#m6').onclick=()=>{modal(`<h3>Delete "${esc(b.name)}"?</h3><p class="mu">This can't be undone. Export it first if you want a backup.</p><button class="btn" id="yes" style="background:#a84444">Delete binder</button><button class="btn alt" id="no" style="margin-top:8px">Cancel</button>`);
+    $('#m6').onclick=()=>{modal(`<h3>Delete "${esc(b.name)}"?</h3><p class="mu">This can't be undone.</p><button class="btn" id="yes" style="background:#a84444;color:#fff">Delete binder</button><button class="btn alt" id="no" style="margin-top:8px">Cancel</button>`);
       $('#no').onclick=()=>closeModal();
       $('#yes').onclick=()=>{if(ACC.handle&&b.vis&&b.vis!=='private')api('unshare',{id:b.id}).catch(()=>{});BD.binders=BD.binders.filter(x=>x.id!==b.id);BD.cur=BD.binders[0]?BD.binders[0].id:null;BD.page=0;bSave();closeModal();bRender()}}};
   $('#bfill').onclick=()=>bPhotoMenu(b);
@@ -937,8 +950,8 @@ function tListHtml(){
   ${T.msg?`<p class="mu" id="tmsg" style="color:var(--ac)">${esc(T.msg)}</p>`:''}
   ${T.review.length?`<h3>Needs a quick look (${T.review.length})</h3>${T.review.map(rv=>`<div class="review"><div style="display:flex;gap:10px;align-items:center">${rv.thumb?`<img src="${rv.thumb}" alt="" style="width:64px;border-radius:6px">`:''}<div><b>${esc(rv.label||'Unknown card')}</b><div class="mu">${esc(rv.note||'Tap the right one:')}</div></div></div>${rv.pairs.map((p,n)=>`<button class="item pair" data-act="pair" data-r="${rv.id}" data-p="${n}"><img src="${esc(p.c.img)}" loading="lazy" alt=""><div style="flex:1;min-width:0"><b style="margin:0">${esc(p.c.name)}</b>${p.c.lang==='jp'?'<span class="lang">JP</span>':''}<div class="mu">${esc(p.c.set)} · #${esc(p.c.number)}<br>${esc(p.k)}</div></div><div class="tp">${money(p.c.v[p.k][0])}</div></button>`).join('')}<div class="row"><button class="btn alt" data-act="manual" data-r="${rv.id}">Search by name</button><button class="btn alt" data-act="skip" data-r="${rv.id}">Skip</button></div></div>`).join('')}`:''}
   ${T.mine.length?T.mine.map((r,i)=>tRow(r,'mine',i)).join(''):'<p class="mu">Tap ＋ Add to scan or search the cards you want to trade or sell. They do not need to be in a binder. Tap a card to see its set, set a price, or switch between Trade, Sale, or both.</p>'}`,true)}
-  ${tFold('calc',`Trade math <span class="mu">${mathSum}</span>`,`<div class="panel"><div class="prow"><span>Trade value %</span><input id="tpct" type="number" inputmode="decimal" min="1" max="200" value="${T.pct}"></div>
-  <div class="chips">${[100,90,80,70,60].map(n=>`<button class="chip${T.pct===n?' on':''}" data-act="pct" data-v="${n}">${n}%</button>`).join('')}</div>
+  ${tFold('calc',`Trade math <span class="mu">${mathSum}</span>`,`<div class="panel"><div class="mu" style="margin:0 0 6px">Count my cards at</div>
+  <div class="chips">${[100,90,80,70].map(n=>`<button class="chip${T.pct===n?' on':''}" data-act="pct" data-v="${n}">${n}%</button>`).join('')}</div>
   <p class="btot" style="margin-bottom:0"><b style="font-size:20px">Trade value ${money(tv)}</b><br><span>Market total ${money(a.val)} × ${T.pct}%</span></p>
   ${a.skipped?`<p class="mu" style="text-align:center;margin:4px 0">${a.skipped} card${a.skipped>1?'s':''} left out because of an uncertain price (⚠).</p>`:''}
   <label class="mu" style="display:block;text-align:center;margin-top:4px"><input type="checkbox" id="tinc"${T.incl?' checked':''}> count uncertain-price cards</label></div>
@@ -1050,7 +1063,6 @@ function tWire(){
   const f1=$('#tfile'),f2=$('#tfile2');
   if(f1)f1.onchange=()=>{const fs=[...f1.files];f1.value='';tScanFiles(fs)};
   if(f2)f2.onchange=()=>{const fs=[...f2.files];f2.value='';tScanFiles(fs)};
-  const pct=$('#tpct');if(pct)pct.onchange=()=>{const n=parseFloat(pct.value);T.pct=n>0&&n<=200?n:100;tSave();tRender()};
   const tv_=$('#tvis');if(tv_)tv_.onclick=()=>tVisDlg(tCurList());
   document.querySelectorAll('#tradeView .tpr').forEach(inp=>inp.onchange=()=>{const r=T.mine[+inp.dataset.i];if(!r)return;const n=parseFloat(inp.value);if(n>0)r.p=Math.round(n*100)/100;else delete r.p;tSave();tRender()});
   const inc=$('#tinc');if(inc)inc.onchange=()=>{T.incl=inc.checked;tSave();tRender()};
@@ -1189,7 +1201,7 @@ const visLabel=v=>v==='public'?'🌐 Public':v==='friends'?'👥 Friends only':'
 const fmtCode=c=>String(c).replace(/(.{5})(?=.)/g,'$1-');
 const ago=ts=>{const m=Math.max(0,Math.floor((Date.now()-ts)/60000));if(m<1)return'just now';if(m<60)return m+' min ago';const h=Math.floor(m/60);if(h<24)return h+' h ago';const d=Math.floor(h/24);return d+' day'+(d>1?'s':'')+' ago'};
 const tcgImg=i=>'https://tcgplayer-cdn.tcgplayer.com/product/'+(+i)+'_200w.jpg';
-let FVOFF=0;const fvBadge=(n,inbox)=>{FVREQ=n||0;if(inbox!==undefined)FVOFF=inbox||0;tabLabel()};
+let FVOFF=0;const fvBadge=(n,inbox,dm)=>{FVREQ=n||0;if(inbox!==undefined)FVOFF=inbox||0;if(dm!==undefined)FVDM=dm||0;tabLabel()};
 
 let GCID=null;
 async function gCfg(){if(GCID!==null)return GCID;try{GCID=(await api('config')).google||''}catch(e){GCID=''}return GCID}
@@ -1257,7 +1269,7 @@ function acctMenu(){
     const safe=ac.email||ac.google;
     if(!confirm(safe?'Sign out on this phone? You can sign back in with your '+(ac.email?'email and password':'Google account')+'.':'Sign out? You have no email or Google sign-in set up, so you would need your recovery code to get back in. Set one up first under Sign-in options.'))return;
     try{await api('logout')}catch(e){}
-    ACC.handle='';ACC.code='';accSave();for(const k in SYNCED)delete SYNCED[k];fvBadge(0);toast('Signed out');if(NAV.tab==='friends')fvRender();else bRender()},150)}}
+    ACC.handle='';ACC.code='';accSave();for(const k in SYNCED)delete SYNCED[k];fvBadge(0,0,0);toast('Signed out');if(NAV.tab==='friends')fvRender();else bRender()},150)}}
 async function signOptDlg(){
   modal('<h3>Sign-in options</h3><p class="mu">Loading…</p>');
   let ac;try{ac=await api('acct')}catch(e){modal(`<h3>Sign-in options</h3><p class="mu">${esc(e.message)}</p><button class="btn" id="no">Close</button>`);$('#no').onclick=()=>closeModal();return}
@@ -1299,8 +1311,8 @@ async function fvHome(my){
     $('#fvstart').onclick=()=>accDlg(()=>fvRender());$('#fvlogin').onclick=()=>loginDlg(()=>fvRender());$('#fvbrowse').onclick=()=>fvGo('browse');return}
   el.innerHTML='<p class="mu">Loading…</p>';
   let m;try{m=await api('me')}catch(e){if(my!==FV.rid)return;el.innerHTML=`<h3>Friends</h3><p class="mu">${esc(e.message)}</p><button class="btn alt" id="facc">Account</button>`;$('#facc').onclick=acctMenu;return}
-  if(my!==FV.rid)return;fvBadge(m.incoming.length,m.inbox);
-  await ftLoad(true);await fvNeed([...FT.items,...FW.items]);if(my!==FV.rid)return;fvBadge(m.incoming.length,m.inbox);
+  if(my!==FV.rid)return;fvBadge(m.incoming.length,m.inbox,m.dm);
+  await ftLoad(true);await fvNeed([...FT.items,...FW.items]);if(my!==FV.rid)return;fvBadge(m.incoming.length,m.inbox,m.dm);
   const mc=matchCalc();
   el.innerHTML=`<div class="row" style="align-items:center;justify-content:space-between;margin-top:4px"><h3 style="margin:0">@${esc(m.handle)}</h3><button class="chip" id="facc">Account</button></div>
   ${matchPanel()}
@@ -1323,13 +1335,13 @@ async function fvHome(my){
 
 
 // ================= Requests, offers and the inbox =================
-const OF={to:'',kind:'offer',give:[],get:[],cash:0,note:'',counter:'',back:null};
+const OF={to:'',kind:'offer',give:[],get:[],cash:0,note:'',counter:'',back:null,gopen:false,topen:true};
 const OFK=x=>x.i+'|'+x.k;
 const offVal=x=>{if(x.p>0)return x.p;const c=cardById(x.i);return c&&c.v[x.k]?Math.max(0,c.v[x.k][0]||0):0};
 const offSum=a=>a.reduce((t,x)=>t+offVal(x),0);
 const offStrip=a=>a.map(x=>{const o={i:x.i,k:x.k};if(x.p>0)o.p=x.p;return o});
 function offerStart(to,o){o=o||{};
-  Object.assign(OF,{to,kind:o.kind||'offer',give:o.give||[],get:o.get||[],cash:o.cash||0,note:'',counter:o.counter||'',back:{view:FV.view,args:{handle:FV.handle,owner:FV.owner,id:FV.id}}});
+  Object.assign(OF,{to,kind:o.kind||'offer',give:o.give||[],get:o.get||[],cash:o.cash||0,note:'',counter:o.counter||'',gopen:false,topen:true,back:{view:FV.view,args:{handle:FV.handle,owner:FV.owner,id:FV.id}}});
   if(!ACC.handle){toast('Sign in on the Friends tab first');return}
   closeModal();setTimeout(()=>{showTab('friends');fvGo('offer')},o.fromModal?400:0)}
 function offTot(){
@@ -1347,22 +1359,24 @@ async function fvOffer(my){
   for(const x of OF.give)if(!s2.has(OFK(x))){s2.add(OFK(x));mine.push(x)}
   await fvNeed([...theirs,...mine]);if(my!==FV.rid)return;
   const on=(arr,x)=>arr.some(y=>OFK(y)===OFK(x));
+  const sideSum=a=>a.length?'· '+a.length+' picked · '+money(offSum(a)):'· none picked';
   const row=(x,side,arr)=>{const c=cardById(x.i);if(!c)return '';return `<label class="trow ofr"><input type="checkbox" data-ofs="${side}|${x.i}|${esc(x.k)}|${x.p||0}"${on(arr,x)?' checked':''}><img src="${esc(c.img)}" alt="" loading="lazy"><div style="flex:1;min-width:0"><b>${esc(c.name)}</b>${c.lang==='jp'?'<span class="lang">JP</span>':''}<div class="mu">${esc(c.set)} · ${esc(x.k)}</div></div><div class="tp">${money(offVal(x))}</div></label>`};
   const ttl=OF.counter?'Counter @'+esc(OF.to)+"'s offer":OF.kind==='request'?'Request a card from @'+esc(OF.to):'Offer a trade to @'+esc(OF.to);
   el.innerHTML=`<button class="chip" id="fvback">← Back</button><h3 style="margin:12px 0 4px">${ttl}</h3>
   <p class="mu" style="margin-top:0">${OF.kind==='request'&&!OF.counter?'Tick the card(s) you would like. Offer something back if you want to.':'Tick what you would get and what you would give.'}</p>
-  <h4 class="mh">You get from @${esc(OF.to)}</h4>${theirs.length?theirs.map(x=>row(x,'get',OF.get)).join(''):`<p class="mu">@${esc(OF.to)} has nothing listed right now. You can still add a card by name.</p>`}
-  <button class="btn alt" id="ofaddget" style="margin:6px 0">＋ Add another card by name</button>
-  <h4 class="mh">You give${OF.kind==='request'&&!OF.counter?' (optional)':''}</h4>${mine.length?mine.map(x=>row(x,'give',OF.give)).join(''):'<p class="mu">Nothing on your trade lists yet. Add cards by name, or build a list in the Trade tab.</p>'}
-  <button class="btn alt" id="ofaddgive" style="margin:6px 0">＋ Add another card by name</button>
-  <div class="panel"><div class="prow"><span>You add cash $</span><input id="ofc1" type="number" inputmode="decimal" min="0" step="0.5" value="${OF.cash>0?OF.cash:''}" placeholder="0"></div><div class="prow"><span>They add cash $</span><input id="ofc2" type="number" inputmode="decimal" min="0" step="0.5" value="${OF.cash<0?-OF.cash:''}" placeholder="0"></div></div>
   <div class="panel" id="oftot">${offTot()}</div>
+  <details class="fold" data-of="get"${OF.topen?' open':''}><summary>You get from @${esc(OF.to)} <span class="mu" id="ogsum">${sideSum(OF.get)}</span></summary><div class="foldbody">${theirs.length?theirs.map(x=>row(x,'get',OF.get)).join(''):`<p class="mu">@${esc(OF.to)} has nothing listed right now. You can still add a card by name.</p>`}
+  <button class="btn alt" id="ofaddget" style="margin:6px 0">＋ Add another card by name</button></div></details>
+  <details class="fold" data-of="give"${OF.gopen?' open':''}><summary>You give${OF.kind==='request'&&!OF.counter?' (optional)':''} <span class="mu" id="ogvsum">${sideSum(OF.give)}</span></summary><div class="foldbody">${mine.length?mine.map(x=>row(x,'give',OF.give)).join(''):'<p class="mu">Nothing on your trade lists yet. Add cards by name, or build a list in the Trade tab.</p>'}
+  <button class="btn alt" id="ofaddgive" style="margin:6px 0">＋ Add another card by name</button></div></details>
+  <div class="panel"><div class="prow"><span>You add cash $</span><input id="ofc1" type="number" inputmode="decimal" min="0" step="0.5" value="${OF.cash>0?OF.cash:''}" placeholder="0"></div><div class="prow"><span>They add cash $</span><input id="ofc2" type="number" inputmode="decimal" min="0" step="0.5" value="${OF.cash<0?-OF.cash:''}" placeholder="0"></div></div>
   <div class="row"><input id="ofnote" type="text" maxlength="300" placeholder="Add a note (e.g. can meet Saturday?)" value="${esc(OF.note)}"></div>
   <button class="btn" id="ofsend">${OF.counter?'Send counter-offer':OF.kind==='request'?'Send request':'Send offer'}</button>
   <p class="mu" style="text-align:center">Binder Buddy does not handle payment or shipping. Work out the swap with your friend.</p>`;
   $('#fvback').onclick=fvBack;
   el.querySelectorAll('[data-ofs]').forEach(cb=>cb.onchange=()=>{const [side,i,k,pr]=cb.dataset.ofs.split('|'),arr=OF[side],x={i:+i,k,p:+pr||0},n=arr.findIndex(y=>OFK(y)===OFK(x));
-    if(cb.checked&&n<0)arr.push(x);else if(!cb.checked&&n>=0)arr.splice(n,1);$('#oftot').innerHTML=offTot()});
+    if(cb.checked&&n<0)arr.push(x);else if(!cb.checked&&n>=0)arr.splice(n,1);$('#oftot').innerHTML=offTot();$('#ogsum').textContent=sideSum(OF.get);$('#ogvsum').textContent=sideSum(OF.give)});
+  el.querySelectorAll('details[data-of]').forEach(d=>d.ontoggle=()=>{if(d.dataset.of==='give')OF.gopen=d.open;else OF.topen=d.open});
   const cash=()=>{OF.cash=(parseFloat($('#ofc1').value)||0)-(parseFloat($('#ofc2').value)||0);$('#oftot').innerHTML=offTot()};
   $('#ofc1').oninput=cash;$('#ofc2').oninput=cash;
   $('#ofnote').oninput=e=>{OF.note=e.target.value};
@@ -1386,7 +1400,7 @@ function offerCard(o){
   const pend=o.status==='pending',agreed=o.status==='accepted';
   const btns=(pend&&!mine?`<button class="btn" data-oa="accept" data-id="${o.id}">Accept</button><div class="row"><button class="btn alt" data-oa="counter" data-id="${o.id}">Counter</button><button class="btn alt" data-oa="decline" data-id="${o.id}">Decline</button></div>`:'')
    +(pend&&mine?`<button class="btn alt" data-oa="cancel" data-id="${o.id}">Cancel this ${o.kind==='request'?'request':'offer'}</button>`:'')
-   +(agreed?`<button class="btn" data-oa="complete" data-id="${o.id}">🏁 Mark trade completed</button>`:'')
+   +(agreed?`<button class="btn" data-oa="complete" data-id="${o.id}">🏁 Mark trade completed</button><button class="btn alt" data-oa="cancel" data-id="${o.id}">✖ Cancel trade (it fell through)</button>`:'')
    +((pend||agreed||o.status==='completed')?`<button class="chip" data-oa="msg" data-id="${o.id}" style="margin-top:8px">💬 Message</button>`:'');
   return `<div class="ocard${o.unseen?' new':''}"><div class="row" style="align-items:center;justify-content:space-between;margin:0 0 6px"><b>${mine?'You → @'+esc(other):'@'+esc(other)+' → you'}</b><span><span class="tag">${o.kind==='request'?'🙋 Request':'🤝 Offer'}</span><span class="tag${agreed||o.status==='completed'?' hit':''}">${STAT[o.status]||o.status}</span>${o.unseen?'<span class="bell">new</span>':''}</span></div>
   <div class="mh" style="margin:6px 0 2px;font-size:13px">You give</div>${offItems(give)}${cash>0?`<div class="oi"><span>💵 Cash</span><b>${money(cash)}</b></div>`:''}
@@ -1421,12 +1435,50 @@ async function fvInbox(my){
     if(act==='msg'){modal(`<h3>Message @${esc(other)}</h3><input id="omsg" type="text" maxlength="300" placeholder="Type a message" style="width:100%"><button class="btn" id="omsend" style="margin-top:10px">Send</button><button class="btn alt" id="no" style="margin-top:8px">Cancel</button>`);
       $('#no').onclick=()=>closeModal();
       $('#omsend').onclick=async()=>{const t=$('#omsg').value.trim();if(!t)return;try{await api('offer_msg',{id,text:t});closeModal();toast('Sent');fvRender()}catch(e){toast(e.message)}};return}
+    if(act==='cancel'&&o.status==='accepted'&&!confirm('Cancel this agreed trade? Nothing changes on your lists, and @'+other+' is told it fell through.'))return;
     if(act==='complete'&&!confirm('Mark this trade as completed? Your traded cards come off your trade list and wishlist.'))return;
-    try{await api('offer_respond',{id,act});toast(act==='accept'?'Accepted. Message them to set up the swap.':act==='decline'?'Declined':act==='cancel'?'Cancelled':'Marked completed');fvRender()}catch(e){toast(e.message)}})}
+    try{await api('offer_respond',{id,act});toast(act==='accept'?'Accepted. Message them to set up the swap.':act==='decline'?'Declined':act==='cancel'?(o.status==='accepted'?'Trade cancelled':'Cancelled'):'Marked completed');fvRender()}catch(e){toast(e.message)}})}
+
+// ================= Messages =================
+const MSG={with:''};
+function msgBubbles(a){const me=ACC.handle;return a.length?a.map(m=>`<div class="mb${m.u===me?' me':''}">${esc(m.t)}<small>${ago(m.at)}</small></div>`).join(''):'<p class="mu" style="text-align:center">No messages yet. Say hi!</p>'}
+async function msgChat(w,soft){
+  const el=$('#msgView');if(!el)return;
+  if(!soft||!$('#mlog')){
+    el.innerHTML=`<button class="chip" id="mback">← Messages</button><h3 style="margin:12px 0 4px">@${esc(w)}</h3><div id="mlog" class="mlog"><p class="mu">Loading…</p></div><div id="mform"><div class="row"><input id="mtxt" type="text" maxlength="500" placeholder="Message @${esc(w)}" autocomplete="off"><button class="btn" id="msend" style="flex:0 0 84px;padding:10px">Send</button></div></div><button class="chip" id="moffer" style="margin-top:8px">🤝 Offers with @${esc(w)}</button>`;
+    $('#mback').onclick=()=>{MSG.with='';msgRender()};
+    $('#moffer').onclick=()=>{showTab('friends');fvGo('inbox')};
+    const send=async()=>{const t=$('#mtxt').value.trim();if(!t)return;$('#msend').disabled=true;
+      try{await api('dm_send',{to:w,text:t});$('#mtxt').value='';await msgChat(w,true)}catch(e){toast(e.message)}$('#msend').disabled=false};
+    $('#msend').onclick=send;$('#mtxt').onkeydown=e=>{if(e.key==='Enter')send()}}
+  let r;try{r=await api('dm_list',{with:w})}catch(e){if($('#mlog'))$('#mlog').innerHTML=`<p class="mu">${esc(e.message)}</p>`;return}
+  if(MSG.with!==w||NAV.tab!=='msg'||!$('#mlog'))return;
+  $('#mlog').innerHTML=msgBubbles(r.msgs);
+  if(r.rel!=='friend'&&$('#mform'))$('#mform').innerHTML='<p class="mu">You can only message friends.</p>';
+  if(!soft){const t=$('#mtxt');if(t&&t.scrollIntoView)t.scrollIntoView({block:'end'})}
+  notifPoll()}
+async function msgRender(){
+  const el=$('#msgView');if(!el)return;
+  if(!ACC.handle){el.innerHTML='<h3 style="margin:8px 0">💬 Messages</h3><div class="panel"><p style="margin:0 0 10px">Create an account in Friends to message friends and keep your trade chats in one place.</p><button class="btn" id="mgo">Go to Friends</button></div>';$('#mgo').onclick=()=>showTab('friends');return}
+  if(MSG.with){msgChat(MSG.with);return}
+  el.innerHTML='<h3 style="margin:8px 0">💬 Messages</h3><p class="mu">Loading…</p>';
+  let t,m;try{[t,m]=await Promise.all([api('dm_threads'),api('me')])}catch(e){if(NAV.tab==='msg')el.innerHTML=`<h3 style="margin:8px 0">💬 Messages</h3><p class="mu">${esc(e.message)}</p>`;return}
+  if(NAV.tab!=='msg'||MSG.with)return;
+  fvBadge(m.incoming.length,m.inbox,m.dm);
+  el.innerHTML=`<div class="row" style="align-items:center;justify-content:space-between;margin:8px 0"><h3 style="margin:0">💬 Messages</h3><button class="chip on" id="mnew">＋ New</button></div>
+  <button class="frow btnrow" id="moff"><div style="min-width:0"><b>📬 Offers &amp; requests</b><div class="mu">Trade offers and card requests</div></div><span>${m.inbox?`<span class="bell">${m.inbox}</span> `:''}<span class="mu">›</span></span></button>
+  <h4 class="mh">Chats</h4>${t.threads.length?t.threads.map(x=>`<button class="frow btnrow" data-mw="${esc(x.with)}"><div style="min-width:0;flex:1"><b>@${esc(x.with)}</b><div class="mu" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${x.mine?'You: ':''}${esc(x.last)}</div></div><span>${x.unread?`<span class="bell">${x.unread}</span> `:''}<span class="mu">${ago(x.at)} ›</span></span></button>`).join(''):'<p class="mu">No chats yet. Tap ＋ New to message a friend.</p>'}`;
+  $('#moff').onclick=()=>{showTab('friends');fvGo('inbox')};
+  $('#mnew').onclick=()=>{
+    modal(`<h3>Message a friend</h3>${m.friends.length?m.friends.map(h=>`<button class="btn alt mbtn" data-nf="${esc(h)}">@${esc(h)}</button>`).join(''):'<p class="mu">Add a friend first, then you can message them.</p>'}<button class="btn mbtn" id="no">Cancel</button>`);
+    $('#no').onclick=()=>closeModal();
+    document.querySelectorAll('#modal [data-nf]').forEach(b=>b.onclick=()=>{const h=b.dataset.nf;closeModal();setTimeout(()=>{MSG.with=h;msgRender()},300)})};
+  el.querySelectorAll('[data-mw]').forEach(b=>b.onclick=()=>{MSG.with=b.dataset.mw;msgRender()})}
+setInterval(()=>{if(NAV.tab==='msg'&&MSG.with&&!document.hidden&&ACC.handle)msgChat(MSG.with,true)},12000);
 
 // ================= Notifications =================
 const NF={busy:0};
-async function notifPoll(){if(!ACC.handle||document.hidden)return;try{const m=await api('me');fvBadge(m.incoming.length,m.inbox);await ftLoad()}catch(e){}}
+async function notifPoll(){if(!ACC.handle||document.hidden)return;try{const m=await api('me');fvBadge(m.incoming.length,m.inbox,m.dm);await ftLoad()}catch(e){}}
 setInterval(notifPoll,75000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)notifPoll()});
 const cardNm=i=>{const c=cardById(i);return c?c.name:'a card'};
 const nameList=a=>a.length?a.slice(0,2).map(x=>cardNm(x.i)).join(', ')+(a.length>2?' +'+(a.length-2)+' more':''):'nothing';
@@ -1438,11 +1490,12 @@ function notifOfferItem(o,me){
   else if(mine&&o.status==='accepted'){icon='✅';txt=`<b>@${esc(other)}</b> accepted your ${o.kind==='request'?'request':'offer'}`;pri=1}
   else if(mine&&o.status==='declined'){icon='✖';txt=`<b>@${esc(other)}</b> declined your ${o.kind==='request'?'request':'offer'}`}
   else if(mine&&o.status==='countered'){icon='↩';txt=`<b>@${esc(other)}</b> sent a counter-offer`}
+  else if(o.status==='cancelled'&&lastMsg&&lastMsg.u!==me&&/agreed trade/.test(lastMsg.t)){icon='✖';txt=`<b>@${esc(other)}</b> cancelled your agreed trade`;pri=1}
   else if(!mine&&o.status==='cancelled'){icon='✖';txt=`<b>@${esc(other)}</b> cancelled their ${o.kind==='request'?'request':'offer'}`}
   else if(o.status==='completed'){icon='🏁';txt=`Trade with <b>@${esc(other)}</b> completed`}
   else if(!mine&&o.status==='accepted'){icon='✅';txt=`You agreed a trade with <b>@${esc(other)}</b>`}
   else return null;
-  if(lastMsg&&lastMsg.u!==me&&o.unseen){icon='💬';txt=`<b>@${esc(lastMsg.u)}</b> messaged you: “${esc(lastMsg.t.slice(0,60))}”`}
+  if(lastMsg&&lastMsg.u!==me&&o.unseen&&!/agreed trade/.test(lastMsg.t)){icon='💬';txt=`<b>@${esc(lastMsg.u)}</b> messaged you: “${esc(lastMsg.t.slice(0,60))}”`}
   return {icon,txt,sub:`You give: ${esc(nameList(give))} · You get: ${esc(nameList(get))} · ${ago(o.updated)}`,isNew:o.unseen,pri,go:()=>fvGo('inbox'),tab:'friends'}}
 async function notifRender(){
   const el=$('#notifView');if(!el)return;
@@ -1451,7 +1504,7 @@ async function notifRender(){
   let m,r;try{[m,r]=await Promise.all([api('me'),api('offer_list')]);await ftLoad(true)}catch(e){if(NAV.tab==='notif')el.innerHTML=`<h3 style="margin:8px 0">🔔 Notifications</h3><p class="mu">${esc(e.message)}</p>`;return}
   if(NAV.tab!=='notif')return;
   await fvNeed([...r.offers.flatMap(o=>o.give.concat(o.get)),...FT.items,...FW.items]);if(NAV.tab!=='notif')return;
-  fvBadge(m.incoming.length,m.inbox);
+  fvBadge(m.incoming.length,m.inbox,m.dm);
   const me=ACC.handle,items=[];
   for(const h of m.incoming)items.push({icon:'👋',txt:`<b>@${esc(h)}</b> wants to be friends`,sub:'',isNew:true,pri:0,act:`<button class="chip on" data-nacc="${esc(h)}">Accept</button>`,go:()=>fvGo('profile',{handle:h}),tab:'friends'});
   for(const o of r.offers){const it=notifOfferItem(o,me);if(it)items.push(it)}
@@ -1498,7 +1551,7 @@ async function fvProfile(my){
   if(my!==FV.rid)return;
   await fvNeed([...(l.trade||[]),...(l.wants||[])]);if(my!==FV.rid)return;
   const rel=l.rel;
-  const relHtml=rel==='none'?(ACC.handle?'<button class="btn" id="frel">Add friend</button>':'<p class="mu">Create an account in Friends to add them.</p>'):rel==='in'?'<button class="btn" id="frel">Accept friend request</button>':rel==='out'?'<p class="mu">Friend request sent.</p>':rel==='friend'?'<div class="row" style="align-items:center;justify-content:space-between"><span class="mu">✓ Friends</span><button class="chip" id="frm">Remove friend</button></div>':'<p class="mu">This is how others see your profile.</p>';
+  const relHtml=rel==='none'?(ACC.handle?'<button class="btn" id="frel">Add friend</button>':'<p class="mu">Create an account in Friends to add them.</p>'):rel==='in'?'<button class="btn" id="frel">Accept friend request</button>':rel==='out'?'<p class="mu">Friend request sent.</p>':rel==='friend'?'<div class="row" style="align-items:center;justify-content:space-between"><span class="mu">✓ Friends</span><span><button class="chip" id="fmmsg">💬 Message</button> <button class="chip" id="frm">Remove friend</button></span></div>':'<p class="mu">This is how others see your profile.</p>';
   el.innerHTML=`<button class="chip" id="fvback">← Back</button><h3 style="margin-top:12px">@${esc(l.handle)}</h3>${relHtml}
   ${rel==='friend'?'<div class="row"><button class="btn" id="fmoffer">🤝 Make an offer</button><button class="btn alt" id="fmreq">🙋 Request a card</button></div>':''}
   <h3>Binders</h3>${l.binders.length?l.binders.map(b=>`<button class="frow btnrow" data-b="${esc(b.id)}">${coverHtml(b.cover)}<div style="flex:1;min-width:0"><b>${esc(b.name)}</b><div class="mu">${b.cnt} card${b.cnt===1?'':'s'} · ${visLabel(b.vis)} · ${ago(b.updated)}</div></div><span class="mu">›</span></button>`).join(''):`<p class="mu">No binders to show yet.${rel==='friend'||rel==='self'?'':' Friends-only binders appear once you are friends.'}</p>`}`;
@@ -1510,6 +1563,7 @@ async function fvProfile(my){
   if($('#fmoffer'))$('#fmoffer').onclick=()=>offerStart(l.handle,{kind:'offer'});
   if($('#fmreq'))$('#fmreq').onclick=()=>offerStart(l.handle,{kind:'request'});
   if($('#frel'))$('#frel').onclick=async()=>{try{const r=await api('friend_add',{to:l.handle});toast(r.rel==='friend'?'You are now friends':'Request sent');fvRender()}catch(e){toast(e.message)}};
+  if($('#fmmsg'))$('#fmmsg').onclick=()=>{MSG.with=l.handle;showTab('msg')};
   if($('#frm'))$('#frm').onclick=()=>{if(!confirm('Remove @'+l.handle+' from your friends?'))return;api('friend_remove',{who:l.handle}).then(()=>{toast('Removed');fvRender()}).catch(e=>toast(e.message))}}
 
 async function fvBrowse(my){
@@ -1576,24 +1630,48 @@ async function fvBinder(my){
     modal(`<h3>${esc(c.name)}${r.w?' <span class="mu">♡ looking for this</span>':''}</h3><p class="mu">${esc(c.set)}${c.lang==='jp'?' · JP':''} · #${esc(c.number)}<br>Near Mint · ${esc(r.k)} · ${money(refVal(r))}</p><a class="btn alt" style="text-decoration:none" target="_blank" rel="noopener" href="${esc(link(c,r.k))}">Open on TCGplayer</a><button class="btn" id="no" style="margin-top:8px">Close</button>`);
     $('#no').onclick=()=>closeModal()})}
 
-if(ACC.handle){api('me').then(m=>fvBadge(m.incoming.length,m.inbox)).catch(()=>{});ftLoad(true)}
+if(ACC.handle){api('me').then(m=>fvBadge(m.incoming.length,m.inbox,m.dm)).catch(()=>{});ftLoad(true)}
 
 // ================= How it works, share links, deep links =================
-const HELP_STEPS=[
- {e:'📒',t:'Your binders',d:'Build digital copies of your real binders. Add cards by name or by photo, drag to rearrange, and see what each page and the whole binder is worth at Near Mint market prices.'},
- {e:'📷',t:'Fill a page from one photo',d:'Lay a binder page flat, snap one photo, and Binder Buddy reads all the pockets. It places the most likely printing of each card and flags the ones to double-check.'},
- {e:'🔄',t:'Trade and sell lists',d:'Tap a card and choose List for trade or sale. Make a separate list for each card show or meetup, mark each card Trade, Sale or both, and set a price if you like.'},
- {e:'👥',t:'Friends and sharing',d:'Create a free account with email or Google. Each binder is Private, Friends only or Public. Friends can see your trade lists and the cards you are looking for (♡), and you can see theirs.'},
+const TOUR=[
+ {tab:'binders',sel:'.tab[data-tab="binders"]',t:'📒 Your binders',d:'Build digital copies of your real binders and see what each page and the whole binder is worth at Near Mint prices.'},
+ {tab:'binders',sel:'#bnew',alt:'.tab[data-tab="binders"]',t:'＋ Make a binder',d:'Start a binder here, then tap any empty pocket to add a card by name or photo. Hold and drag a card to rearrange.'},
+ {tab:'binders',sel:'#bfill',alt:'#bnew',t:'📷 Fill a page from one photo',d:'Lay a real binder page flat, snap one photo, and every pocket is read for you. Cards it is unsure about are flagged to double-check.'},
+ {tab:'binders',sel:'#bvis',alt:'#bnew',t:'👁 Who can see it',d:'Each binder is Private, Friends only or Public. Viewers see cards and prices, never what you paid.'},
+ {tab:'binders',sel:'#bmore',alt:'#bnew',t:'⋯ More',d:'Rename the binder, change who can see it, copy a share link, or delete a page or the whole binder.'},
+ {tab:'find',sel:'#go',alt:'.tab[data-tab="find"]',t:'🔍 Look up a card',d:'Scan or type a card to see its price and find other cards worth about the same. Handy for fair swaps.'},
+ {tab:'trade',sel:'[data-act="tadd"]',alt:'.tab[data-tab="trade"]',t:'🔄 Your trade lists',d:'Tap ＋ Add to put cards on a list for trade or sale. Make a separate list for each card show or meetup. Tap a card for its details and price.'},
+ {tab:'trade',sel:'.seg',alt:'.tab[data-tab="trade"]',t:'♡ Wishlist',d:'Switch to Wishlist to save cards you want. Friends can see it, and Matches tells you when a friend has one.'},
+ {tab:'trade',sel:'details[data-fk="calc"]',alt:'.tab[data-tab="trade"]',t:'🧮 Trade math',d:'Open this to compare both sides of a trade. Pick 100, 90, 80 or 70% to count your cards at a discount.'},
+ {tab:'friends',sel:'#fvstart',alt:'.tab[data-tab="friends"]',t:'👥 Friends',d:'Create a free account with email or Google, then add friends by handle. Look inside their binders and trade lists, and check 🎯 Matches for swaps that work for both of you.'},
+ {tab:'friends',sel:'.tab[data-tab="friends"]',t:'🤝 Offers and requests',d:'On a friend\'s profile, tap Make an offer or Request a card. They can accept, counter or decline. If a deal falls through, either of you can cancel it.'},
+ {tab:'msg',sel:'.tab[data-tab="msg"]',t:'💬 Messages',d:'Chat with friends to set up a meetup. Your offers and requests are in here too.'},
+ {tab:'msg',sel:'#bellbtn',t:'🔔 Notifications',d:'Friend requests, offers waiting on you, replies and new matches all show up here. The number tells you how many are new.'},
+ {tab:'msg',sel:'#themebtn',t:'🎨 Colors',d:'Pick a color theme that is easy on your eyes, or choose your own accent color.'}
 ];
-function helpDlg(i){
-  i=i||0;const st=HELP_STEPS[i],last=i===HELP_STEPS.length-1;
-  modal(`<div class="hstep"><div class="big">${st.e}</div><h3>${st.t}</h3><p class="mu">${st.d}</p></div><div class="hdots">${HELP_STEPS.map((_,n)=>`<i class="${n===i?'on':''}"></i>`).join('')}</div>
-  <button class="btn" id="hnext">${last?'Get started':'Next'}</button>${i>0?'<button class="btn alt" id="hback" style="margin-top:8px">Back</button>':(!last?'<button class="btn alt" id="hskip" style="margin-top:8px">Skip</button>':'')}`);
-  $('#hnext').onclick=()=>{if(last){helpDone()}else{closeModal();setTimeout(()=>helpDlg(i+1),300)}};
-  if($('#hback'))$('#hback').onclick=()=>{closeModal();setTimeout(()=>helpDlg(i-1),300)};
-  if($('#hskip'))$('#hskip').onclick=helpDone}
-function helpDone(){try{localStorage.setItem('bb_seen','1')}catch(e){}closeModal()}
-$('#helpbtn').onclick=()=>helpDlg(0);
+const CH={i:0,from:'',on:false};
+const cSleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function coachShow(i){
+  CH.i=i;const st=TOUR[i],last=i===TOUR.length-1;
+  let ov=$('#coach');if(!ov){ov=document.createElement('div');ov.id='coach';ov.innerHTML='<div id="coachhl"></div><div id="coachcard"></div>';document.body.appendChild(ov)}
+  if(st.tab&&NAV.tab!==st.tab)showTab(st.tab);
+  await cSleep(380);if(!CH.on)return;
+  const el=document.querySelector(st.sel)||(st.alt&&document.querySelector(st.alt));
+  const hl=$('#coachhl'),card=$('#coachcard');
+  let r=null;
+  if(el){try{if(!el.closest('.tabs')&&!el.closest('.banner'))el.scrollIntoView({block:'center'})}catch(e){}await cSleep(180);r=el.getBoundingClientRect();if(!(r.width>0&&r.height>0))r=null}
+  if(r){Object.assign(hl.style,{display:'block',left:(r.left-6)+'px',top:(r.top-6)+'px',width:(r.width+12)+'px',height:(r.height+12)+'px',background:'transparent'})}
+  else{Object.assign(hl.style,{display:'block',left:'50%',top:'50%',width:'0px',height:'0px'})}
+  card.innerHTML=`<h3>${st.t}</h3><p class="mu">${st.d}</p><div class="crow"><span class="cn">${i+1} of ${TOUR.length}</span>${i>0?'<button class="btn alt" id="cback" style="flex:0 0 76px">Back</button>':'<button class="btn alt" id="cskip" style="flex:0 0 76px">Skip</button>'}<button class="btn" id="cnext" style="flex:0 0 96px">${last?'Done':'Next'}</button></div>`;
+  const low=r&&(r.top+r.height/2)>window.innerHeight*0.5;
+  card.style.top=low?'14px':'auto';card.style.bottom=low?'auto':'90px';
+  $('#cnext').onclick=()=>{if(last)coachEnd();else coachShow(i+1)};
+  if($('#cback'))$('#cback').onclick=()=>coachShow(i-1);
+  if($('#cskip'))$('#cskip').onclick=coachEnd}
+function coachEnd(){CH.on=false;const o=$('#coach');if(o)o.remove();try{localStorage.setItem('bb_seen','1')}catch(e){}if(CH.from&&NAV.tab!==CH.from)showTab(CH.from)}
+function helpDlg(){closeModal();if(CH.on)return;CH.on=true;CH.from=NAV.tab||'binders';coachShow(0)}
+function helpDone(){coachEnd()}
+$('#helpbtn').onclick=()=>helpDlg();
 function themeSave(t){try{localStorage.setItem('bb_theme',JSON.stringify(t))}catch(e){}themeApply(t)}
 function themeDlg(){
   const cur=themeLoad();
@@ -1619,5 +1697,5 @@ function openDeepLink(){
   return false}
 
 bLoad();showTab('binders',true);bCheckShared();
-if(!openDeepLink()){let seen=false;try{seen=!!localStorage.getItem('bb_seen')}catch(e){}if(!seen&&!location.hash&&!BD.binders.some(b=>b.pages.some(p=>p.some(Boolean)))&&!ACC.handle)setTimeout(()=>helpDlg(0),700)}
+if(!openDeepLink()){let seen=false;try{seen=!!localStorage.getItem('bb_seen')}catch(e){}if(!seen&&!location.hash&&!BD.binders.some(b=>b.pages.some(p=>p.some(Boolean)))&&!ACC.handle)setTimeout(()=>helpDlg(),700)}
 </script></body></html>
