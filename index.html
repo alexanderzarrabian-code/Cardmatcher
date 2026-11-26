@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <style>
-:root{--bg:#0c1220;--bg2:#0a0f1b;--surf:#161f34;--fg:#eef1f7;--mu:#9aa6bf;--ac:#f5c542;--onac:#10192e;--gold:#c99a2e;--line:#2f3e62;--aqua:#34d399;--aqt:#6ee7b7;--alt:#18233f;--altl:#3a4a70;--ban1:#16223f;--ban2:#101a30;--tabsbg:rgba(12,18,32,.94);--pkbg:rgba(12,18,32,.6);--inpc:#0a0f1c;--ac2:color-mix(in srgb,var(--ac) 85%,#000);--blue:var(--ac);--card:color-mix(in srgb,var(--surf) 85%,transparent);--chip:color-mix(in srgb,var(--surf) 90%,transparent);--panel:color-mix(in srgb,var(--surf) 55%,transparent);--inp:color-mix(in srgb,var(--inpc) 85%,transparent);--shadow:0 3px 0 rgba(0,0,0,.35),0 0 14px color-mix(in srgb,var(--ac) 10%,transparent)}
+:root{--bg:#141a24;--bg2:#10151e;--surf:#1e2634;--fg:#e6e9ef;--mu:#9aa3b5;--ac:#d9b45a;--onac:#1a1405;--gold:#d9b45a;--line:#364257;--aqua:#63b99b;--aqt:#93d1b9;--alt:#222b3a;--altl:#445068;--ban1:#1d2636;--ban2:#171e2b;--tabsbg:rgba(20,26,36,.94);--pkbg:rgba(20,26,36,.6);--inpc:#10151e;--ac2:color-mix(in srgb,var(--ac) 85%,#000);--blue:var(--ac);--card:color-mix(in srgb,var(--surf) 85%,transparent);--chip:color-mix(in srgb,var(--surf) 90%,transparent);--panel:color-mix(in srgb,var(--surf) 55%,transparent);--inp:color-mix(in srgb,var(--inpc) 85%,transparent);--shadow:0 3px 0 rgba(0,0,0,.35),0 0 14px color-mix(in srgb,var(--ac) 10%,transparent)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{background:var(--bg)}
 body{margin:0;padding:0 14px 96px;font:16px/1.4 "Trebuchet MS","Avenir Next",system-ui,sans-serif;color:var(--fg);max-width:640px;margin:auto;min-height:100vh;
@@ -43,7 +43,7 @@ h3{font:900 17px/1.2 "Arial Black","Trebuchet MS",system-ui,sans-serif;margin:18
   background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(135deg,var(--gold),var(--ac),var(--gold)) border-box}
 @keyframes pop{from{transform:scale(.94);opacity:0}to{transform:none;opacity:1}}
 .hero img{flex:0 0 110px;width:110px;height:auto;align-self:flex-start;border-radius:8px;box-shadow:0 0 14px color-mix(in srgb,var(--ac) 50%,transparent)}
-.price{display:inline-block;font:900 26px/1 "Arial Black",system-ui,sans-serif;color:#052e1f;background:linear-gradient(135deg,#34d399,#6ee7b7);padding:6px 12px;border-radius:12px;margin:4px 0;box-shadow:0 0 16px rgba(52,211,153,.4)}
+.price{display:inline-block;font:900 26px/1 "Arial Black",system-ui,sans-serif;color:#052e1f;background:linear-gradient(135deg,var(--aqua),var(--aqt));padding:6px 12px;border-radius:12px;margin:4px 0;box-shadow:0 0 16px rgba(52,211,153,.4)}
 .warn{display:inline-block;color:#4a3000;background:#ffd54a;border:2px solid #d99a00;border-radius:8px;padding:2px 8px;font-size:12.5px;font-weight:800;margin:3px 0}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .item{position:relative;background:var(--card);border:3px solid transparent;border-radius:14px;padding:8px;text-decoration:none;color:inherit;font-size:14px;box-shadow:var(--shadow);transition:transform .12s;overflow:hidden;
@@ -53,7 +53,7 @@ h3{font:900 17px/1.2 "Arial Black","Trebuchet MS",system-ui,sans-serif;margin:18
 .item img{width:100%;border-radius:6px;display:block}
 .item::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .25s;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.4) 45%,color-mix(in srgb,var(--ac) 28%,transparent) 52%,rgba(255,255,255,.2) 58%,transparent 72%)}
 .item:hover::after,.item:active::after{opacity:1}
-.item .tag{display:inline-block;margin-top:5px;background:linear-gradient(135deg,#34d399,#6ee7b7);color:#052e1f;font-weight:800;border-radius:9px;padding:2px 8px}
+.item .tag{display:inline-block;margin-top:5px;background:linear-gradient(135deg,var(--aqua),var(--aqt));color:#052e1f;font-weight:800;border-radius:9px;padding:2px 8px}
 .chips{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 8px}
 .chip{flex:0 0 auto;padding:7px 12px;border-radius:99px;background:var(--chip);border:2px solid var(--line);color:var(--fg);font-size:13px;font-weight:700;cursor:pointer}
 .chip[data-d]{border-color:var(--ac);color:var(--ac)}
@@ -63,7 +63,7 @@ h3{font:900 17px/1.2 "Arial Black","Trebuchet MS",system-ui,sans-serif;margin:18
 .chip[data-v^="1st"]{background:linear-gradient(120deg,var(--chip),var(--chip))}
 #status{font-weight:700}
 .chip.on{background:var(--ac)!important;border-color:var(--ac)!important;color:var(--onac)!important}
-.lang{display:inline-block;background:#f43f5e;color:#fff;font-size:11px;font-weight:800;border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:1px}
+.lang{display:inline-block;background:#cf6178;color:#fff;font-size:11px;font-weight:800;border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:1px}
 details summary{cursor:pointer}
 label.mu{color:var(--mu)}
 .bsum{list-style:none;cursor:pointer;text-align:center;font-weight:800;font-size:17px;color:#fff;padding:13px;border-radius:14px;background:var(--alt);border:2px solid var(--gold);box-shadow:var(--shadow)}.bsum::-webkit-details-marker{display:none}#browse[open] .bsum{margin-bottom:6px}
@@ -89,7 +89,7 @@ label.mu{color:var(--mu)}
 .mbtn{margin-top:8px}
 .trow{display:flex;gap:10px;align-items:center;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:8px;margin-bottom:8px}
 .trow img{width:46px;flex:0 0 46px;border-radius:5px}.trow b{font-size:15px}.trow .mu{font-size:12px}
-.tp{font-weight:800;color:var(--aqt);text-align:right;font-size:15px}.x{border:0;background:rgba(185,28,28,.85);color:#fff;border-radius:50%;width:30px;height:30px;font-size:14px;cursor:pointer;flex:0 0 30px}
+.tp{font-weight:800;color:var(--aqt);text-align:right;font-size:15px}.x{border:0;background:rgba(168,68,68,.85);color:#fff;border-radius:50%;width:30px;height:30px;font-size:14px;cursor:pointer;flex:0 0 30px}
 .review{background:rgba(255,217,102,.08);border:2px solid #b8962f;border-radius:14px;padding:10px;margin-bottom:10px}
 .pair{display:flex!important;gap:10px;align-items:center;margin-top:8px;text-align:left}.pair img{width:44px;flex:0 0 44px}
 #tradeView .prow input[type=number]{flex:0 0 84px;width:84px;text-align:center;font-weight:800;padding:8px}
@@ -131,25 +131,28 @@ label.ofr{cursor:pointer}label.ofr input{width:22px;height:22px;flex:0 0 22px;ac
 .trow2 .rbody{padding:2px 10px 10px 48px;font-size:13px}.trow2[open]{border-color:var(--ac)}.chip.sm{font-size:12px;padding:4px 10px}details.pset{display:inline-block}details.pset>summary{list-style:none;cursor:pointer}details.pset>summary::-webkit-details-marker{display:none}
 details.fold>summary .lname{display:inline;font-size:17px}
 details.pset[open]{display:block;width:100%}
+.tab[data-tab="notif"]{flex:0 0 58px}.tab[data-tab="notif"] .nb{margin-left:2px;padding:0 5px}
+.nitem{display:flex;align-items:center;gap:10px;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:10px;margin-bottom:8px;cursor:pointer}.nitem.new{border-color:var(--ac)}.nitem .ni{font-size:20px;flex:0 0 26px;text-align:center}.nitem .nt{flex:1;min-width:0;font-size:15px;font-weight:700}.nitem .nt .mu{display:block;font-weight:400;font-size:13px}.nitem .dot{width:9px;height:9px;border-radius:50%;background:var(--ac);flex:0 0 9px}
+.tabs{gap:5px!important;padding-left:8px!important;padding-right:8px!important}.tab{font-size:12px!important;min-width:0;overflow:hidden;padding:10px 1px!important}.tab[data-tab="notif"]{flex:0 0 52px}
 </style>
 <script>
-var THEMES={gold:{n:'Gold Night',bg:'#0c1220',bg2:'#0a0f1b',surf:'#161f34',line:'#2f3e62',ac:'#f5c542',mu:'#9aa6bf',alt:'#18233f',altl:'#3a4a70',ban1:'#16223f',ban2:'#101a30'},
-ocean:{n:'Ocean',bg:'#08131f',bg2:'#060d16',surf:'#0f2236',line:'#24506e',ac:'#38bdf8',mu:'#8fb0c8',alt:'#10283d',altl:'#2f6a8e',ban1:'#0f2a44',ban2:'#0a1c2f'},
-forest:{n:'Forest',bg:'#0a1710',bg2:'#07100a',surf:'#12261a',line:'#2c5a3d',ac:'#4ade80',mu:'#93b8a0',alt:'#143020',altl:'#357a50',ban1:'#123422',ban2:'#0c2417'},
-rose:{n:'Rose',bg:'#1a0c14',bg2:'#12080d',surf:'#2a1422',line:'#633048',ac:'#fb7185',mu:'#c79aab',alt:'#331a28',altl:'#8a4562',ban1:'#3a1a2c',ban2:'#27111d'},
-grape:{n:'Grape',bg:'#130c20',bg2:'#0d0716',surf:'#21153a',line:'#4b3578',ac:'#c084fc',mu:'#b4a0d4',alt:'#291a46',altl:'#6b4ca6',ban1:'#2a1a4a',ban2:'#1b1033'},
-light:{n:'Light',bg:'#f2f5fb',bg2:'#e8edf6',surf:'#ffffff',line:'#c5cfe3',ac:'#e0a100',mu:'#5a6684',alt:'#e4eaf6',altl:'#b4c0da',ban1:'#ffffff',ban2:'#eef2fa',fg:'#1b2233',aqua:'#0f9d6e',aqt:'#0b7a55',tabsbg:'rgba(255,255,255,.95)',pkbg:'rgba(0,0,0,.04)',inpc:'#ffffff'}};
+var THEMES={gold:{n:'Soft Gold',bg:'#141a24',bg2:'#10151e',surf:'#1e2634',line:'#364257',ac:'#d9b45a',mu:'#9aa3b5',alt:'#222b3a',altl:'#445068',ban1:'#1d2636',ban2:'#171e2b'},
+ocean:{n:'Ocean',bg:'#101b24',bg2:'#0c151d',surf:'#192833',line:'#33505f',ac:'#6fb3d2',mu:'#8fa7b5',alt:'#1d2f3b',altl:'#3f6679',ban1:'#1b2e3b',ban2:'#14232d'},
+forest:{n:'Forest',bg:'#121a15',bg2:'#0e1511',surf:'#1b261f',line:'#38503f',ac:'#8cbf8f',mu:'#93a89a',alt:'#202e25',altl:'#46634d',ban1:'#1d2d23',ban2:'#16231b'},
+rose:{n:'Rose',bg:'#1c1519',bg2:'#161014',surf:'#271d23',line:'#52404a',ac:'#d98c9c',mu:'#b09aa4',alt:'#2d2128',altl:'#6d5360',ban1:'#2b1f26',ban2:'#21181d'},
+grape:{n:'Grape',bg:'#17141f',bg2:'#120f19',surf:'#221e2e',line:'#443b5c',ac:'#b49ae0',mu:'#a79db8',alt:'#282336',altl:'#5d5180',ban1:'#262034',ban2:'#1d1828'},
+light:{n:'Light',bg:'#f4f1ea',bg2:'#ece8df',surf:'#fbfaf6',line:'#d3cdbf',ac:'#c79a3b',mu:'#6b6657',alt:'#ebe6da',altl:'#cfc8b6',ban1:'#faf8f3',ban2:'#f0ece2',fg:'#2b2a26',aqua:'#3f9d7c',aqt:'#2f7d61',tabsbg:'rgba(250,248,243,.95)',pkbg:'rgba(0,0,0,.04)',inpc:'#ffffff'}};
 function themeLoad(){try{return JSON.parse(localStorage.getItem('bb_theme')||'null')||{k:'gold'}}catch(e){return {k:'gold'}}}
 function themeApply(t){t=t||themeLoad();var base=THEMES.gold,pr=Object.assign({},base,THEMES[t.k]||{});if(t.ac)pr.ac=t.ac;
  var lum=function(h){var n=parseInt(h.slice(1),16),r=n>>16&255,g=n>>8&255,b=n&255;return(.299*r+.587*g+.114*b)/255};
- var set={'--bg':pr.bg,'--bg2':pr.bg2,'--surf':pr.surf,'--line':pr.line,'--ac':pr.ac,'--mu':pr.mu,'--alt':pr.alt,'--altl':pr.altl,'--ban1':pr.ban1,'--ban2':pr.ban2,'--fg':pr.fg||'#eef1f7','--aqua':pr.aqua||'#34d399','--aqt':pr.aqt||'#6ee7b7','--tabsbg':pr.tabsbg||'rgba(12,18,32,.94)','--pkbg':pr.pkbg||'rgba(12,18,32,.6)','--inpc':pr.inpc||'#0a0f1c','--onac':lum(pr.ac)>.55?'#1a1405':'#fff','--gold':pr.ac};
+ var set={'--bg':pr.bg,'--bg2':pr.bg2,'--surf':pr.surf,'--line':pr.line,'--ac':pr.ac,'--mu':pr.mu,'--alt':pr.alt,'--altl':pr.altl,'--ban1':pr.ban1,'--ban2':pr.ban2,'--fg':pr.fg||'#e6e9ef','--aqua':pr.aqua||'#63b99b','--aqt':pr.aqt||'#93d1b9','--tabsbg':pr.tabsbg||'color-mix(in srgb,var(--bg) 94%,transparent)','--pkbg':pr.pkbg||'color-mix(in srgb,var(--bg) 60%,transparent)','--inpc':pr.inpc||'var(--bg2)','--onac':lum(pr.ac)>.55?'#1a1405':'#fff','--gold':pr.ac};
  var st=document.documentElement.style;for(var k in set)st.setProperty(k,set[k]);
  var m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',pr.ban2)}
 try{themeApply()}catch(e){}
 </script>
 </head><body>
 <div class="banner"><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><button id="themebtn" aria-label="Colors" title="Colors">🎨</button><button id="helpbtn" aria-label="How it works" title="How it works">?</button><h1>Binder Buddy</h1><p>Snap a card. Find its price twins.</p></div>
-<div class="tabs"><button class="tab on" data-tab="binders">📒 Binders</button><button class="tab" data-tab="find">🔍 Look up</button><button class="tab" data-tab="trade">🔄 Trade</button><button class="tab" data-tab="friends">👥 Friends</button></div>
+<div class="tabs"><button class="tab on" data-tab="binders">📒 Binders</button><button class="tab" data-tab="find">🔍 Look up</button><button class="tab" data-tab="trade">🔄 Trade</button><button class="tab" data-tab="friends">👥 Friends</button><button class="tab" data-tab="notif" id="notifTab" aria-label="Notifications">🔔</button></div>
 <div id="findView" hidden>
 <p class="hint" style="margin:0 0 8px">Scan or type a card to see its price and find cards worth about the same.</p>
 <div class="cams"><label class="btn" for="file">📷 Take photo</label>
@@ -172,6 +175,7 @@ try{themeApply()}catch(e){}
 <div id="binderView"></div>
 <div id="tradeView" hidden></div>
 <div id="friendsView" hidden></div>
+<div id="notifView" hidden></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.1.1/tesseract.min.js"></script>
 <script>
 const $=s=>document.querySelector(s);
@@ -529,7 +533,8 @@ const matchNew=()=>{if(!ACC.handle)return 0;const sn=mSeenGet();return matchKeys
 function matchMarkSeen(){try{localStorage.setItem('bb_match_seen',JSON.stringify(matchKeys()))}catch(e){}tabLabel()}
 document.addEventListener('toggle',e=>{if(e.target&&e.target.classList&&e.target.classList.contains('match')&&e.target.open){matchMarkSeen();const b=e.target.querySelector('.bell');if(b)b.remove()}},true);
 let FVREQ=0;
-function tabLabel(){const t=document.querySelector('.tab[data-tab="friends"]');if(!t)return;const mc=matchCount();const nn=matchNew(),bd=FVOFF?'<span class="nb hot">📬 '+(FVOFF+FVREQ)+'</span>':FVREQ?'<span class="nb">'+FVREQ+'</span>':(mc?'<span class="nb'+(nn?' hot':'')+'">'+(nn?'🔔 '+nn:mc)+'</span>':'');t.innerHTML='👥 Friends'+bd}
+function notifCount(){return ACC.handle?FVREQ+FVOFF+matchNew():0}
+function tabLabel(){const t=document.querySelector('.tab[data-tab="notif"]');if(!t)return;const n=notifCount();t.innerHTML='🔔'+(n?'<span class="nb hot">'+n+'</span>':'')}
 const owners=a=>[...new Set(a.map(x=>x.o))];
 const ownTxt=a=>{const o=owners(a);return '@'+esc(o[0])+(o.length>1?' +'+(o.length-1):'')};
 function pkMk(r){ // marker on a binder pocket
@@ -562,7 +567,7 @@ function matchPanel(){
     return `<div class="tl hot"><img src="${esc(c.img)}" alt="" loading="lazy"><div style="flex:1;min-width:0"><b>${esc(c.name)}</b>${c.lang==='jp'?'<span class="lang">JP</span>':''}<span class="tag hit">${MODE_TXT[x.m]||'Trade or sale'}</span><div class="mu">${esc(c.set)} · ${esc(x.k)}<br><b>@${esc(x.o)}</b> · ${esc(x.ln)} · ${x.p>0?money(x.p)+' asking':(mk>0?money(mk):'—')}</div></div><span style="display:flex;gap:6px;flex-direction:column"><button class="chip on" data-fgo="${esc(x.o)}|${esc(x.l)}">View</button><button class="chip" data-req="${esc(x.o)}|${x.i}|${esc(x.k)}|${x.p||0}">Request</button></span></div>`}).join('');
   const wantRows=m.want.map(e=>{const c=cardById(e.i);if(!c)return '';const mk=c.v[e.k]?c.v[e.k][0]:0;
     return `<div class="tl hot"><img src="${esc(c.img)}" alt="" loading="lazy"><div style="flex:1;min-width:0"><b>${esc(c.name)}</b>${c.lang==='jp'?'<span class="lang">JP</span>':''}<span class="tag">${e.listed?'On your trade list':'In your binder'}</span><div class="mu">${esc(c.set)}<br>Wanted by ${e.o.map(o=>'<b>@'+esc(o)+'</b>').join(', ')}${mk>0?' · '+money(mk):''}</div></div>${e.listed?'':`<button class="chip on" data-mlist="${e.i}">List it</button>`}</div>`}).join('');
-  return `<details class="fold match"><summary>🎯 Matches <span class="mu">(${n})</span>${matchNew()?' <span class="bell">🔔 '+matchNew()+' new</span>':''}${matchPreview(m)}</summary><div class="foldbody">${m.have.length?`<h4 class="mh">👥 Friends have cards you want (${m.have.length})</h4>${haveRows}`:''}${m.want.length?`<h4 class="mh">🎁 Friends want cards you have (${m.want.length})</h4>${wantRows}`:''}</div></details>`}
+  return `<details class="fold match"><summary>🎯 Matches <span class="mu">(${n})</span>${matchNew()?' <span class="bell">🔔 '+matchNew()+' new</span>':''}</summary><div class="foldbody">${m.have.length?`<h4 class="mh">👥 Friends have cards you want (${m.have.length})</h4>${haveRows}`:''}${m.want.length?`<h4 class="mh">🎁 Friends want cards you have (${m.want.length})</h4>${wantRows}`:''}</div></details>`}
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-mlist]');if(!b)return;const i=+b.dataset.mlist,c=cardById(i);if(!c)return;tListDlg({i,k:(FW.by.get(i)||[]).map(x=>x.k).find(k=>c.v[k])||c.vk[0]},c)});
 
 // ================= Accounts, friends and sharing =================
@@ -634,11 +639,12 @@ try{history.replaceState({tab:'binders',page:0,cur:null},'')}catch(e){}
 // tabs
 function showTab(t,fromPop){
   if(!fromPop&&NAV.tab!==t){NAV.tab=t;navPush()}NAV.tab=t;
-  $('#findView').hidden=t!=='find';$('#binderView').hidden=t!=='binders';$('#tradeView').hidden=t!=='trade';$('#friendsView').hidden=t!=='friends';
+  $('#findView').hidden=t!=='find';$('#binderView').hidden=t!=='binders';$('#tradeView').hidden=t!=='trade';$('#friendsView').hidden=t!=='friends';$('#notifView').hidden=t!=='notif';
   document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
   if(t==='binders')bRender(true);
   if(t==='trade')tRender(true);
   if(t==='friends')fvRender();
+  if(t==='notif')notifRender();
   if(t==='find'||t==='trade'||t==='friends'||t==='binders')ftLoad()}
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{if(b.dataset.tab==='friends'&&NAV.tab==='friends'&&FV.view!=='home'){fvGo('home');return}showTab(b.dataset.tab)});
 
@@ -684,7 +690,7 @@ async function bRender(load){
   $('#bnew').onclick=bNewDlg;
   $('#bvis').onclick=()=>bVisDlg(b);
   $('#bmore').onclick=()=>{
-    modal(`<h3>${esc(b.name)}</h3><button class="btn alt mbtn" id="m1">Rename binder</button><button class="btn alt mbtn" id="mvis">👁 Who can see this: ${visLabel(b.vis||'private')}</button><button class="btn alt mbtn" id="mi">🖼️ Share this page as an image</button>${ACC.handle&&b.vis&&b.vis!=='private'?'<button class="btn alt mbtn" id="mlive">🔗 Link to my live binder</button>':''}<button class="btn alt mbtn" id="m2">Share link (whole binder)</button><button class="btn alt mbtn" id="m3">Export (backup file)</button><button class="btn alt mbtn" id="m4">Import binders</button><button class="btn alt mbtn" id="m5"${b.pages.length<2?' disabled style="opacity:.4"':''}>Delete this page</button><button class="btn mbtn" id="m6" style="background:#b91c1c">Delete binder</button><button class="btn alt mbtn" id="m0">Close</button>`);
+    modal(`<h3>${esc(b.name)}</h3><button class="btn alt mbtn" id="m1">Rename binder</button><button class="btn alt mbtn" id="mvis">👁 Who can see this: ${visLabel(b.vis||'private')}</button><button class="btn alt mbtn" id="mi">🖼️ Share this page as an image</button>${ACC.handle&&b.vis&&b.vis!=='private'?'<button class="btn alt mbtn" id="mlive">🔗 Link to my live binder</button>':''}<button class="btn alt mbtn" id="m2">Share link (whole binder)</button><button class="btn alt mbtn" id="m3">Export (backup file)</button><button class="btn alt mbtn" id="m4">Import binders</button><button class="btn alt mbtn" id="m5"${b.pages.length<2?' disabled style="opacity:.4"':''}>Delete this page</button><button class="btn mbtn" id="m6" style="background:#a84444">Delete binder</button><button class="btn alt mbtn" id="m0">Close</button>`);
     $('#m0').onclick=()=>closeModal();
     $('#mvis').onclick=()=>bVisDlg(b);
     if($('#mlive'))$('#mlive').onclick=()=>{closeModal();setTimeout(()=>shareUrl(binderLink(ACC.handle,b.id),b.name+' on Binder Buddy'),400)};
@@ -694,7 +700,7 @@ async function bRender(load){
     $('#m3').onclick=()=>{closeModal();bExport()};
     $('#m4').onclick=()=>{closeModal();const f=$('#bimpf');if(f)f.click()};
     $('#m5').onclick=()=>{if(b.pages.length<2)return;closeModal();setTimeout(()=>{if(pg.some(Boolean)&&!confirm('Delete this page and its cards?'))return;b.pages.splice(BD.page,1);BD.page=Math.max(0,BD.page-1);BD.sel=null;bSave();bRender()},150)};
-    $('#m6').onclick=()=>{modal(`<h3>Delete "${esc(b.name)}"?</h3><p class="mu">This can't be undone. Export it first if you want a backup.</p><button class="btn" id="yes" style="background:#b91c1c">Delete binder</button><button class="btn alt" id="no" style="margin-top:8px">Cancel</button>`);
+    $('#m6').onclick=()=>{modal(`<h3>Delete "${esc(b.name)}"?</h3><p class="mu">This can't be undone. Export it first if you want a backup.</p><button class="btn" id="yes" style="background:#a84444">Delete binder</button><button class="btn alt" id="no" style="margin-top:8px">Cancel</button>`);
       $('#no').onclick=()=>closeModal();
       $('#yes').onclick=()=>{if(ACC.handle&&b.vis&&b.vis!=='private')api('unshare',{id:b.id}).catch(()=>{});BD.binders=BD.binders.filter(x=>x.id!==b.id);BD.cur=BD.binders[0]?BD.binders[0].id:null;BD.page=0;bSave();closeModal();bRender()}}};
   $('#bfill').onclick=()=>bPhotoMenu(b);
@@ -741,7 +747,7 @@ function bPocket(b,i){
   modal(`<h3>${c?esc(c.name):'Card'}${r.w?' <span class="mu">♡ wishlist</span>':''}</h3>${c?`<p class="mu">${esc(c.set)}${c.lang==='jp'?' · JP':''} · #${esc(c.number)}<br>Near Mint · ${esc(r.k)} · ${money(cur)}${gain!==null&&Math.abs(gain)>=0.005?`<br>Added at ${money(r.a)} · ${gain>=0?'▲':'▼'} ${money(Math.abs(gain))} since`:''}</p>`:''}
   ${sheetMatch(r)}
   ${r.q&&c&&c.vk.length>1?`<div class="review"><b>⚠ I guessed the printing from your photo</b><div class="mu">Tap the right one:</div>${c.vk.map((k,n)=>`<button class="item" data-pk="${n}" style="${k===r.k?'outline:2px solid var(--ac)':''}">${esc(k)} · ${c.v[k][0]>0?money(c.v[k][0]):'no price'}</button>`).join('')}<button class="chip" id="qok">Looks right</button></div>`:''}
-  ${r.w?'':`<button class="btn" id="tr">${isListed(r)?'🏷 Listed · manage lists':'🔄 List for trade or sale'}</button>`}<button class="btn alt" id="wl" style="margin-top:8px">${r.w?'I own this now':'♡ Mark as wishlist'}</button><button class="btn alt" id="mv" style="margin-top:8px">Move / swap on this page</button>${b.pages.length>1?'<button class="btn alt" id="mtp" style="margin-top:8px">Move to another page</button>':''}<button class="btn alt" id="rp" style="margin-top:8px">Replace card</button>${c?`<a class="btn alt" style="margin-top:8px;text-decoration:none" target="_blank" rel="noopener" href="${esc(link(c,r.k))}">Open on TCGplayer</a>`:''}<button class="btn" id="rm" style="margin-top:8px;background:#b91c1c">Remove from pocket</button><button class="btn alt" id="no" style="margin-top:8px">Close</button>`);
+  ${r.w?'':`<button class="btn" id="tr">${isListed(r)?'🏷 Listed · manage lists':'🔄 List for trade or sale'}</button>`}<button class="btn alt" id="wl" style="margin-top:8px">${r.w?'I own this now':'♡ Mark as wishlist'}</button><button class="btn alt" id="mv" style="margin-top:8px">Move / swap on this page</button>${b.pages.length>1?'<button class="btn alt" id="mtp" style="margin-top:8px">Move to another page</button>':''}<button class="btn alt" id="rp" style="margin-top:8px">Replace card</button>${c?`<a class="btn alt" style="margin-top:8px;text-decoration:none" target="_blank" rel="noopener" href="${esc(link(c,r.k))}">Open on TCGplayer</a>`:''}<button class="btn" id="rm" style="margin-top:8px;background:#a84444">Remove from pocket</button><button class="btn alt" id="no" style="margin-top:8px">Close</button>`);
   $('#no').onclick=()=>closeModal();
   if($('#sheetft'))$('#sheetft').onclick=()=>{closeModal();setTimeout(()=>ftDlg(r.i),450)};
   if($('#tr'))$('#tr').onclick=()=>{closeModal();setTimeout(()=>tListDlg(r,c),450)};
@@ -1079,7 +1085,7 @@ function tAddMenu(){
   $('#tsn').onclick=()=>{closeModal();setTimeout(()=>tPick((c,k)=>{tTarget().push({i:c.i,k});tSave();tRender()}),450)}}
 function tListMenu(){
   const l=tCurList();
-  modal(`<h3>${esc(l.name)}</h3><button class="btn alt mbtn" id="lm1">✎ Rename list</button><button class="btn alt mbtn" id="lm2" style="margin-top:8px">👁 Who can see: ${visLabel(tVis(l))}</button><button class="btn mbtn" id="lm3" style="margin-top:8px;background:#b91c1c;color:#fff">🗑 Delete list</button><button class="btn alt mbtn" id="no" style="margin-top:8px">Close</button>`);
+  modal(`<h3>${esc(l.name)}</h3><button class="btn alt mbtn" id="lm1">✎ Rename list</button><button class="btn alt mbtn" id="lm2" style="margin-top:8px">👁 Who can see: ${visLabel(tVis(l))}</button><button class="btn mbtn" id="lm3" style="margin-top:8px;background:#a84444;color:#fff">🗑 Delete list</button><button class="btn alt mbtn" id="no" style="margin-top:8px">Close</button>`);
   $('#no').onclick=()=>closeModal();
   $('#lm1').onclick=()=>{closeModal();setTimeout(()=>tNameDlg('Rename list',l.name,'Save',v=>{l.name=v;tSave();tRender()}),450)};
   $('#lm2').onclick=()=>{closeModal();setTimeout(()=>tVisDlg(l),450)};
@@ -1370,6 +1376,50 @@ async function fvInbox(my){
     if(act==='complete'&&!confirm('Mark this trade as completed? Your traded cards come off your trade list and wishlist.'))return;
     try{await api('offer_respond',{id,act});toast(act==='accept'?'Accepted. Message them to set up the swap.':act==='decline'?'Declined':act==='cancel'?'Cancelled':'Marked completed');fvRender()}catch(e){toast(e.message)}})}
 
+// ================= Notifications =================
+const NF={busy:0};
+async function notifPoll(){if(!ACC.handle||document.hidden)return;try{const m=await api('me');fvBadge(m.incoming.length,m.inbox);await ftLoad()}catch(e){}}
+setInterval(notifPoll,75000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)notifPoll()});
+const cardNm=i=>{const c=cardById(i);return c?c.name:'a card'};
+const nameList=a=>a.length?a.slice(0,2).map(x=>cardNm(x.i)).join(', ')+(a.length>2?' +'+(a.length-2)+' more':''):'nothing';
+function notifOfferItem(o,me){
+  const mine=o.from===me,other=mine?o.to:o.from,give=mine?o.give:o.get,get=mine?o.get:o.give;
+  const lastMsg=o.thread.length?o.thread[o.thread.length-1]:null;
+  let icon='🤝',txt='',pri=2;
+  if(!mine&&o.status==='pending'){icon=o.kind==='request'?'🙋':'🤝';txt=`<b>@${esc(other)}</b> ${o.kind==='request'?'requested a card from you':'sent you an offer'}`;pri=0}
+  else if(mine&&o.status==='accepted'){icon='✅';txt=`<b>@${esc(other)}</b> accepted your ${o.kind==='request'?'request':'offer'}`;pri=1}
+  else if(mine&&o.status==='declined'){icon='✖';txt=`<b>@${esc(other)}</b> declined your ${o.kind==='request'?'request':'offer'}`}
+  else if(mine&&o.status==='countered'){icon='↩';txt=`<b>@${esc(other)}</b> sent a counter-offer`}
+  else if(!mine&&o.status==='cancelled'){icon='✖';txt=`<b>@${esc(other)}</b> cancelled their ${o.kind==='request'?'request':'offer'}`}
+  else if(o.status==='completed'){icon='🏁';txt=`Trade with <b>@${esc(other)}</b> completed`}
+  else if(!mine&&o.status==='accepted'){icon='✅';txt=`You agreed a trade with <b>@${esc(other)}</b>`}
+  else return null;
+  if(lastMsg&&lastMsg.u!==me&&o.unseen){icon='💬';txt=`<b>@${esc(lastMsg.u)}</b> messaged you: “${esc(lastMsg.t.slice(0,60))}”`}
+  return {icon,txt,sub:`You give: ${esc(nameList(give))} · You get: ${esc(nameList(get))} · ${ago(o.updated)}`,isNew:o.unseen,pri,go:()=>fvGo('inbox'),tab:'friends'}}
+async function notifRender(){
+  const el=$('#notifView');if(!el)return;
+  if(!ACC.handle){el.innerHTML='<h3 style="margin:8px 0">🔔 Notifications</h3><div class="panel"><p style="margin:0 0 10px">Sign in on the Friends tab to get friend requests, offers and matches here.</p><button class="btn" id="nogo">Go to Friends</button></div>';$('#nogo').onclick=()=>showTab('friends');return}
+  el.innerHTML='<h3 style="margin:8px 0">🔔 Notifications</h3><p class="mu">Loading…</p>';
+  let m,r;try{[m,r]=await Promise.all([api('me'),api('offer_list')]);await ftLoad(true)}catch(e){if(NAV.tab==='notif')el.innerHTML=`<h3 style="margin:8px 0">🔔 Notifications</h3><p class="mu">${esc(e.message)}</p>`;return}
+  if(NAV.tab!=='notif')return;
+  await fvNeed([...r.offers.flatMap(o=>o.give.concat(o.get)),...FT.items,...FW.items]);if(NAV.tab!=='notif')return;
+  fvBadge(m.incoming.length,m.inbox);
+  const me=ACC.handle,items=[];
+  for(const h of m.incoming)items.push({icon:'👋',txt:`<b>@${esc(h)}</b> wants to be friends`,sub:'',isNew:true,pri:0,act:`<button class="chip on" data-nacc="${esc(h)}">Accept</button>`,go:()=>fvGo('profile',{handle:h}),tab:'friends'});
+  for(const o of r.offers){const it=notifOfferItem(o,me);if(it)items.push(it)}
+  const mc=matchCalc(),sn=mSeenGet();
+  for(const x of mc.have){const c=cardById(x.i);items.push({icon:'🎯',txt:`<b>@${esc(x.o)}</b> has <b>${esc(c?c.name:'a card')}</b>, a card you want`,sub:`${esc(x.ln)} · ${esc(x.k)}`,isNew:!sn.has('h|'+x.o+'|'+x.i+'|'+x.k),pri:3,go:()=>ftGo(x.o,x.l),tab:'friends'})}
+  for(const e of mc.want){const c=cardById(e.i);for(const o of e.o)items.push({icon:'🎁',txt:`<b>@${esc(o)}</b> wants your <b>${esc(c?c.name:'card')}</b>`,sub:e.listed?'On your trade list':'In your binder',isNew:!sn.has('w|'+o+'|'+e.i),pri:3,go:()=>fvGo('profile',{handle:o}),tab:'friends'})}
+  const need=items.filter(x=>x.pri===0),news=items.filter(x=>x.pri>0&&x.isNew),old=items.filter(x=>x.pri>0&&!x.isNew).slice(0,12);
+  NF.list=[];const card=x=>{NF.list.push(x);return `<div class="nitem${x.isNew?' new':''}" data-n="${NF.list.length-1}"><span class="ni">${x.icon}</span><span class="nt">${x.txt}${x.sub?`<span class="mu">${x.sub}</span>`:''}</span>${x.act||''}${x.isNew&&!x.act?'<span class="dot"></span>':''}</div>`};
+  const sec=(t,a)=>a.length?`<h4 class="mh">${t} (${a.length})</h4>${a.map(card).join('')}`:'';
+  const anyNew=news.length||need.length;
+  el.innerHTML=`<div class="row" style="align-items:center;justify-content:space-between;margin:8px 0"><h3 style="margin:0">🔔 Notifications</h3>${news.length?'<button class="chip" id="nread">Mark all read</button>':''}</div>
+  ${items.length?sec('Needs your reply',need)+sec('New',news)+(old.length?`<details class="fold"><summary>Earlier <span class="mu">(${old.length})</span></summary><div class="foldbody">${old.map(card).join('')}</div></details>`:''):'<p class="mu">Nothing yet. Friend requests, offers and matches will show up here.</p>'}`;
+  if($('#nread'))$('#nread').onclick=async()=>{try{await api('offer_list',{mark:true})}catch(e){}matchMarkSeen();fvBadge(m.incoming.length,0);notifRender()};
+  el.querySelectorAll('[data-nacc]').forEach(b=>b.onclick=async e=>{e.stopPropagation();try{await api('friend_accept',{from:b.dataset.nacc});toast('You and @'+b.dataset.nacc+' are friends')}catch(err){toast(err.message)}notifRender()});
+  el.querySelectorAll('.nitem[data-n]').forEach(d=>d.onclick=()=>{const x=NF.list[+d.dataset.n];if(!x||!x.go)return;showTab('friends');x.go()})}
+
 async function fvNeed(list){try{await loadData()}catch(e){return}
   if(list.some(r=>!cardById(r.i))&&!DATA.jp.length){try{await loadJP()}catch(e){}}}
 function myWishSet(){const s=new Set(T.wish.map(r=>r.i));for(const b of BD.binders)for(const pg of b.pages)for(const r of pg)if(r&&r.w)s.add(r.i);return s}
@@ -1500,7 +1550,7 @@ function themeSave(t){try{localStorage.setItem('bb_theme',JSON.stringify(t))}cat
 function themeDlg(){
   const cur=themeLoad();
   modal(`<h3>🎨 Colors</h3><div class="swg">${Object.keys(THEMES).map(k=>{const t=THEMES[k];return `<button class="sw${cur.k===k?' on':''}" data-th="${k}"><i style="background:${t.bg}"></i><i style="background:${t.surf}"></i><i style="background:${t.ac}"></i><br>${t.n}</button>`}).join('')}</div>
-  <div class="panel"><div class="prow"><span>Your own accent color</span><input type="color" id="thc" value="${cur.ac||'#f5c542'}" style="width:56px;height:40px;border:0;background:none;padding:0"></div><p class="mu" style="margin:6px 0 0">Keeps your current theme and swaps the highlight color.</p></div>
+  <div class="panel"><div class="prow"><span>Your own accent color</span><input type="color" id="thc" value="${cur.ac||'#d9b45a'}" style="width:56px;height:40px;border:0;background:none;padding:0"></div><p class="mu" style="margin:6px 0 0">Keeps your current theme and swaps the highlight color.</p></div>
   <button class="btn mbtn" id="no">Done</button>`);
   $('#no').onclick=()=>closeModal();
   document.querySelectorAll('#modal [data-th]').forEach(b=>b.onclick=()=>{themeSave({k:b.dataset.th});themeDlg()});
