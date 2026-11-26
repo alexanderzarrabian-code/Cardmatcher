@@ -30,7 +30,7 @@ body{margin:0;padding:0 14px 96px;font:16px/1.4 "Trebuchet MS","Avenir Next",sys
 .btn[style*="b91c1c"]{color:#fff}
 .btn.alt{background:var(--alt);border:2px solid var(--altl);color:var(--fg);box-shadow:none}
 .row{display:flex;gap:8px;margin:10px 0}
-input[type=text],input[type=number]{flex:1;min-width:0;padding:12px;border-radius:12px;border:2px solid var(--line);background:var(--inp);color:var(--fg);font-size:16px}
+input[type=text],input[type=number],input[type=email],input[type=password]{flex:1;min-width:0;padding:12px;border-radius:12px;border:2px solid var(--line);background:var(--inp);color:var(--fg);font-size:16px}
 input::placeholder{color:color-mix(in srgb,var(--mu) 70%,transparent)}
 input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 10px color-mix(in srgb,var(--ac) 45%,transparent)}
 #num{flex:0 0 110px}
@@ -572,15 +572,15 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
 
 // ================= Accounts, friends and sharing =================
 const AK='bb_acct';
-const ACC={handle:'',code:''};
-try{const j=JSON.parse(localStorage.getItem(AK)||'null');if(j&&j.handle&&j.code){ACC.handle=j.handle;ACC.code=j.code}}catch(e){}
-const accSave=()=>{try{if(ACC.handle)localStorage.setItem(AK,JSON.stringify({handle:ACC.handle,code:ACC.code}));else localStorage.removeItem(AK)}catch(e){}};
+const ACC={handle:'',code:'',tok:false};
+try{const j=JSON.parse(localStorage.getItem(AK)||'null');if(j&&j.handle&&j.code){ACC.handle=j.handle;ACC.code=j.code;ACC.tok=!!j.tok}}catch(e){}
+const accSave=()=>{try{if(ACC.handle)localStorage.setItem(AK,JSON.stringify({handle:ACC.handle,code:ACC.code,tok:ACC.tok}));else localStorage.removeItem(AK)}catch(e){}};
 const FV={view:'home',handle:'',owner:'',id:'',page:0,rid:0};
 function toast(msg){let t=$('#toast');if(!t){t=document.createElement('div');t.id='toast';document.body.appendChild(t)}t.textContent=msg;t.className='show';clearTimeout(t._t);t._t=setTimeout(()=>{t.className=''},3400)}
 async function api(a,body,retried){
-  if(/^friend_(add|accept|remove)$|^(signup|login|sync|unshare|trade_sync)$/.test(a)&&typeof FT!=='undefined')FT.t=0;
+  if(/^friend_(add|accept|remove)$|^(signup|login|reg_email|login_email|google|link|logout|sync|unshare|trade_sync)$/.test(a)&&typeof FT!=='undefined')FT.t=0;
   const hdr={'content-type':'application/json'};let pass='';try{pass=localStorage.getItem('bb_pass')||''}catch(e){}if(pass)hdr['x-pass']=pass;
-  if(ACC.handle&&a!=='signup'&&a!=='login')hdr['x-auth']=ACC.handle+':'+ACC.code;
+  if(ACC.handle&&!/^(signup|login|reg_email|login_email|google|config)$/.test(a))hdr['x-auth']=ACC.handle+':'+ACC.code;
   let r,j={};
   try{r=await fetch(SCAN_URL+'/api',{method:'POST',headers:hdr,body:JSON.stringify(Object.assign({a},body||{}))})}catch(e){throw new Error("Couldn't reach the sharing service. Check your connection.")}
   try{j=await r.json()}catch(e){}
@@ -1191,25 +1191,54 @@ const ago=ts=>{const m=Math.max(0,Math.floor((Date.now()-ts)/60000));if(m<1)retu
 const tcgImg=i=>'https://tcgplayer-cdn.tcgplayer.com/product/'+(+i)+'_200w.jpg';
 let FVOFF=0;const fvBadge=(n,inbox)=>{FVREQ=n||0;if(inbox!==undefined)FVOFF=inbox||0;tabLabel()};
 
+let GCID=null;
+async function gCfg(){if(GCID!==null)return GCID;try{GCID=(await api('config')).google||''}catch(e){GCID=''}return GCID}
+function gLoad(){return new Promise((ok,no)=>{if(window.google&&google.accounts&&google.accounts.id)return ok();const t=document.createElement('script');t.src='https://accounts.google.com/gsi/client';t.async=true;t.onload=()=>ok();t.onerror=()=>no();document.head.appendChild(t)})}
+async function gButton(boxId,onCred){
+  const id=await gCfg(),box=$('#'+boxId);if(!id||!box)return;
+  try{await gLoad();google.accounts.id.initialize({client_id:id,callback:r=>onCred(r.credential)});
+    google.accounts.id.renderButton(box,{theme:'outline',size:'large',text:'continue_with',width:Math.min(280,Math.max(200,box.clientWidth||260))});box.hidden=false;const o=$('#'+boxId+'or');if(o)o.hidden=false}catch(e){}}
+async function signedIn(j,done,rec){ACC.handle=j.handle;ACC.code=j.code;ACC.tok=!rec;accSave();closeModal();await restoreShared();setTimeout(()=>{if(done)done();else if(NAV.tab==='friends')fvRender();else bRender()},400)}
+const GBOX='<div id="gbox" hidden style="display:flex;justify-content:center;min-height:44px;margin-bottom:6px"></div><p class="mu" id="gboxor" hidden style="text-align:center;margin:4px 0 8px">or use email</p>';
+function googleHandleDlg(cred,email,done){
+  modal(`<h3>Pick a handle</h3><p class="mu">Signed in with Google${email?' as '+esc(email):''}. Choose the name friends will find you by (3 to 20 letters, numbers or underscores).</p><input id="gh" type="text" placeholder="e.g. alex_cards" maxlength="20" autocapitalize="none" autocorrect="off" spellcheck="false" style="width:100%"><p class="mu" id="gerr" style="color:#ff9b9b;min-height:1.2em"></p><button class="btn" id="gok">Create account</button><button class="btn alt" id="gno" style="margin-top:8px">Cancel</button>`);
+  $('#gno').onclick=()=>closeModal();
+  $('#gok').onclick=async()=>{const h=$('#gh').value.trim().toLowerCase();if(!/^[a-z0-9_]{3,20}$/.test(h)){$('#gerr').textContent='Use 3 to 20 letters, numbers or underscores.';return}
+    $('#gok').disabled=true;try{await signedIn(await api('google',{credential:cred,handle:h}),done)}catch(e){$('#gerr').textContent=e.message;$('#gok').disabled=false}}}
+async function googleDone(cred,done){
+  try{const j=await api('google',{credential:cred});if(j.need_handle)googleHandleDlg(cred,j.email,done);else await signedIn(j,done)}
+  catch(e){toast(e.message)}}
 function accDlg(done){
-  modal(`<h3>Pick a handle</h3><p class="mu">This is how friends find you. Use 3 to 20 letters, numbers or underscores. No email needed.</p><input id="ah" type="text" placeholder="e.g. alex_cards" maxlength="20" autocapitalize="none" autocorrect="off" spellcheck="false" style="width:100%"><p class="mu" id="aerr" style="color:#ff9b9b;min-height:1.2em"></p><button class="btn" id="aok">Create account</button><button class="btn alt" id="alog" style="margin-top:8px">I already have an account</button><button class="btn alt" id="ano" style="margin-top:8px">Cancel</button>`);
+  modal(`<h3>Create your account</h3><p class="mu">Your handle is how friends find you. Your email and password are only for signing in.</p>${GBOX}<input id="ah" type="text" placeholder="handle (e.g. alex_cards)" maxlength="20" autocapitalize="none" autocorrect="off" spellcheck="false" style="width:100%"><input id="ae" type="email" placeholder="email" autocomplete="email" autocapitalize="none" style="width:100%;margin-top:8px"><input id="ap" type="password" placeholder="password (8+ characters)" autocomplete="new-password" style="width:100%;margin-top:8px"><p class="mu" id="aerr" style="color:#ff9b9b;min-height:1.2em"></p><button class="btn" id="aok">Create account</button><button class="btn alt" id="alog" style="margin-top:8px">I already have an account</button><button class="btn alt" id="ano" style="margin-top:8px">Cancel</button>`);
+  gButton('gbox',c=>googleDone(c,done));
   $('#ano').onclick=()=>closeModal();
   $('#alog').onclick=()=>loginDlg(done);
-  $('#aok').onclick=async()=>{const h=$('#ah').value.trim().toLowerCase();
-    if(!/^[a-z0-9_]{3,20}$/.test(h)){$('#aerr').textContent='Use 3 to 20 letters, numbers or underscores.';return}
+  $('#aok').onclick=async()=>{const h=$('#ah').value.trim().toLowerCase(),e=$('#ae').value.trim(),pw=$('#ap').value;
+    if(!/^[a-z0-9_]{3,20}$/.test(h)){$('#aerr').textContent='Handle: 3 to 20 letters, numbers or underscores.';return}
+    if(!/^\S+@\S+\.\S+$/.test(e)){$('#aerr').textContent="That email doesn't look right.";return}
+    if(pw.length<8){$('#aerr').textContent='Use a password of 8 or more characters.';return}
     $('#aok').disabled=true;
-    try{const j=await api('signup',{handle:h});ACC.handle=j.handle;ACC.code=j.code;accSave();codeDlg(done,true)}
-    catch(e){$('#aerr').textContent=e.message;$('#aok').disabled=false}}}
+    try{await signedIn(await api('reg_email',{handle:h,email:e,password:pw}),done)}
+    catch(er){$('#aerr').textContent=er.message;$('#aok').disabled=false}}}
 function codeDlg(done,fresh){
   modal(`<h3>${fresh?"You're in, @"+esc(ACC.handle):'Your recovery code'}</h3><p class="mu">Save this code in a note or take a screenshot. If you ever lose this phone, it's the only way back into your account.</p><div class="code">${esc(fmtCode(ACC.code))}</div><button class="btn alt" id="ccopy">Copy code</button><button class="btn" id="cok" style="margin-top:8px">Done</button>`);
   $('#ccopy').onclick=async()=>{try{await navigator.clipboard.writeText(fmtCode(ACC.code));toast('Code copied')}catch(e){toast('Press and hold the code to copy it')}};
   $('#cok').onclick=()=>{closeModal();if(done)setTimeout(done,400);else if(NAV.tab==='friends')setTimeout(fvRender,400)}}
 function loginDlg(done){
-  modal(`<h3>Sign in</h3><p class="mu">Enter your handle and recovery code.</p><input id="lh" type="text" placeholder="handle" autocapitalize="none" autocorrect="off" spellcheck="false" style="width:100%"><input id="lc" type="text" placeholder="recovery code" autocapitalize="characters" autocorrect="off" spellcheck="false" style="width:100%;margin-top:8px"><p class="mu" id="lerr" style="color:#ff9b9b;min-height:1.2em"></p><button class="btn" id="lok">Sign in</button><button class="btn alt" id="lno" style="margin-top:8px">Cancel</button>`);
+  modal(`<h3>Sign in</h3>${GBOX}<input id="le" type="email" placeholder="email" autocomplete="email" autocapitalize="none" style="width:100%"><input id="lp" type="password" placeholder="password" autocomplete="current-password" style="width:100%;margin-top:8px"><p class="mu" id="lerr" style="color:#ff9b9b;min-height:1.2em"></p><button class="btn" id="lok">Sign in</button><button class="btn alt" id="lrec" style="margin-top:8px">Use a handle + recovery code</button><button class="btn alt" id="lno" style="margin-top:8px">Cancel</button>`);
+  gButton('gbox',c=>googleDone(c,done));
   $('#lno').onclick=()=>closeModal();
+  $('#lrec').onclick=()=>recLoginDlg(done);
+  $('#lok').onclick=async()=>{const e=$('#le').value.trim(),pw=$('#lp').value;if(!e||!pw){$('#lerr').textContent='Enter both.';return}
+    $('#lok').disabled=true;
+    try{await signedIn(await api('login_email',{email:e,password:pw}),done)}
+    catch(er){$('#lerr').textContent=er.message;$('#lok').disabled=false}}}
+function recLoginDlg(done){
+  modal(`<h3>Sign in with a recovery code</h3><p class="mu">For accounts made before email sign-in. Enter your handle and recovery code.</p><input id="lh" type="text" placeholder="handle" autocapitalize="none" autocorrect="off" spellcheck="false" style="width:100%"><input id="lc" type="text" placeholder="recovery code" autocapitalize="characters" autocorrect="off" spellcheck="false" style="width:100%;margin-top:8px"><p class="mu" id="lerr" style="color:#ff9b9b;min-height:1.2em"></p><button class="btn" id="lok">Sign in</button><button class="btn alt" id="lno" style="margin-top:8px">Back</button>`);
+  $('#lno').onclick=()=>loginDlg(done);
   $('#lok').onclick=async()=>{const h=$('#lh').value.trim().toLowerCase(),c=$('#lc').value.trim();if(!h||!c){$('#lerr').textContent='Enter both.';return}
     $('#lok').disabled=true;
-    try{const j=await api('login',{handle:h,code:c});ACC.handle=j.handle;ACC.code=c.toUpperCase().replace(/[^A-Z0-9]/g,'');accSave();closeModal();await restoreShared();setTimeout(()=>{if(done)done();else fvRender()},400)}
+    try{const j=await api('login',{handle:h,code:c});await signedIn({handle:j.handle,code:c.toUpperCase().replace(/[^A-Z0-9]/g,'')},done,true)}
     catch(e){$('#lerr').textContent=e.message;$('#lok').disabled=false}}}
 async function restoreShared(){
   try{const l=await api('list_user',{handle:ACC.handle});let n=0;
@@ -1219,13 +1248,32 @@ async function restoreShared(){
     if(n){bSave();toast('Restored '+n+' shared binder'+(n>1?'s':''))}
     if(!T.lists.some(x=>x.items.length)&&Array.isArray(l.lists)&&l.lists.length){T.lists=l.lists.map(x=>({id:String(x.id),name:String(x.name||'List').slice(0,40),items:(x.items||[]).filter(r=>r.i&&r.k).map(r=>({i:r.i,k:r.k,m:r.m||'either',p:r.p})),vis:x.vis||'friends'}));tSetCur(T.lists[0].id);tSave()}}catch(e){}}
 function acctMenu(){
-  modal(`<h3>@${esc(ACC.handle)}</h3><button class="btn alt mbtn" id="aprof">See my profile as others do</button><button class="btn alt mbtn" id="acode">Show my recovery code</button><button class="btn alt mbtn" id="aout">Sign out on this phone</button><button class="btn mbtn" id="no">Close</button>`);
+  modal(`<h3>@${esc(ACC.handle)}</h3><button class="btn alt mbtn" id="aprof">See my profile as others do</button><button class="btn alt mbtn" id="asign">Sign-in options (email, Google)</button><button class="btn alt mbtn" id="aout">Sign out on this phone</button><button class="btn mbtn" id="no">Close</button>`);
   $('#no').onclick=()=>closeModal();
   $('#aprof').onclick=()=>{closeModal();setTimeout(()=>{showTab('friends');fvGo('profile',{handle:ACC.handle})},350)};
-  $('#acode').onclick=()=>codeDlg(null,false);
-  $('#aout').onclick=()=>{closeModal();setTimeout(()=>{
-    if(!confirm('Sign out? Your binders stay on this phone. Make sure you saved your recovery code, or you will not be able to sign back in.'))return;
+  $('#asign').onclick=()=>signOptDlg();
+  $('#aout').onclick=async()=>{let ac={};try{ac=await api('acct')}catch(e){}
+    closeModal();setTimeout(async()=>{
+    const safe=ac.email||ac.google;
+    if(!confirm(safe?'Sign out on this phone? You can sign back in with your '+(ac.email?'email and password':'Google account')+'.':'Sign out? You have no email or Google sign-in set up, so you would need your recovery code to get back in. Set one up first under Sign-in options.'))return;
+    try{await api('logout')}catch(e){}
     ACC.handle='';ACC.code='';accSave();for(const k in SYNCED)delete SYNCED[k];fvBadge(0);toast('Signed out');if(NAV.tab==='friends')fvRender();else bRender()},150)}}
+async function signOptDlg(){
+  modal('<h3>Sign-in options</h3><p class="mu">Loading…</p>');
+  let ac;try{ac=await api('acct')}catch(e){modal(`<h3>Sign-in options</h3><p class="mu">${esc(e.message)}</p><button class="btn" id="no">Close</button>`);$('#no').onclick=()=>closeModal();return}
+  const gid=await gCfg();
+  modal(`<h3>Sign-in options</h3>
+  <div class="panel"><b>Email + password</b><div class="mu" style="margin:4px 0 8px">${ac.email?'✓ '+esc(ac.email):'Not set up'}</div>${ac.email?'':'<input id="se" type="email" placeholder="email" autocomplete="email" autocapitalize="none" style="width:100%"><input id="sp" type="password" placeholder="password (8+ characters)" autocomplete="new-password" style="width:100%;margin-top:8px"><button class="btn" id="sadd" style="margin-top:8px">Add email sign-in</button>'}</div>
+  <div class="panel"><b>Google</b><div class="mu" style="margin:4px 0 8px">${ac.google?'✓ Linked'+(ac.gem?' ('+esc(ac.gem)+')':''):(gid?'Not linked':'Not available yet')}</div>${ac.google||!gid?'':'<div id="gbox2" hidden style="display:flex;justify-content:center;min-height:44px"></div>'}</div>
+  ${ac.recovery&&!ACC.tok?'<button class="btn alt mbtn" id="srec">Show my recovery code</button>':''}
+  <p class="mu" id="serr" style="color:#ff9b9b;min-height:1.2em"></p><button class="btn" id="no">Close</button>`);
+  $('#no').onclick=()=>closeModal();
+  if($('#srec'))$('#srec').onclick=()=>{if(!ACC.tok&&ac.recovery)codeDlg(null,false)};
+  if($('#sadd'))$('#sadd').onclick=async()=>{const e=$('#se').value.trim(),pw=$('#sp').value;
+    if(!/^\S+@\S+\.\S+$/.test(e)){$('#serr').textContent="That email doesn't look right.";return}
+    if(pw.length<8){$('#serr').textContent='Use a password of 8 or more characters.';return}
+    try{await api('link',{email:e,password:pw});toast('Email sign-in added');signOptDlg()}catch(er){$('#serr').textContent=er.message}};
+  if(!ac.google&&gid)gButton('gbox2',async c=>{try{await api('link',{credential:c});toast('Google linked');signOptDlg()}catch(er){const x=$('#serr');if(x)x.textContent=er.message}})}
 function bVisDlg(b){
   const opts=[['private','🔒 Private','Only you. Stays on this phone.'],['friends','👥 Friends only','Your friends can view it.'],['public','🌐 Public','Anyone can find it in Browse.']];
   modal(`<h3>Who can see "${esc(b.name)}"?</h3>${opts.map(([v,l,d])=>`<button class="btn alt" data-vis="${v}" style="margin-bottom:8px;text-align:left;${(b.vis||'private')===v?'border-color:var(--ac);':''}">${l}<div class="mu" style="font-weight:400;font-size:12px">${d}</div></button>`).join('')}<p class="mu">Viewers see your cards and today's prices. They never see what you paid.</p><button class="btn" id="no">Close</button>`);
@@ -1247,7 +1295,7 @@ const coverHtml=a=>`<div class="cov">${(a||[]).slice(0,4).map(i=>`<img src="${es
 async function fvHome(my){
   const el=fvEl();
   if(!ACC.handle){
-    el.innerHTML=`<h3>Friends</h3><div class="panel"><p style="margin:0 0 10px">Share binders with friends and browse theirs. No email needed, just pick a handle.</p><button class="btn" id="fvstart">Pick a handle</button><button class="btn alt" id="fvlogin" style="margin-top:8px">I already have an account</button></div><button class="btn alt" id="fvbrowse">🌐 Browse binders, trades &amp; wants</button>`;
+    el.innerHTML=`<h3>Friends</h3><div class="panel"><p style="margin:0 0 10px">Share binders with friends and browse theirs. Create a free account with email or Google.</p><button class="btn" id="fvstart">Create an account</button><button class="btn alt" id="fvlogin" style="margin-top:8px">Sign in</button></div><button class="btn alt" id="fvbrowse">🌐 Browse binders, trades &amp; wants</button>`;
     $('#fvstart').onclick=()=>accDlg(()=>fvRender());$('#fvlogin').onclick=()=>loginDlg(()=>fvRender());$('#fvbrowse').onclick=()=>fvGo('browse');return}
   el.innerHTML='<p class="mu">Loading…</p>';
   let m;try{m=await api('me')}catch(e){if(my!==FV.rid)return;el.innerHTML=`<h3>Friends</h3><p class="mu">${esc(e.message)}</p><button class="btn alt" id="facc">Account</button>`;$('#facc').onclick=acctMenu;return}
@@ -1450,7 +1498,7 @@ async function fvProfile(my){
   if(my!==FV.rid)return;
   await fvNeed([...(l.trade||[]),...(l.wants||[])]);if(my!==FV.rid)return;
   const rel=l.rel;
-  const relHtml=rel==='none'?(ACC.handle?'<button class="btn" id="frel">Add friend</button>':'<p class="mu">Pick a handle in Friends to add them.</p>'):rel==='in'?'<button class="btn" id="frel">Accept friend request</button>':rel==='out'?'<p class="mu">Friend request sent.</p>':rel==='friend'?'<div class="row" style="align-items:center;justify-content:space-between"><span class="mu">✓ Friends</span><button class="chip" id="frm">Remove friend</button></div>':'<p class="mu">This is how others see your profile.</p>';
+  const relHtml=rel==='none'?(ACC.handle?'<button class="btn" id="frel">Add friend</button>':'<p class="mu">Create an account in Friends to add them.</p>'):rel==='in'?'<button class="btn" id="frel">Accept friend request</button>':rel==='out'?'<p class="mu">Friend request sent.</p>':rel==='friend'?'<div class="row" style="align-items:center;justify-content:space-between"><span class="mu">✓ Friends</span><button class="chip" id="frm">Remove friend</button></div>':'<p class="mu">This is how others see your profile.</p>';
   el.innerHTML=`<button class="chip" id="fvback">← Back</button><h3 style="margin-top:12px">@${esc(l.handle)}</h3>${relHtml}
   ${rel==='friend'?'<div class="row"><button class="btn" id="fmoffer">🤝 Make an offer</button><button class="btn alt" id="fmreq">🙋 Request a card</button></div>':''}
   <h3>Binders</h3>${l.binders.length?l.binders.map(b=>`<button class="frow btnrow" data-b="${esc(b.id)}">${coverHtml(b.cover)}<div style="flex:1;min-width:0"><b>${esc(b.name)}</b><div class="mu">${b.cnt} card${b.cnt===1?'':'s'} · ${visLabel(b.vis)} · ${ago(b.updated)}</div></div><span class="mu">›</span></button>`).join(''):`<p class="mu">No binders to show yet.${rel==='friend'||rel==='self'?'':' Friends-only binders appear once you are friends.'}</p>`}`;
@@ -1535,7 +1583,7 @@ const HELP_STEPS=[
  {e:'📒',t:'Your binders',d:'Build digital copies of your real binders. Add cards by name or by photo, drag to rearrange, and see what each page and the whole binder is worth at Near Mint market prices.'},
  {e:'📷',t:'Fill a page from one photo',d:'Lay a binder page flat, snap one photo, and Binder Buddy reads all the pockets. It places the most likely printing of each card and flags the ones to double-check.'},
  {e:'🔄',t:'Trade and sell lists',d:'Tap a card and choose List for trade or sale. Make a separate list for each card show or meetup, mark each card Trade, Sale or both, and set a price if you like.'},
- {e:'👥',t:'Friends and sharing',d:'Pick a handle, with no email or sign-up. Each binder is Private, Friends only or Public. Friends can see your trade lists and the cards you are looking for (♡), and you can see theirs.'},
+ {e:'👥',t:'Friends and sharing',d:'Create a free account with email or Google. Each binder is Private, Friends only or Public. Friends can see your trade lists and the cards you are looking for (♡), and you can see theirs.'},
 ];
 function helpDlg(i){
   i=i||0;const st=HELP_STEPS[i],last=i===HELP_STEPS.length-1;
