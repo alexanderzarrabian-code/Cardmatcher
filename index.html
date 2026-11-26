@@ -12,114 +12,138 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <style>
-:root{--bg:#0c1220;--fg:#eef1f7;--card:rgba(22,31,52,.85);--ac:#f5c542;--mu:#9aa6bf;--gold:#c99a2e;--blue:#f5c542;--line:#2f3e62;--aqua:#34d399;--shadow:0 3px 0 rgba(0,0,0,.35),0 0 14px rgba(245,197,66,.10)}
+:root{--bg:#0c1220;--bg2:#0a0f1b;--surf:#161f34;--fg:#eef1f7;--mu:#9aa6bf;--ac:#f5c542;--onac:#10192e;--gold:#c99a2e;--line:#2f3e62;--aqua:#34d399;--aqt:#6ee7b7;--alt:#18233f;--altl:#3a4a70;--ban1:#16223f;--ban2:#101a30;--tabsbg:rgba(12,18,32,.94);--pkbg:rgba(12,18,32,.6);--inpc:#0a0f1c;--ac2:color-mix(in srgb,var(--ac) 85%,#000);--blue:var(--ac);--card:color-mix(in srgb,var(--surf) 85%,transparent);--chip:color-mix(in srgb,var(--surf) 90%,transparent);--panel:color-mix(in srgb,var(--surf) 55%,transparent);--inp:color-mix(in srgb,var(--inpc) 85%,transparent);--shadow:0 3px 0 rgba(0,0,0,.35),0 0 14px color-mix(in srgb,var(--ac) 10%,transparent)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{background:#0c1220}
+html{background:var(--bg)}
 body{margin:0;padding:0 14px 96px;font:16px/1.4 "Trebuchet MS","Avenir Next",system-ui,sans-serif;color:var(--fg);max-width:640px;margin:auto;min-height:100vh;
-  background:linear-gradient(180deg,#0c1220,#0a0f1b);
+  background:linear-gradient(180deg,var(--bg),var(--bg2));
   background-repeat:no-repeat;background-attachment:fixed}
-.banner{margin:0 -14px 12px;padding:12px 16px 10px;text-align:center;background:linear-gradient(180deg,#16223f,#101a30);color:#fff;border-bottom:3px solid #f5c542;position:relative;overflow:hidden}
-.banner h1{margin:0;font:900 26px/1.1 "Arial Black","Trebuchet MS",system-ui,sans-serif;letter-spacing:.5px;color:#f5c542;text-shadow:0 2px 0 rgba(0,0,0,.35)}
+.banner{margin:0 -14px 12px;padding:12px 16px 10px;text-align:center;background:linear-gradient(180deg,var(--ban1),var(--ban2));color:var(--fg);border-bottom:3px solid var(--ac);position:relative;overflow:hidden}
+.banner h1{margin:0;font:900 26px/1.1 "Arial Black","Trebuchet MS",system-ui,sans-serif;letter-spacing:.5px;color:var(--ac);text-shadow:0 2px 0 rgba(0,0,0,.35)}
 .banner p{margin:3px 0 0;font-size:12.5px;font-weight:700;opacity:.95}
 .spark{display:none;position:absolute;color:#fff7c2;font-size:18px;animation:tw 2.4s ease-in-out infinite}
 .spark:nth-child(1){right:18px;top:10px}.spark:nth-child(2){left:22px;top:30px;font-size:12px;animation-delay:.7s}.spark:nth-child(3){left:72px;top:10px;font-size:14px;animation-delay:1.3s}.spark:nth-child(4){right:64px;top:44px;font-size:11px;animation-delay:.3s}
 @keyframes tw{0%,100%{opacity:.25;transform:scale(.7) rotate(0)}50%{opacity:1;transform:scale(1.2) rotate(25deg)}}
 .pick{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
-.btn{display:block;width:100%;padding:14px;border:0;border-radius:14px;background:linear-gradient(135deg,#f5c542,#e0a82e);color:#1a1405;font-size:17px;font-weight:800;text-align:center;cursor:pointer;box-shadow:var(--shadow);transition:transform .08s}
+.btn{display:block;width:100%;padding:14px;border:0;border-radius:14px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:var(--onac);font-size:17px;font-weight:800;text-align:center;cursor:pointer;box-shadow:var(--shadow);transition:transform .08s}
 .btn:active{transform:translateY(3px);box-shadow:none}
 .btn[style*="b91c1c"]{color:#fff}
-.btn.alt{background:#18233f;border:2px solid #3a4a70;color:var(--fg);box-shadow:none}
+.btn.alt{background:var(--alt);border:2px solid var(--altl);color:var(--fg);box-shadow:none}
 .row{display:flex;gap:8px;margin:10px 0}
-input[type=text],input[type=number]{flex:1;min-width:0;padding:12px;border-radius:12px;border:2px solid var(--line);background:rgba(10,15,28,.85);color:var(--fg);font-size:16px}
-input::placeholder{color:#6f7c98}
-input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 10px rgba(245,197,66,.45)}
+input[type=text],input[type=number]{flex:1;min-width:0;padding:12px;border-radius:12px;border:2px solid var(--line);background:var(--inp);color:var(--fg);font-size:16px}
+input::placeholder{color:color-mix(in srgb,var(--mu) 70%,transparent)}
+input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 10px color-mix(in srgb,var(--ac) 45%,transparent)}
 #num{flex:0 0 110px}
 [hidden]{display:none!important}
 button.item{border:3px solid var(--gold);text-align:left;font:inherit;cursor:pointer;width:100%}
-select{padding:8px;border-radius:10px;background:rgba(10,15,28,.85);color:var(--fg);border:2px solid var(--line);font-size:15px}
+select{padding:8px;border-radius:10px;background:var(--inp);color:var(--fg);border:2px solid var(--line);font-size:15px}
 .mu{color:var(--mu);font-size:14px}
-h3{font:900 17px/1.2 "Arial Black","Trebuchet MS",system-ui,sans-serif;margin:18px 0 8px;color:#f5c542}
+h3{font:900 17px/1.2 "Arial Black","Trebuchet MS",system-ui,sans-serif;margin:18px 0 8px;color:var(--ac)}
 .hero{display:flex;gap:12px;background:var(--card);border:4px solid transparent;border-radius:16px;padding:12px;margin:14px 0;box-shadow:var(--shadow);animation:pop .35s ease-out;
-  background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(135deg,#c99a2e,#f5c542,#c99a2e) border-box}
+  background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(135deg,var(--gold),var(--ac),var(--gold)) border-box}
 @keyframes pop{from{transform:scale(.94);opacity:0}to{transform:none;opacity:1}}
-.hero img{flex:0 0 110px;width:110px;height:auto;align-self:flex-start;border-radius:8px;box-shadow:0 0 14px rgba(245,197,66,.5)}
+.hero img{flex:0 0 110px;width:110px;height:auto;align-self:flex-start;border-radius:8px;box-shadow:0 0 14px color-mix(in srgb,var(--ac) 50%,transparent)}
 .price{display:inline-block;font:900 26px/1 "Arial Black",system-ui,sans-serif;color:#052e1f;background:linear-gradient(135deg,#34d399,#6ee7b7);padding:6px 12px;border-radius:12px;margin:4px 0;box-shadow:0 0 16px rgba(52,211,153,.4)}
 .warn{display:inline-block;color:#4a3000;background:#ffd54a;border:2px solid #d99a00;border-radius:8px;padding:2px 8px;font-size:12.5px;font-weight:800;margin:3px 0}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .item{position:relative;background:var(--card);border:3px solid transparent;border-radius:14px;padding:8px;text-decoration:none;color:inherit;font-size:14px;box-shadow:var(--shadow);transition:transform .12s;overflow:hidden;
-  background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(135deg,#c99a2e,#3a4a70) border-box}
+  background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(135deg,var(--gold),var(--altl)) border-box}
 .item:active{transform:scale(.97)}
 .item b{display:block;margin-top:4px}
 .item img{width:100%;border-radius:6px;display:block}
-.item::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .25s;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.4) 45%,rgba(245,197,66,.28) 52%,rgba(255,255,255,.2) 58%,transparent 72%)}
+.item::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .25s;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.4) 45%,color-mix(in srgb,var(--ac) 28%,transparent) 52%,rgba(255,255,255,.2) 58%,transparent 72%)}
 .item:hover::after,.item:active::after{opacity:1}
 .item .tag{display:inline-block;margin-top:5px;background:linear-gradient(135deg,#34d399,#6ee7b7);color:#052e1f;font-weight:800;border-radius:9px;padding:2px 8px}
 .chips{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 8px}
-.chip{flex:0 0 auto;padding:7px 12px;border-radius:99px;background:rgba(22,31,52,.9);border:2px solid var(--line);color:var(--fg);font-size:13px;font-weight:700;cursor:pointer}
-.chip[data-d]{border-color:#f5c542;color:#f5c542}
+.chip{flex:0 0 auto;padding:7px 12px;border-radius:99px;background:var(--chip);border:2px solid var(--line);color:var(--fg);font-size:13px;font-weight:700;cursor:pointer}
+.chip[data-d]{border-color:var(--ac);color:var(--ac)}
 .chip[data-v]{border-width:2px;color:#eef1f7}
-.chip[data-v^="Holofoil"]{background:linear-gradient(120deg,#1b2744,#22305a)}
-.chip[data-v^="Reverse"]{background:linear-gradient(120deg,#1b2744,#1b2744)}
-.chip[data-v^="1st"]{background:linear-gradient(120deg,#2a2440,#1b2744)}
+.chip[data-v^="Holofoil"]{background:linear-gradient(120deg,var(--chip),#22305a)}
+.chip[data-v^="Reverse"]{background:linear-gradient(120deg,var(--chip),var(--chip))}
+.chip[data-v^="1st"]{background:linear-gradient(120deg,var(--chip),var(--chip))}
 #status{font-weight:700}
-.chip.on{background:#f5c542!important;border-color:#ffe08a!important;color:#1a1405!important}
+.chip.on{background:var(--ac)!important;border-color:var(--ac)!important;color:var(--onac)!important}
 .lang{display:inline-block;background:#f43f5e;color:#fff;font-size:11px;font-weight:800;border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:1px}
 details summary{cursor:pointer}
 label.mu{color:var(--mu)}
-.bsum{list-style:none;cursor:pointer;text-align:center;font-weight:800;font-size:17px;color:#fff;padding:13px;border-radius:14px;background:#18233f;border:2px solid #c99a2e;box-shadow:var(--shadow)}.bsum::-webkit-details-marker{display:none}#browse[open] .bsum{margin-bottom:6px}
-.tabs{position:fixed;left:0;right:0;bottom:0;max-width:640px;margin:0 auto;z-index:20;display:flex;gap:8px;padding:8px 14px calc(8px + env(safe-area-inset-bottom));background:rgba(12,18,32,.94);border-top:2px solid var(--line);backdrop-filter:blur(6px)}.tab{flex:1;padding:10px 2px;border-radius:12px;border:2px solid var(--line);background:rgba(22,31,52,.9);color:var(--fg);font:800 13px system-ui;cursor:pointer}.tab.on{background:linear-gradient(135deg,#f5c542,#e0a82e);border-color:transparent;color:#1a1405}
-.bgrid{display:grid;gap:6px;background:rgba(22,31,52,.6);border:3px solid var(--line);border-radius:14px;padding:8px;margin:8px 0}
-.pk{position:relative;aspect-ratio:5/7;border:2px dashed var(--line);border-radius:8px;background:rgba(12,18,32,.6);padding:0;overflow:hidden;color:var(--mu);font-size:24px;cursor:pointer}
+.bsum{list-style:none;cursor:pointer;text-align:center;font-weight:800;font-size:17px;color:#fff;padding:13px;border-radius:14px;background:var(--alt);border:2px solid var(--gold);box-shadow:var(--shadow)}.bsum::-webkit-details-marker{display:none}#browse[open] .bsum{margin-bottom:6px}
+.tabs{position:fixed;left:0;right:0;bottom:0;max-width:640px;margin:0 auto;z-index:20;display:flex;gap:8px;padding:8px 14px calc(8px + env(safe-area-inset-bottom));background:var(--tabsbg);border-top:2px solid var(--line);backdrop-filter:blur(6px)}.tab{flex:1;padding:10px 2px;border-radius:12px;border:2px solid var(--line);background:var(--chip);color:var(--fg);font:800 13px system-ui;cursor:pointer}.tab.on{background:linear-gradient(135deg,var(--ac),var(--ac2));border-color:transparent;color:var(--onac)}
+.bgrid{display:grid;gap:6px;background:var(--panel);border:3px solid var(--line);border-radius:14px;padding:8px;margin:8px 0}
+.pk{position:relative;aspect-ratio:5/7;border:2px dashed var(--line);border-radius:8px;background:var(--pkbg);padding:0;overflow:hidden;color:var(--mu);font-size:24px;cursor:pointer}
 .pk.has{border:2px solid transparent}.pk.sel{outline:3px solid var(--ac)}.pk img{width:100%;height:100%;object-fit:cover;display:block}
-.pk .qm{position:absolute;top:2px;right:3px;background:#f59e0b;color:#10192e;font:900 11px system-ui;border-radius:9px;padding:0 6px;box-shadow:0 0 6px #000}.pk .pp{position:absolute;left:0;right:0;bottom:0;background:rgba(6,28,22,.9);color:#6ee7b7;font:800 11px system-ui;text-align:center;padding:2px 0}
+.pk .qm{position:absolute;top:2px;right:3px;background:#f59e0b;color:var(--onac);font:900 11px system-ui;border-radius:9px;padding:0 6px;box-shadow:0 0 6px #000}.pk .pp{position:absolute;left:0;right:0;bottom:0;background:rgba(6,28,22,.9);color:#6ee7b7;font:800 11px system-ui;text-align:center;padding:2px 0}
 .chip:disabled{opacity:.35}
 #modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:50;overflow:auto}
-#modal .sheet{max-width:520px;margin:6vh auto;background:#111a30;border:2px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--shadow)}
+#modal .sheet{max-width:520px;margin:6vh auto;background:var(--surf);border:2px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--shadow)}
 #binderView select{flex:1;min-width:0}
 .pk{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}.pk.drag{opacity:.35}.pk.over{outline:3px solid var(--blue);box-shadow:0 0 14px var(--blue)}.ghost{position:fixed;z-index:60;pointer-events:none;border-radius:8px;overflow:hidden;box-shadow:0 10px 26px rgba(0,0,0,.6),0 0 16px var(--ac);transform:scale(1.06) rotate(3deg);opacity:.95}.ghost img{width:100%;height:100%;object-fit:cover;display:block}
 .cams{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}.cams .btn{padding:12px 6px;font-size:16px}
-.panel{background:rgba(22,31,52,.55);border:2px solid var(--line);border-radius:14px;padding:10px 12px;margin:12px 0}
+.panel{background:var(--panel);border:2px solid var(--line);border-radius:14px;padding:10px 12px;margin:12px 0}
 .prow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;color:var(--mu);font-size:14px}
-.prow #range,.prow #trng{flex:0 0 76px;width:76px;text-align:center;font-weight:800;padding:8px}.stp{display:flex;gap:6px;align-items:center}.stpb{width:42px;height:42px;border-radius:12px;border:2px solid var(--line);background:rgba(22,31,52,.9);color:var(--fg);font:800 22px system-ui;cursor:pointer;padding:0}.acts{display:flex;gap:8px;margin:6px 0 10px}.acts .chip{flex:1;padding:11px 4px;font-size:13px;text-align:center;border-radius:12px}
+.prow #range,.prow #trng{flex:0 0 76px;width:76px;text-align:center;font-weight:800;padding:8px}.stp{display:flex;gap:6px;align-items:center}.stpb{width:42px;height:42px;border-radius:12px;border:2px solid var(--line);background:var(--chip);color:var(--fg);font:800 22px system-ui;cursor:pointer;padding:0}.acts{display:flex;gap:8px;margin:6px 0 10px}.acts .chip{flex:1;padding:11px 4px;font-size:13px;text-align:center;border-radius:12px}
 .chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
 .bsum{padding:9px;font-size:15px}
 .btot{text-align:center;margin:6px 0;font-size:15px}.btot span{color:var(--mu);font-size:13px}
 .bgrid{margin:8px auto}
-.fbar{margin:8px 0;border:2px solid var(--line);border-radius:14px;background:rgba(22,31,52,.55);padding:0 12px}.fbar summary{cursor:pointer;font-weight:800;padding:11px 0;color:var(--ac);list-style:none}.fbar summary::-webkit-details-marker{display:none}.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:2px 0 10px}.fsel{display:contents}.fl{display:flex;flex-direction:column;font-size:12px;color:var(--mu);gap:3px;min-width:0}.fl select,.fl input{width:100%;font-size:14px;padding:9px 8px;border-radius:10px}.fq{grid-column:1/-1}.ftags{display:flex;flex-wrap:wrap;gap:6px;padding-bottom:10px}.ftags:empty{display:none}.hint{text-align:center;color:var(--mu);font-size:12px;margin:2px 0 8px}
+.fbar{margin:8px 0;border:2px solid var(--line);border-radius:14px;background:var(--panel);padding:0 12px}.fbar summary{cursor:pointer;font-weight:800;padding:11px 0;color:var(--ac);list-style:none}.fbar summary::-webkit-details-marker{display:none}.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:2px 0 10px}.fsel{display:contents}.fl{display:flex;flex-direction:column;font-size:12px;color:var(--mu);gap:3px;min-width:0}.fl select,.fl input{width:100%;font-size:14px;padding:9px 8px;border-radius:10px}.fq{grid-column:1/-1}.ftags{display:flex;flex-wrap:wrap;gap:6px;padding-bottom:10px}.ftags:empty{display:none}.hint{text-align:center;color:var(--mu);font-size:12px;margin:2px 0 8px}
 .mbtn{margin-top:8px}
 .trow{display:flex;gap:10px;align-items:center;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:8px;margin-bottom:8px}
 .trow img{width:46px;flex:0 0 46px;border-radius:5px}.trow b{font-size:15px}.trow .mu{font-size:12px}
-.tp{font-weight:800;color:#6ee7b7;text-align:right;font-size:15px}.x{border:0;background:rgba(185,28,28,.85);color:#fff;border-radius:50%;width:30px;height:30px;font-size:14px;cursor:pointer;flex:0 0 30px}
+.tp{font-weight:800;color:var(--aqt);text-align:right;font-size:15px}.x{border:0;background:rgba(185,28,28,.85);color:#fff;border-radius:50%;width:30px;height:30px;font-size:14px;cursor:pointer;flex:0 0 30px}
 .review{background:rgba(255,217,102,.08);border:2px solid #b8962f;border-radius:14px;padding:10px;margin-bottom:10px}
 .pair{display:flex!important;gap:10px;align-items:center;margin-top:8px;text-align:left}.pair img{width:44px;flex:0 0 44px}
 #tradeView .prow input[type=number]{flex:0 0 84px;width:84px;text-align:center;font-weight:800;padding:8px}
 .pk.wish img{opacity:.42;filter:grayscale(.65)}.pk .heart{position:absolute;top:2px;left:4px;color:#f9a8d4;font-size:20px;text-shadow:0 0 6px #000}
 .trend{display:flex;align-items:center;gap:10px;margin:2px 4px 6px}.trend svg{flex:1;height:34px}
-.frow{display:flex;align-items:center;gap:10px;justify-content:space-between;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:10px;margin-bottom:8px;width:100%;color:var(--fg);font:inherit;text-align:left}.btnrow{cursor:pointer}.cov{display:flex;gap:3px;flex:0 0 auto}.cov img{width:30px;border-radius:3px;background:#16213a}.code{font:700 17px ui-monospace,monospace;letter-spacing:1px;text-align:center;background:rgba(10,15,28,.85);border:2px dashed #c99a2e;border-radius:12px;padding:14px 6px;margin:10px 0;word-break:break-all;user-select:all}#toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);background:#f5c542;color:#1a1405;padding:10px 16px;border-radius:12px;font-weight:700;z-index:70;opacity:0;pointer-events:none;transition:opacity .2s;max-width:86vw;text-align:center}#toast.show{opacity:1}
+.frow{display:flex;align-items:center;gap:10px;justify-content:space-between;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:10px;margin-bottom:8px;width:100%;color:var(--fg);font:inherit;text-align:left}.btnrow{cursor:pointer}.cov{display:flex;gap:3px;flex:0 0 auto}.cov img{width:30px;border-radius:3px;background:#16213a}.code{font:700 17px ui-monospace,monospace;letter-spacing:1px;text-align:center;background:var(--inp);border:2px dashed var(--gold);border-radius:12px;padding:14px 6px;margin:10px 0;word-break:break-all;user-select:all}#toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);background:var(--ac);color:var(--onac);padding:10px 16px;border-radius:12px;font-weight:700;z-index:70;opacity:0;pointer-events:none;transition:opacity .2s;max-width:86vw;text-align:center}#toast.show{opacity:1}
 .tmeta{display:flex;gap:8px;align-items:center;margin:-4px 0 10px 4px;flex-wrap:wrap}.tmeta .chip{font-size:13px}.tpr{width:96px;padding:6px 8px;text-align:center;font-weight:800}
 .tl{display:flex;gap:10px;align-items:center;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:8px;margin-bottom:8px;position:relative}.tl img{width:46px;flex:0 0 46px;border-radius:5px}.tl b{font-size:15px}.tl .mu{font-size:12px}
 .tag{display:inline-block;font-size:11px;font-weight:800;border-radius:999px;padding:2px 8px;margin-left:6px;background:var(--line);color:var(--fg)}.tag.hit{background:var(--aqua);color:#06281d}
-.lbadge{position:absolute;top:2px;left:2px;z-index:2;background:var(--ac);color:#10192e;font-size:10px;font-weight:800;border-radius:999px;padding:1px 6px;box-shadow:0 0 6px #000}
+.lbadge{position:absolute;top:2px;left:2px;z-index:2;background:var(--ac);color:var(--onac);font-size:10px;font-weight:800;border-radius:999px;padding:1px 6px;box-shadow:0 0 6px #000}
 details.fold{margin:10px 0}details.fold>summary{cursor:pointer;font-weight:800;font-size:17px;list-style:none;padding:12px 14px;background:var(--card);border:2px solid var(--line);border-radius:12px;display:flex;justify-content:space-between;align-items:center;gap:8px}details.fold>summary::-webkit-details-marker{display:none}details.fold>summary::after{content:'▾';color:var(--mu)}details.fold[open]>summary::after{content:'▴'}details.fold[open]>summary{border-color:var(--ac)}.foldbody{padding-top:8px}
+#themebtn{position:absolute;left:14px;top:12px;width:32px;height:32px;border-radius:50%;border:2px solid var(--ac);background:transparent;font-size:15px;cursor:pointer;z-index:2;padding:0}
+.swg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.sw{border:2px solid var(--line);border-radius:12px;padding:8px;background:var(--card);color:var(--fg);font:700 14px system-ui;text-align:left;cursor:pointer}.sw.on{border-color:var(--ac)}.sw i{display:inline-block;width:16px;height:16px;border-radius:50%;margin-right:3px;vertical-align:-3px;border:1px solid rgba(128,128,128,.5)}
 #helpbtn{position:absolute;right:14px;top:12px;width:32px;height:32px;border-radius:50%;border:2px solid var(--ac);background:transparent;color:var(--ac);font-weight:800;font-size:16px;cursor:pointer;z-index:2}
 .hstep{text-align:center;padding:6px 4px}.hstep .big{font-size:46px;line-height:1.1}.hstep h3{margin:8px 0 6px}.hdots{display:flex;gap:6px;justify-content:center;margin:12px 0}.hdots i{width:8px;height:8px;border-radius:50%;background:var(--line)}.hdots i.on{background:var(--ac)}
 .fbadge{position:absolute;top:4px;left:4px;z-index:2;background:var(--aqua);color:#06281d;font-size:11px;font-weight:800;border-radius:999px;padding:2px 8px;box-shadow:0 0 6px #000}
-.fbadge.want{background:var(--ac);color:#10192e}
+.fbadge.want{background:var(--ac);color:var(--onac)}
 .mbadge{position:absolute;top:2px;right:2px;z-index:3;font-size:10px;font-weight:800;border-radius:999px;padding:1px 6px;box-shadow:0 0 6px #000;max-width:92%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.mbadge.want{background:var(--ac);color:#10192e}.mbadge.have{background:var(--aqua);color:#06281d}
-.pk.match{border:2px solid var(--ac);box-shadow:0 0 12px rgba(245,197,66,.65)}
-.tag.hot{background:var(--ac);color:#10192e}
+.mbadge.want{background:var(--ac);color:var(--onac)}.mbadge.have{background:var(--aqua);color:#06281d}
+.pk.match{border:2px solid var(--ac);box-shadow:0 0 12px color-mix(in srgb,var(--ac) 65%,transparent)}
+.tag.hot{background:var(--ac);color:var(--onac)}
 .tl.hot{border-color:var(--ac)}
 details.fold.match>summary{border-color:var(--ac);color:var(--ac)}
 .panel.match{border-color:var(--aqua)}.panel.match:empty{display:none}
 .mh{margin:12px 0 6px;font-size:15px}
 .gh{grid-column:1/-1;font-weight:800;color:var(--ac);margin:8px 0 2px;font-size:15px}
 .review.mt.have{border-color:var(--aqua)}.review.mt.want{border-color:var(--ac)}
-.bell{background:var(--ac);color:#10192e;border-radius:999px;padding:1px 8px;font-size:12px;font-weight:800;margin-left:6px}
-.tab{white-space:nowrap}.nb{display:inline-block;min-width:18px;margin-left:4px;padding:0 6px;border-radius:999px;background:var(--line);color:var(--fg);font-size:12px;font-weight:800;line-height:18px}.nb.hot{background:var(--ac);color:#10192e}
+.bell{background:var(--ac);color:var(--onac);border-radius:999px;padding:1px 8px;font-size:12px;font-weight:800;margin-left:6px}
+.tab{white-space:nowrap}.nb{display:inline-block;min-width:18px;margin-left:4px;padding:0 6px;border-radius:999px;background:var(--line);color:var(--fg);font-size:12px;font-weight:800;line-height:18px}.nb.hot{background:var(--ac);color:var(--onac)}
 .mprev{display:block;font-size:13px;font-weight:600;color:var(--fg);margin-top:4px;white-space:normal}details.match[open] .mprev{display:none}
-</style></head><body>
-<div class="banner"><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><button id="helpbtn" aria-label="How it works" title="How it works">?</button><h1>Binder Buddy</h1><p>Snap a card. Find its price twins.</p></div>
+.seg{display:flex;gap:6px;margin:4px 0 10px}.seg button{flex:1;padding:10px 6px;border-radius:12px;border:2px solid var(--line);background:var(--chip);color:var(--fg);font:800 14px system-ui;cursor:pointer}.seg button.on{background:var(--ac);color:var(--onac);border-color:var(--ac)}
+.lhead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:10px 0 8px}.lname{font-size:19px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.banner h1{text-shadow:none}
+.ocard{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px;margin-bottom:10px}.ocard.new{border-color:var(--ac)}
+.oi{display:flex;align-items:center;gap:8px;font-size:14px;margin:3px 0}.oi img{width:28px;border-radius:3px}.oi span{flex:1;min-width:0}.onote{font-size:13px;margin-top:6px;padding:6px 8px;border-radius:8px;background:var(--panel)}
+label.ofr{cursor:pointer}label.ofr input{width:22px;height:22px;flex:0 0 22px;accent-color:var(--ac)}
+</style>
+<script>
+var THEMES={gold:{n:'Gold Night',bg:'#0c1220',bg2:'#0a0f1b',surf:'#161f34',line:'#2f3e62',ac:'#f5c542',mu:'#9aa6bf',alt:'#18233f',altl:'#3a4a70',ban1:'#16223f',ban2:'#101a30'},
+ocean:{n:'Ocean',bg:'#08131f',bg2:'#060d16',surf:'#0f2236',line:'#24506e',ac:'#38bdf8',mu:'#8fb0c8',alt:'#10283d',altl:'#2f6a8e',ban1:'#0f2a44',ban2:'#0a1c2f'},
+forest:{n:'Forest',bg:'#0a1710',bg2:'#07100a',surf:'#12261a',line:'#2c5a3d',ac:'#4ade80',mu:'#93b8a0',alt:'#143020',altl:'#357a50',ban1:'#123422',ban2:'#0c2417'},
+rose:{n:'Rose',bg:'#1a0c14',bg2:'#12080d',surf:'#2a1422',line:'#633048',ac:'#fb7185',mu:'#c79aab',alt:'#331a28',altl:'#8a4562',ban1:'#3a1a2c',ban2:'#27111d'},
+grape:{n:'Grape',bg:'#130c20',bg2:'#0d0716',surf:'#21153a',line:'#4b3578',ac:'#c084fc',mu:'#b4a0d4',alt:'#291a46',altl:'#6b4ca6',ban1:'#2a1a4a',ban2:'#1b1033'},
+light:{n:'Light',bg:'#f2f5fb',bg2:'#e8edf6',surf:'#ffffff',line:'#c5cfe3',ac:'#e0a100',mu:'#5a6684',alt:'#e4eaf6',altl:'#b4c0da',ban1:'#ffffff',ban2:'#eef2fa',fg:'#1b2233',aqua:'#0f9d6e',aqt:'#0b7a55',tabsbg:'rgba(255,255,255,.95)',pkbg:'rgba(0,0,0,.04)',inpc:'#ffffff'}};
+function themeLoad(){try{return JSON.parse(localStorage.getItem('bb_theme')||'null')||{k:'gold'}}catch(e){return {k:'gold'}}}
+function themeApply(t){t=t||themeLoad();var base=THEMES.gold,pr=Object.assign({},base,THEMES[t.k]||{});if(t.ac)pr.ac=t.ac;
+ var lum=function(h){var n=parseInt(h.slice(1),16),r=n>>16&255,g=n>>8&255,b=n&255;return(.299*r+.587*g+.114*b)/255};
+ var set={'--bg':pr.bg,'--bg2':pr.bg2,'--surf':pr.surf,'--line':pr.line,'--ac':pr.ac,'--mu':pr.mu,'--alt':pr.alt,'--altl':pr.altl,'--ban1':pr.ban1,'--ban2':pr.ban2,'--fg':pr.fg||'#eef1f7','--aqua':pr.aqua||'#34d399','--aqt':pr.aqt||'#6ee7b7','--tabsbg':pr.tabsbg||'rgba(12,18,32,.94)','--pkbg':pr.pkbg||'rgba(12,18,32,.6)','--inpc':pr.inpc||'#0a0f1c','--onac':lum(pr.ac)>.55?'#1a1405':'#fff','--gold':pr.ac};
+ var st=document.documentElement.style;for(var k in set)st.setProperty(k,set[k]);
+ var m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',pr.ban2)}
+try{themeApply()}catch(e){}
+</script>
+</head><body>
+<div class="banner"><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><button id="themebtn" aria-label="Colors" title="Colors">🎨</button><button id="helpbtn" aria-label="How it works" title="How it works">?</button><h1>Binder Buddy</h1><p>Snap a card. Find its price twins.</p></div>
 <div class="tabs"><button class="tab on" data-tab="binders">📒 Binders</button><button class="tab" data-tab="find">🔍 Look up</button><button class="tab" data-tab="trade">🔄 Trade</button><button class="tab" data-tab="friends">👥 Friends</button></div>
 <div id="findView" hidden>
 <p class="hint" style="margin:0 0 8px">Scan or type a card to see its price and find cards worth about the same.</p>
@@ -414,6 +438,7 @@ function render(){
   $('#out').innerHTML=`${S.list.length>1?'<button class="chip" id="back">← Back to matches</button>':''}
   <div class="hero"><img src="${esc(c.img)}" alt=""><div><b>${esc(c.name)}</b><div class="mu">${esc(c.set)}${c.lang==='jp'?'<span class="lang">JP</span>':''} · #${esc(c.number)} · ${esc(c.rarity)}</div><div class="price">${money(p)}</div><div class="mu"><b>Near Mint · ${esc(S.v)}</b><br>TCGplayer market price. Other conditions sell for less.</div>${shaky(c,S.v)?'<div class="warn">⚠ Price uncertain: market and lowest listing disagree a lot. Check TCGplayer.</div>':''}<div class="mu">Lowest listing ${v[1]!=null?money(v[1]):'n/a'} · prices as of ${esc(asOf())}</div><a href="${esc(link(c,S.v))}" target="_blank" rel="noopener" class="mu">Open this version on TCGplayer ↗</a></div></div>
   <div class="chips">${c.vk.map(k=>`<button class="chip" data-v="${esc(k)}" style="${k===S.v?'border-color:var(--ac);color:var(--ac)':''}">${esc(k)} · NM ${money(mk(c,k))}${shaky(c,k)?' ⚠':''}</button>`).join('')}</div>
+  <div class="row" style="margin:6px 0"><button class="chip" id="hwish"></button></div>
   <div class="panel match" id="frp"></div>
   <details class="fold" open id="rfold"><summary><span id="h"></span></summary><div class="foldbody">
   <p class="mu" style="margin:0 0 8px">Each price is the TCGplayer market price for Near Mint in the printing shown. Tap a card to open that version on TCGplayer.</p>
@@ -424,6 +449,8 @@ function render(){
   if($('#back'))$('#back').onclick=picker;
   document.querySelectorAll('.chip[data-v]').forEach(b=>b.onclick=()=>{S.v=b.dataset.v;render()});
   $('#sort').onchange=draw;$('#incl').onchange=e=>{S.incl=e.target.checked;findAlts();draw()};$('#more').onclick=()=>{S.shown+=60;draw()};
+  const wlab=()=>{const on=T.wish.some(x=>x.i===c.i);const h=$('#hwish');h.className='chip'+(on?' on':'');h.textContent=on?'♡ On your wishlist (tap to remove)':'♡ Add to my wishlist'};wlab();
+  $('#hwish').onclick=()=>{const n=T.wish.findIndex(x=>x.i===c.i);if(n>=0)T.wish.splice(n,1);else T.wish.push({i:c.i,k:S.v});tSave();wlab();toast(n>=0?'Removed from wishlist':'Added to your wishlist')};
   findAlts();draw();fillFriendPanel()}
 
 // ---- Alternatives: every card with any printing priced within +/- $range ----
@@ -475,7 +502,7 @@ const ftFirst=arr=>{if(!FT.by.size)return arr;const ws=WS_CUR||myWishSet(),a=[],
 function ftGo(owner,list){closeModal();setTimeout(()=>{showTab('friends');fvGo('profile',{handle:owner,focus:list})},350)}
 function ftDlg(i){
   const c=cardById(i),a=FT.by.get(i)||[];if(!c||!a.length)return;
-  modal(`<h3>${esc(c.name)}</h3><p class="mu">${esc(c.set)}${c.lang==='jp'?' · JP':''} · #${esc(c.number)}<br>On your friends' lists:</p>${a.map((x,n)=>{const m=c.v[x.k]?c.v[x.k][0]:0;return `<div class="review"><b>@${esc(x.o)}</b> <span class="tag">${MODE_TXT[x.m]||'Trade or sale'}</span><div class="mu">${esc(x.ln)} · ${esc(x.k)} · ${x.p>0?money(x.p)+' asking':(m>0?money(m)+' market':'no price')}</div><button class="btn" data-n="${n}" style="margin-top:6px">Go to @${esc(x.o)}'s list</button></div>`}).join('')}<a class="btn alt" style="text-decoration:none" target="_blank" rel="noopener" href="${esc(link(c,a[0].k))}">Open on TCGplayer</a><button class="btn alt" id="ftno" style="margin-top:8px">Close</button>`);
+  modal(`<h3>${esc(c.name)}</h3><p class="mu">${esc(c.set)}${c.lang==='jp'?' · JP':''} · #${esc(c.number)}<br>On your friends' lists:</p>${a.map((x,n)=>{const m=c.v[x.k]?c.v[x.k][0]:0;return `<div class="review"><b>@${esc(x.o)}</b> <span class="tag">${MODE_TXT[x.m]||'Trade or sale'}</span><div class="mu">${esc(x.ln)} · ${esc(x.k)} · ${x.p>0?money(x.p)+' asking':(m>0?money(m)+' market':'no price')}</div><button class="btn" data-n="${n}" style="margin-top:6px">Go to @${esc(x.o)}'s list</button><button class="btn alt" data-req="${esc(x.o)}|${x.i}|${esc(x.k)}|${x.p||0}" style="margin-top:6px">🙋 Request this card</button></div>`}).join('')}<a class="btn alt" style="text-decoration:none" target="_blank" rel="noopener" href="${esc(link(c,a[0].k))}">Open on TCGplayer</a><button class="btn alt" id="ftno" style="margin-top:8px">Close</button>`);
   $('#ftno').onclick=()=>closeModal();
   document.querySelectorAll('#modal [data-n]').forEach(b=>b.onclick=()=>{const x=a[+b.dataset.n];ftGo(x.o,x.l)})}
 document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('a[data-fl]');if(!a)return;e.preventDefault();ftDlg(+a.dataset.fl)});
@@ -497,7 +524,7 @@ const matchNew=()=>{if(!ACC.handle)return 0;const sn=mSeenGet();return matchKeys
 function matchMarkSeen(){try{localStorage.setItem('bb_match_seen',JSON.stringify(matchKeys()))}catch(e){}tabLabel()}
 document.addEventListener('toggle',e=>{if(e.target&&e.target.classList&&e.target.classList.contains('match')&&e.target.open){matchMarkSeen();const b=e.target.querySelector('.bell');if(b)b.remove()}},true);
 let FVREQ=0;
-function tabLabel(){const t=document.querySelector('.tab[data-tab="friends"]');if(!t)return;const mc=matchCount();const nn=matchNew(),bd=FVREQ?'<span class="nb">'+FVREQ+'</span>':(mc?'<span class="nb'+(nn?' hot':'')+'">'+(nn?'🔔 '+nn:mc)+'</span>':'');t.innerHTML='👥 Friends'+bd}
+function tabLabel(){const t=document.querySelector('.tab[data-tab="friends"]');if(!t)return;const mc=matchCount();const nn=matchNew(),bd=FVOFF?'<span class="nb hot">📬 '+(FVOFF+FVREQ)+'</span>':FVREQ?'<span class="nb">'+FVREQ+'</span>':(mc?'<span class="nb'+(nn?' hot':'')+'">'+(nn?'🔔 '+nn:mc)+'</span>':'');t.innerHTML='👥 Friends'+bd}
 const owners=a=>[...new Set(a.map(x=>x.o))];
 const ownTxt=a=>{const o=owners(a);return '@'+esc(o[0])+(o.length>1?' +'+(o.length-1):'')};
 function pkMk(r){ // marker on a binder pocket
@@ -512,9 +539,10 @@ function friendPanelInner(c){
   if(!ACC.handle)return '<p class="mu" style="margin:0">Sign in on the Friends tab to see which friends have this card or want it.</p>';
   const have=FT.by.get(c.i)||[],want=FW.by.get(c.i)||[];
   if(!have.length&&!want.length)return '<p class="mu" style="margin:0">None of your friends have this listed or are looking for it.</p>';
-  return (have.length?`<b>👥 Friends who have it (${have.length})</b>`+have.map(x=>{const m=c.v[x.k]?c.v[x.k][0]:0;return `<div class="frow" style="margin-top:6px"><div style="flex:1;min-width:0"><b>@${esc(x.o)}</b> <span class="tag">${MODE_TXT[x.m]||'Trade or sale'}</span><div class="mu">${esc(x.ln)} · ${esc(x.k)} · ${x.p>0?money(x.p)+' asking':(m>0?money(m)+' market':'no price')}</div></div><button class="chip on" data-fgo="${esc(x.o)}|${esc(x.l)}">Go to list</button></div>`}).join(''):'')
+  return (have.length?`<b>👥 Friends who have it (${have.length})</b>`+have.map(x=>{const m=c.v[x.k]?c.v[x.k][0]:0;return `<div class="frow" style="margin-top:6px"><div style="flex:1;min-width:0"><b>@${esc(x.o)}</b> <span class="tag">${MODE_TXT[x.m]||'Trade or sale'}</span><div class="mu">${esc(x.ln)} · ${esc(x.k)} · ${x.p>0?money(x.p)+' asking':(m>0?money(m)+' market':'no price')}</div></div><span style="display:flex;gap:6px;flex-direction:column"><button class="chip on" data-fgo="${esc(x.o)}|${esc(x.l)}">Go to list</button><button class="chip" data-req="${esc(x.o)}|${x.i}|${esc(x.k)}|${x.p||0}">Request</button></span></div>`}).join(''):'')
    +(want.length?`<div style="margin-top:${have.length?10:0}px"><b>🎁 Friends looking for it (${owners(want).length})</b><div class="mu">${owners(want).map(o=>'@'+esc(o)).join(', ')}</div></div>`:'')}
 function fillFriendPanel(){const e=$('#frp');if(e&&S.card)e.innerHTML=friendPanelInner(S.card)}
+document.addEventListener('click',e=>{const q=e.target.closest&&e.target.closest('[data-req]');if(!q)return;const [o,i,k,pr]=q.dataset.req.split('|');offerStart(o,{kind:'request',get:[{i:+i,k,p:+pr||0}],fromModal:true})});
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-fgo]');if(!b)return;const [o,l]=b.dataset.fgo.split('|');ftGo(o,l)});
 function matchPreview(m){
   const f=[];const a=m.have[0],w=m.want[0];
@@ -526,7 +554,7 @@ function matchPanel(){
   const m=matchCalc(),n=m.have.length+m.want.length;
   if(!n)return `<details class="fold match"><summary>🎯 Matches <span class="mu">(none yet)</span></summary><div class="foldbody"><p class="mu">When a friend lists a card you ♡, or a friend wants a card you own or have listed, it shows up here.</p></div></details>`;
   const haveRows=m.have.map(x=>{const c=cardById(x.i);if(!c)return '';const mk=c.v[x.k]?c.v[x.k][0]:0;
-    return `<div class="tl hot"><img src="${esc(c.img)}" alt="" loading="lazy"><div style="flex:1;min-width:0"><b>${esc(c.name)}</b>${c.lang==='jp'?'<span class="lang">JP</span>':''}<span class="tag hit">${MODE_TXT[x.m]||'Trade or sale'}</span><div class="mu">${esc(c.set)} · ${esc(x.k)}<br><b>@${esc(x.o)}</b> · ${esc(x.ln)} · ${x.p>0?money(x.p)+' asking':(mk>0?money(mk):'—')}</div></div><button class="chip on" data-fgo="${esc(x.o)}|${esc(x.l)}">View</button></div>`}).join('');
+    return `<div class="tl hot"><img src="${esc(c.img)}" alt="" loading="lazy"><div style="flex:1;min-width:0"><b>${esc(c.name)}</b>${c.lang==='jp'?'<span class="lang">JP</span>':''}<span class="tag hit">${MODE_TXT[x.m]||'Trade or sale'}</span><div class="mu">${esc(c.set)} · ${esc(x.k)}<br><b>@${esc(x.o)}</b> · ${esc(x.ln)} · ${x.p>0?money(x.p)+' asking':(mk>0?money(mk):'—')}</div></div><span style="display:flex;gap:6px;flex-direction:column"><button class="chip on" data-fgo="${esc(x.o)}|${esc(x.l)}">View</button><button class="chip" data-req="${esc(x.o)}|${x.i}|${esc(x.k)}|${x.p||0}">Request</button></span></div>`}).join('');
   const wantRows=m.want.map(e=>{const c=cardById(e.i);if(!c)return '';const mk=c.v[e.k]?c.v[e.k][0]:0;
     return `<div class="tl hot"><img src="${esc(c.img)}" alt="" loading="lazy"><div style="flex:1;min-width:0"><b>${esc(c.name)}</b>${c.lang==='jp'?'<span class="lang">JP</span>':''}<span class="tag">${e.listed?'On your trade list':'In your binder'}</span><div class="mu">${esc(c.set)}<br>Wanted by ${e.o.map(o=>'<b>@'+esc(o)+'</b>').join(', ')}${mk>0?' · '+money(mk):''}</div></div>${e.listed?'':`<button class="chip on" data-mlist="${e.i}">List it</button>`}</div>`}).join('');
   return `<details class="fold match"><summary>🎯 Matches <span class="mu">(${n})</span>${matchNew()?' <span class="bell">🔔 '+matchNew()+' new</span>':''}${matchPreview(m)}</summary><div class="foldbody">${m.have.length?`<h4 class="mh">👥 Friends have cards you want (${m.have.length})</h4>${haveRows}`:''}${m.want.length?`<h4 class="mh">🎁 Friends want cards you have (${m.want.length})</h4>${wantRows}`:''}</div></details>`}
@@ -639,7 +667,7 @@ async function bRender(load){
   <p class="btot"><b>Page ${money(pv)}</b> · Binder ${money(tv)} · ${cnt} card${cnt===1?'':'s'}${wc?`<br><span>♡ Wishlist ${money(wl)} · ${wc} card${wc===1?'':'s'}</span>`:''}</p>${bTrend(b,tv)}
   <div class="row" style="align-items:center;justify-content:center;gap:10px;margin:6px 0"><button class="chip" id="bprev"${BD.page===0?' disabled':''}>◀</button><b>Page ${BD.page+1} of ${b.pages.length}</b><button class="chip" id="bnext"${BD.page>=b.pages.length-1?' disabled':''}>▶</button></div>
   <div class="acts"><button class="chip" id="bfill">📷 Fill page from photo</button><button class="chip" id="bmovep">↔ Move page</button><button class="chip" id="baddp">＋ Add page</button></div>
-  ${BD.sel?'<p class="mu" style="text-align:center;color:#f5c542;margin:4px 0">Moving a card: tap the pocket to move it to. <button class="chip" id="bcancel">Cancel</button></p>':''}
+  ${BD.sel?'<p class="mu" style="text-align:center;color:var(--ac);margin:4px 0">Moving a card: tap the pocket to move it to. <button class="chip" id="bcancel">Cancel</button></p>':''}
   <div class="bgrid" style="grid-template-columns:repeat(${b.cols},1fr);max-width:${b.cols*98+16+(b.cols-1)*6}px">${pg.map((r,i)=>{
     const c=r&&cardById(r.i);
     if(!r)return `<button class="pk" data-i="${i}">＋</button>`;
@@ -825,18 +853,19 @@ function bWireDrag(b){DR.b=b;document.querySelectorAll('.pk.has').forEach(el=>{
 
 // ================= Trade (scan a stack, see its value, find cards worth about that) =================
 const TK='bb_trade_v1';
-const T={f:{},fold:{},lists:[],cur:'',mine:[],theirs:[],pct:100,incl:false,mode:'about',range:5,lang:'en',review:[],msg:'',shown:40,results:[],rid:0};
+const T={f:{},fold:{},lists:[],cur:'',mine:[],theirs:[],wish:[],wishVis:'friends',tab:'list',pct:100,incl:false,mode:'about',range:5,lang:'en',review:[],msg:'',shown:40,results:[],rid:0};
 const FOLDK='bb_fold_v1';
 try{Object.assign(T.fold,JSON.parse(localStorage.getItem(FOLDK)||'{}'))}catch(e){}
 const tFold=(key,sum,body,def)=>`<details class="fold" data-fk="${key}"${(T.fold[key]===undefined?def:T.fold[key])?' open':''}><summary>${sum}</summary><div class="foldbody">${body}</div></details>`;
 function tVisDlg(l){
   const opts=[['private','🔒 Private','Only you. Not shown to anyone.'],['friends','👥 Friends only','Your friends see it on your profile and in their searches.'],['public','🌐 Public','Anyone can find it in Browse.']];
-  modal(`<h3>Who can see "${esc(l.name)}"?</h3>${opts.map(([v,t,d])=>`<button class="btn alt" data-vis="${v}" style="margin-bottom:8px;text-align:left;${tVis(l)===v?'border-color:#f5c542;':''}">${t}<div class="mu" style="font-weight:400;font-size:12px">${d}</div></button>`).join('')}<button class="btn" id="no">Close</button>`);
+  modal(`<h3>Who can see "${esc(l.name)}"?</h3>${opts.map(([v,t,d])=>`<button class="btn alt" data-vis="${v}" style="margin-bottom:8px;text-align:left;${tVis(l)===v?'border-color:var(--ac);':''}">${t}<div class="mu" style="font-weight:400;font-size:12px">${d}</div></button>`).join('')}<button class="btn" id="no">Close</button>`);
   $('#no').onclick=()=>closeModal();
   document.querySelectorAll('#modal [data-vis]').forEach(el=>el.onclick=()=>{const v=el.dataset.vis;
     const apply=()=>{l.vis=v;tSave();closeModal();tRender();toast(v==='private'?'List is private':v==='public'?'List is public':'Friends can see this list')};
     if(v!=='private'&&!ACC.handle){accDlg(()=>setTimeout(apply,0));return}
     apply()})}
+const tTarget=()=>T.tab==='wish'?T.wish:T.mine;
 function tNewId(){return 'l'+Date.now().toString(36)+Math.random().toString(36).slice(2,5)}
 function tSetCur(id){const l=T.lists.find(x=>x.id===id)||T.lists[0];T.cur=l.id;T.mine=l.items}
 const tVis=l=>l.vis||(l.share===false?'private':'friends');
@@ -844,14 +873,15 @@ const tCurList=()=>T.lists.find(x=>x.id===T.cur)||T.lists[0];
 function tLoad(){try{const j=JSON.parse(localStorage.getItem(TK)||'null');if(j){
   if(Array.isArray(j.lists)&&j.lists.length){T.lists=j.lists.map(l=>({id:String(l.id),name:String(l.name||'List').slice(0,40),items:Array.isArray(l.items)?l.items:[],vis:l.vis||(l.share===false?'private':'friends')}));T.cur=j.cur}
   else T.lists=[{id:'main',name:'My trade list',items:Array.isArray(j.mine)?j.mine:[],vis:j.share===false?'private':'friends'}];
-  T.theirs=Array.isArray(j.theirs)?j.theirs:[];T.pct=+j.pct||100;T.incl=!!j.incl}}catch(e){}
+  T.theirs=Array.isArray(j.theirs)?j.theirs:[];T.pct=+j.pct||100;T.incl=!!j.incl;T.wish=Array.isArray(j.wish)?j.wish.filter(x=>x&&x.i&&x.k):[];T.wishVis=j.wishVis||'friends'}}catch(e){}
   if(!T.lists.length)T.lists=[{id:'main',name:'My trade list',items:[],vis:'friends'}];
   tSetCur(T.cur)}
-function tSave(){try{localStorage.setItem(TK,JSON.stringify({v:2,lists:T.lists,cur:T.cur,theirs:T.theirs,pct:T.pct,incl:T.incl}))}catch(e){}tradeSyncSoon()}
+function tSave(){try{localStorage.setItem(TK,JSON.stringify({v:2,lists:T.lists,cur:T.cur,theirs:T.theirs,pct:T.pct,incl:T.incl,wish:T.wish,wishVis:T.wishVis}))}catch(e){}tradeSyncSoon()}
 let TSYNC=null;
 function tradeSyncSoon(){if(!ACC.handle)return;clearTimeout(TSYNC);TSYNC=setTimeout(()=>{
   const lists=T.lists.filter(l=>tVis(l)!=='private'&&l.items.length).map(l=>({id:l.id,name:l.name,vis:tVis(l),items:l.items.map(r=>{const o={i:r.i,k:r.k,m:r.m||'either'};if(r.p>0)o.p=r.p;return o})}));
-  api('trade_sync',{lists}).catch(()=>{})},1500)}
+  const wish=T.wishVis!=='private'&&T.wish.length?{vis:T.wishVis,items:T.wish.map(r=>({i:r.i,k:r.k}))}:null;
+  api('trade_sync',{lists,wish}).catch(()=>{})},1500)}
 const isListed=r=>!!r&&!r.w&&T.lists.some(l=>l.items.some(x=>x.i===r.i&&x.k===r.k));
 function tNameDlg(title,init,okLabel,cb,back){
   modal(`<h3>${title}</h3><input id="lnm" type="text" maxlength="40" value="${esc(init||'')}" placeholder="e.g. Card show Dec 14" style="width:100%"><button class="btn" id="lok" style="margin-top:10px">${okLabel}</button><button class="btn alt" id="lcancel" style="margin-top:8px">Cancel</button>`);
@@ -883,36 +913,45 @@ function tRow(r,side,i){
 const MODE_LBL={trade:'🔄 Trade',sale:'💵 Sale',either:'🔄💵 Trade or sale'};
 const MODE_NEXT={either:'trade',trade:'sale',sale:'either'};
 
-async function tRender(load){
-  if(load)await tEnsure();
-  const v=$('#tradeView');if(!v)return;
-  const a=tSum(T.mine),b=tSum(T.theirs),tv=a.val*T.pct/100,diff=tv-b.val;
-  const cl=tCurList();
-  v.innerHTML=`<div class="chips" style="margin-top:4px">${T.lists.map(l=>`<button class="chip${l.id===T.cur?' on':''}" data-act="tlist" data-id="${esc(l.id)}">${esc(l.name)} (${l.items.length})</button>`).join('')}<button class="chip" data-act="tnew">＋ New list</button></div>
-  ${tFold('offer',`${esc(cl.name)} <span class="mu">(${T.mine.length} card${T.mine.length===1?'':'s'})</span>`,`  <div class="chips" style="margin-bottom:8px"><button class="chip" data-act="trename">✎ Rename</button><button class="chip" data-act="tdel">🗑 Delete list</button></div>
-  <button class="btn alt" id="tvis" style="margin:0 0 8px">👁 Who can see this list: ${visLabel(tVis(cl))}</button>
-  <div class="cams"><label class="btn" for="tfile">📷 Scan card</label><label class="btn alt" for="tfile2">🖼️ Scan photos</label></div>
-  <input id="tfile" class="pick" type="file" accept="image/*" capture="environment"><input id="tfile2" class="pick" type="file" accept="image/*" multiple>
-  <button class="btn alt" data-act="addmine" style="margin-bottom:8px">＋ Add by name</button>
-  ${T.msg?`<p class="mu" id="tmsg" style="color:#f5c542">${esc(T.msg)}</p>`:''}
-  ${T.review.length?`<h3>Needs a quick look (${T.review.length})</h3>${T.review.map(rv=>`<div class="review"><div style="display:flex;gap:10px;align-items:center">${rv.thumb?`<img src="${rv.thumb}" alt="" style="width:64px;border-radius:6px">`:''}<div><b>${esc(rv.label||'Unknown card')}</b><div class="mu">${esc(rv.note||'Tap the right one:')}</div></div></div>${rv.pairs.map((p,n)=>`<button class="item pair" data-act="pair" data-r="${rv.id}" data-p="${n}"><img src="${esc(p.c.img)}" loading="lazy" alt=""><div style="flex:1;min-width:0"><b style="margin:0">${esc(p.c.name)}</b>${p.c.lang==='jp'?'<span class="lang">JP</span>':''}<div class="mu">${esc(p.c.set)} · #${esc(p.c.number)}<br>${esc(p.k)}</div></div><span class="tag">${p.c.v[p.k][0]>0?money(p.c.v[p.k][0]):'—'}</span></button>`).join('')}<div class="row"><button class="chip" data-act="manual" data-r="${rv.id}">Search by name</button><button class="chip" data-act="skip" data-r="${rv.id}">Skip</button></div></div>`).join('')}`:''}
-  ${T.mine.length?T.mine.map((r,i)=>tRow(r,'mine',i)).join(''):'<p class="mu">Scan or add the cards you want to trade or sell. They do not need to be in a binder. Tap the label on a card to switch between Trade, Sale, or both.</p>'}
-`,true)}
-  ${tFold('calc',`Trade value ${money(tv)} <span class="mu">(${T.pct}%)</span>`,`<div class="panel"><div class="prow"><span>Trade value %</span><input id="tpct" type="number" inputmode="decimal" min="1" max="200" value="${T.pct}"></div>
-  <div class="chips"><button class="chip${T.pct===100?' on':''}" data-act="pct" data-v="100">100%</button><button class="chip${T.pct===90?' on':''}" data-act="pct" data-v="90">90%</button><button class="chip${T.pct===80?' on':''}" data-act="pct" data-v="80">80%</button><button class="chip${T.pct===70?' on':''}" data-act="pct" data-v="70">70%</button><button class="chip${T.pct===60?' on':''}" data-act="pct" data-v="60">60%</button></div>
+const wishObj={name:'My wishlist',get vis(){return T.wishVis},set vis(v){T.wishVis=v}};
+const binderWishes=()=>{const m=new Map();for(const b of BD.binders)for(const pg of b.pages)for(const r of pg)if(r&&r.w&&!m.has(r.i))m.set(r.i,r);return [...m.values()]};
+function tListHtml(){
+  const a=tSum(T.mine),b=tSum(T.theirs),tv=a.val*T.pct/100,diff=tv-b.val,cl=tCurList();
+  const mathSum=T.mine.length?`${money(tv)} <span class="mu">(${T.pct}%) · ${T.theirs.length?(diff>=0?'ahead '+money(diff):'owe '+money(-diff)):'nothing on their side'}</span>`:'<span class="mu">add cards first</span>';
+  return `<div class="chips">${T.lists.map(l=>`<button class="chip${l.id===T.cur?' on':''}" data-act="tlist" data-id="${esc(l.id)}">${esc(l.name)} (${l.items.length})</button>`).join('')}<button class="chip" data-act="tnew">＋ New</button></div>
+  <div class="lhead"><div style="min-width:0"><b class="lname">${esc(cl.name)}</b><div class="mu">${T.mine.length} card${T.mine.length===1?'':'s'} · ${visLabel(tVis(cl))}</div></div><div class="row" style="margin:0;flex:0 0 auto"><button class="chip on" data-act="tadd">＋ Add</button><button class="chip" data-act="tmenu" aria-label="List options">⋯</button></div></div>
+  ${T.msg?`<p class="mu" id="tmsg" style="color:var(--ac)">${esc(T.msg)}</p>`:''}
+  ${T.review.length?`<h3>Needs a quick look (${T.review.length})</h3>${T.review.map(rv=>`<div class="review"><div style="display:flex;gap:10px;align-items:center">${rv.thumb?`<img src="${rv.thumb}" alt="" style="width:64px;border-radius:6px">`:''}<div><b>${esc(rv.label||'Unknown card')}</b><div class="mu">${esc(rv.note||'Tap the right one:')}</div></div></div>${rv.pairs.map((p,n)=>`<button class="item pair" data-act="pair" data-r="${rv.id}" data-p="${n}"><img src="${esc(p.c.img)}" loading="lazy" alt=""><div style="flex:1;min-width:0"><b style="margin:0">${esc(p.c.name)}</b>${p.c.lang==='jp'?'<span class="lang">JP</span>':''}<div class="mu">${esc(p.c.set)} · #${esc(p.c.number)}<br>${esc(p.k)}</div></div><div class="tp">${money(p.c.v[p.k][0])}</div></button>`).join('')}<div class="row"><button class="btn alt" data-act="manual" data-r="${rv.id}">Search by name</button><button class="btn alt" data-act="skip" data-r="${rv.id}">Skip</button></div></div>`).join('')}`:''}
+  ${T.mine.length?T.mine.map((r,i)=>tRow(r,'mine',i)).join(''):'<p class="mu">Tap ＋ Add to scan or search the cards you want to trade or sell. They do not need to be in a binder. Tap a card\'s label to switch between Trade, Sale, or both.</p>'}
+  ${tFold('calc',`Trade math <span class="mu">${mathSum}</span>`,`<div class="panel"><div class="prow"><span>Trade value %</span><input id="tpct" type="number" inputmode="decimal" min="1" max="200" value="${T.pct}"></div>
+  <div class="chips">${[100,90,80,70,60].map(n=>`<button class="chip${T.pct===n?' on':''}" data-act="pct" data-v="${n}">${n}%</button>`).join('')}</div>
   <p class="btot" style="margin-bottom:0"><b style="font-size:20px">Trade value ${money(tv)}</b><br><span>Market total ${money(a.val)} × ${T.pct}%</span></p>
   ${a.skipped?`<p class="mu" style="text-align:center;margin:4px 0">${a.skipped} card${a.skipped>1?'s':''} left out because of an uncertain price (⚠).</p>`:''}
   <label class="mu" style="display:block;text-align:center;margin-top:4px"><input type="checkbox" id="tinc"${T.incl?' checked':''}> count uncertain-price cards</label></div>
-`,false)}
-  ${tFold('their',`Their side <span class="mu">(${T.theirs.length} card${T.theirs.length===1?'':'s'}, ${money(b.val)})</span>`,`  ${T.theirs.length?T.theirs.map((r,i)=>tRow(r,'theirs',i)).join(''):'<p class="mu">Optional: add the cards you would get, or tap ＋ Get on a card below.</p>'}
+  <h4 class="mh">Their side <span class="mu">(${T.theirs.length} card${T.theirs.length===1?'':'s'}, ${money(b.val)})</span></h4>
+  ${T.theirs.length?T.theirs.map((r,i)=>tRow(r,'theirs',i)).join(''):'<p class="mu">Optional: add the cards you would get, or tap ＋ Get on a card below.</p>'}
   <button class="btn alt" data-act="addtheirs" style="margin:6px 0">＋ Add by name</button>
-  ${T.mine.length?`<p class="btot"><b>${diff>=0?`You're ahead ${money(diff)}`:`You owe ${money(-diff)}`}</b><br><span>${T.theirs.length?'your trade value vs their market value':'nothing on their side yet'}</span></p>`:''}
-`,false)}
-  ${tFold('find',`Cards worth about ${money(Math.max(0,diff))}`,`  <div class="panel"><div class="prow"><span>Cards</span><div class="chips"><button class="chip${T.lang==='en'?' on':''}" data-act="tlang" data-v="en">English</button><button class="chip${T.lang==='jp'?' on':''}" data-act="tlang" data-v="jp">Japanese</button><button class="chip${T.lang==='both'?' on':''}" data-act="tlang" data-v="both">Both</button></div></div>
+  ${T.mine.length?`<p class="btot"><b>${diff>=0?`You're ahead ${money(diff)}`:`You owe ${money(-diff)}`}</b><br><span>${T.theirs.length?'your trade value vs their market value':'nothing on their side yet'}</span></p>`:''}`,false)}
+  ${tFold('find',`Cards worth about ${money(Math.max(0,diff))}`,`<details class="fbar"><summary>⚙ Options <span class="mu">${T.lang==='en'?'English':T.lang==='jp'?'Japanese':'Both'} · ${T.mode==='about'?'about this value':'up to this value'}</span></summary><div class="panel" style="margin-top:0"><div class="prow"><span>Cards</span><div class="chips"><button class="chip${T.lang==='en'?' on':''}" data-act="tlang" data-v="en">English</button><button class="chip${T.lang==='jp'?' on':''}" data-act="tlang" data-v="jp">Japanese</button><button class="chip${T.lang==='both'?' on':''}" data-act="tlang" data-v="both">Both</button></div></div>
   <div class="prow"><span>Show</span><div class="chips"><button class="chip${T.mode==='about'?' on':''}" data-act="mode" data-v="about">About this value</button><button class="chip${T.mode==='upto'?' on':''}" data-act="mode" data-v="upto">Up to this value</button></div></div>
-  ${T.mode==='about'?`<div class="prow"><span>Range ± $</span><div class="stp"><button class="stpb" data-dir="-1" aria-label="Less">−</button><input id="trng" type="number" inputmode="decimal" min="0" step="1" value="${T.range}"><button class="stpb" data-dir="1" aria-label="More">+</button></div></div>`:''}</div>
-  <div id="tfbar"></div><div id="tres"></div>`,false)}`;
-  tWire();tResults();
+  ${T.mode==='about'?`<div class="prow"><span>Range ± $</span><div class="stp"><button class="stpb" data-dir="-1" aria-label="Less">−</button><input id="trng" type="number" inputmode="decimal" min="0" step="1" value="${T.range}"><button class="stpb" data-dir="1" aria-label="More">+</button></div></div>`:''}</div></details>
+  <div id="tfbar"></div><div id="tres"></div>`,false)}`}
+function tWishHtml(){
+  const bw=binderWishes().filter(r=>!T.wish.some(x=>x.i===r.i));
+  return `<div class="lhead"><div style="min-width:0"><b class="lname">♡ My wishlist</b><div class="mu">${T.wish.length} card${T.wish.length===1?'':'s'} · ${visLabel(tVis(wishObj))}</div></div><div class="row" style="margin:0;flex:0 0 auto"><button class="chip on" data-act="tadd">＋ Add</button><button class="chip" data-act="wvis" aria-label="Who can see">👁</button></div></div>
+  <p class="mu" style="margin-top:0">Cards you are hunting for. Friends can see them and get a 🎯 when they have one. Cards you ♡ in a binder count too.</p>
+  ${T.msg?`<p class="mu" id="tmsg" style="color:var(--ac)">${esc(T.msg)}</p>`:''}
+  ${T.review.length?`<h3>Needs a quick look (${T.review.length})</h3>${T.review.map(rv=>`<div class="review"><b>${esc(rv.label||'Unknown card')}</b><div class="mu">${esc(rv.note||'Tap the right one:')}</div>${rv.pairs.map((p,n)=>`<button class="item pair" data-act="pair" data-r="${rv.id}" data-p="${n}"><img src="${esc(p.c.img)}" loading="lazy" alt=""><div style="flex:1;min-width:0"><b style="margin:0">${esc(p.c.name)}</b><div class="mu">${esc(p.c.set)} · #${esc(p.c.number)}<br>${esc(p.k)}</div></div><div class="tp">${money(p.c.v[p.k][0])}</div></button>`).join('')}<div class="row"><button class="btn alt" data-act="manual" data-r="${rv.id}">Search by name</button><button class="btn alt" data-act="skip" data-r="${rv.id}">Skip</button></div></div>`).join('')}`:''}
+  ${T.wish.length?T.wish.map((r,i)=>tRow(r,'wish',i)).join(''):'<p class="mu">Nothing here yet. Tap ＋ Add to search a card, or scan one.</p>'}
+  ${bw.length?tFold('bwish',`From your binders <span class="mu">(${bw.length})</span>`,bw.map(r=>{const c=cardById(r.i);return c?`<div class="trow"><img src="${esc(c.img)}" alt="" loading="lazy"><div style="flex:1;min-width:0"><b>${esc(c.name)}</b><div class="mu">${esc(c.set)} · #${esc(c.number)}</div></div><span class="tag">♡ binder</span></div>`:''}).join(''),false):''}`}
+async function tRender(load){
+  if(load)await tEnsure();
+  const v=$('#tradeView');if(!v)return;
+  const wn=new Set(T.wish.map(r=>r.i).concat(binderWishes().map(r=>r.i))).size;
+  v.innerHTML=`<div class="seg"><button class="${T.tab==='wish'?'':'on'}" data-act="ttab" data-v="list">🔄 Trade lists</button><button class="${T.tab==='wish'?'on':''}" data-act="ttab" data-v="wish">♡ Wishlist (${wn})</button></div>
+  <input id="tfile" class="pick" type="file" accept="image/*" capture="environment"><input id="tfile2" class="pick" type="file" accept="image/*" multiple>
+  ${T.tab==='wish'?tWishHtml():tListHtml()}`;
+  tWire();if(T.tab!=='wish')tResults();
 }
 
 function tResults(){
@@ -986,7 +1025,7 @@ async function tScanFiles(files){
       const img=await loadImg(f);thumb=tThumb(img);
       const r=await claudeRead(img),m=await tMatch(r);
       const label=(r.name_english||r.name||'?')+(r.number?' '+r.number+(r.set_total?'/'+r.set_total:''):'');
-      if(m.list.length===1&&m.list[0].vk.length===1&&(m.exact||!m.num)&&!m.foreign){T.mine.push({i:m.list[0].i,k:m.list[0].vk[0]});added++}
+      if(m.list.length===1&&m.list[0].vk.length===1&&(m.exact||!m.num)&&!m.foreign){tTarget().push({i:m.list[0].i,k:m.list[0].vk[0]});added++}
       else if(!m.list.length){T.review.push({id:++T.rid,thumb,label,note:"No match found. Search by name or skip.",pairs:[]})}
       else T.review.push({id:++T.rid,thumb,label,note:m.foreign?"This language isn't on TCGplayer, so there's no exact price. Pick a similar card or skip.":(m.exact||!m.num)?'Which one is yours?':"Couldn't match the exact number. Pick the closest one:",pairs:tPairs(m.list)});
     }catch(err){T.review.push({id:++T.rid,thumb,label:"Couldn't read this card",note:String(err.message||err),pairs:[]})}
@@ -1006,6 +1045,10 @@ $('#tradeView').addEventListener('click',async e=>{
   const el=e.target.closest('[data-act]');if(!el)return;const act=el.dataset.act;
   if(act==='rm'){T[el.dataset.side].splice(+el.dataset.i,1);tSave();tRender()}
   else if(act==='tlist'){tSetCur(el.dataset.id);tSave();tRender()}
+  else if(act==='ttab'){T.tab=el.dataset.v;T.msg='';tRender()}
+  else if(act==='tadd')tAddMenu();
+  else if(act==='tmenu')tListMenu();
+  else if(act==='wvis')tVisDlg(wishObj);
   else if(act==='tnew')tNewList(l=>{tSetCur(l.id);tSave();tRender()});
   else if(act==='trename'){const l=tCurList();tNameDlg('Rename list',l.name,'Save',v=>{l.name=v;tSave();tRender()})}
   else if(act==='tdel'){const l=tCurList();if(!confirm('Delete the list "'+l.name+'"? The cards in it are not deleted from your binders.'))return;T.lists=T.lists.filter(x=>x!==l);if(!T.lists.length)T.lists=[{id:tNewId(),name:'My trade list',items:[],vis:'friends'}];tSetCur(T.lists[0].id);tSave();tRender()}
@@ -1019,8 +1062,20 @@ $('#tradeView').addEventListener('click',async e=>{
   else if(act==='more'){T.shown+=40;tResults()}
   else if(act==='get'){const x=T.results[+el.dataset.n];if(x){T.theirs.push({i:x.c.i,k:x.k});tSave();toast('Added to their side: '+x.c.name);tRender()}}
   else if(act==='skip'){T.review=T.review.filter(r=>r.id!==+el.dataset.r);tRender()}
-  else if(act==='pair'){const rv=T.review.find(r=>r.id===+el.dataset.r);if(!rv)return;const p=rv.pairs[+el.dataset.p];T.mine.push({i:p.c.i,k:p.k});T.review=T.review.filter(r=>r!==rv);tSave();tRender()}
-  else if(act==='manual'){const id=+el.dataset.r;tPick((c,k)=>{T.mine.push({i:c.i,k});T.review=T.review.filter(r=>r.id!==id);tSave();tRender()})}});
+  else if(act==='pair'){const rv=T.review.find(r=>r.id===+el.dataset.r);if(!rv)return;const p=rv.pairs[+el.dataset.p];tTarget().push({i:p.c.i,k:p.k});T.review=T.review.filter(r=>r!==rv);tSave();tRender()}
+  else if(act==='manual'){const id=+el.dataset.r;tPick((c,k)=>{tTarget().push({i:c.i,k});T.review=T.review.filter(r=>r.id!==id);tSave();tRender()})}});
+function tAddMenu(){
+  modal(`<h3>Add cards</h3><label class="btn mbtn" for="tfile" id="ts1">📷 Scan a card</label><label class="btn alt mbtn" for="tfile2" id="ts2" style="margin-top:8px">🖼️ Scan photos</label><button class="btn alt mbtn" id="tsn" style="margin-top:8px">＋ Search by name</button><button class="btn alt mbtn" id="no" style="margin-top:8px">Close</button>`);
+  $('#no').onclick=()=>closeModal();
+  for(const id of ['#ts1','#ts2'])$(id).addEventListener('click',()=>setTimeout(closeModal,400));
+  $('#tsn').onclick=()=>{closeModal();setTimeout(()=>tPick((c,k)=>{tTarget().push({i:c.i,k});tSave();tRender()}),450)}}
+function tListMenu(){
+  const l=tCurList();
+  modal(`<h3>${esc(l.name)}</h3><button class="btn alt mbtn" id="lm1">✎ Rename list</button><button class="btn alt mbtn" id="lm2" style="margin-top:8px">👁 Who can see: ${visLabel(tVis(l))}</button><button class="btn mbtn" id="lm3" style="margin-top:8px;background:#b91c1c;color:#fff">🗑 Delete list</button><button class="btn alt mbtn" id="no" style="margin-top:8px">Close</button>`);
+  $('#no').onclick=()=>closeModal();
+  $('#lm1').onclick=()=>{closeModal();setTimeout(()=>tNameDlg('Rename list',l.name,'Save',v=>{l.name=v;tSave();tRender()}),450)};
+  $('#lm2').onclick=()=>{closeModal();setTimeout(()=>tVisDlg(l),450)};
+  $('#lm3').onclick=()=>{closeModal();setTimeout(()=>{if(!confirm('Delete the list "'+l.name+'"? The cards in it are not deleted from your binders.'))return;T.lists=T.lists.filter(x=>x!==l);if(!T.lists.length)T.lists=[{id:tNewId(),name:'My trade list',items:[],vis:'friends'}];tSetCur(T.lists[0].id);tSave();tRender()},450)}}
 tLoad();
 $('#tradeView').addEventListener('toggle',e=>{const d=e.target;if(!d||!d.dataset||!d.dataset.fk)return;T.fold[d.dataset.fk]=d.open;try{localStorage.setItem(FOLDK,JSON.stringify(T.fold))}catch(err){}},true);
 
@@ -1120,7 +1175,7 @@ const visLabel=v=>v==='public'?'🌐 Public':v==='friends'?'👥 Friends only':'
 const fmtCode=c=>String(c).replace(/(.{5})(?=.)/g,'$1-');
 const ago=ts=>{const m=Math.max(0,Math.floor((Date.now()-ts)/60000));if(m<1)return'just now';if(m<60)return m+' min ago';const h=Math.floor(m/60);if(h<24)return h+' h ago';const d=Math.floor(h/24);return d+' day'+(d>1?'s':'')+' ago'};
 const tcgImg=i=>'https://tcgplayer-cdn.tcgplayer.com/product/'+(+i)+'_200w.jpg';
-const fvBadge=n=>{FVREQ=n||0;tabLabel()};
+let FVOFF=0;const fvBadge=(n,inbox)=>{FVREQ=n||0;if(inbox!==undefined)FVOFF=inbox||0;tabLabel()};
 
 function accDlg(done){
   modal(`<h3>Pick a handle</h3><p class="mu">This is how friends find you. Use 3 to 20 letters, numbers or underscores. No email needed.</p><input id="ah" type="text" placeholder="e.g. alex_cards" maxlength="20" autocapitalize="none" autocorrect="off" spellcheck="false" style="width:100%"><p class="mu" id="aerr" style="color:#ff9b9b;min-height:1.2em"></p><button class="btn" id="aok">Create account</button><button class="btn alt" id="alog" style="margin-top:8px">I already have an account</button><button class="btn alt" id="ano" style="margin-top:8px">Cancel</button>`);
@@ -1159,7 +1214,7 @@ function acctMenu(){
     ACC.handle='';ACC.code='';accSave();for(const k in SYNCED)delete SYNCED[k];fvBadge(0);toast('Signed out');if(NAV.tab==='friends')fvRender();else bRender()},150)}}
 function bVisDlg(b){
   const opts=[['private','🔒 Private','Only you. Stays on this phone.'],['friends','👥 Friends only','Your friends can view it.'],['public','🌐 Public','Anyone can find it in Browse.']];
-  modal(`<h3>Who can see "${esc(b.name)}"?</h3>${opts.map(([v,l,d])=>`<button class="btn alt" data-vis="${v}" style="margin-bottom:8px;text-align:left;${(b.vis||'private')===v?'border-color:#f5c542;':''}">${l}<div class="mu" style="font-weight:400;font-size:12px">${d}</div></button>`).join('')}<p class="mu">Viewers see your cards and today's prices. They never see what you paid.</p><button class="btn" id="no">Close</button>`);
+  modal(`<h3>Who can see "${esc(b.name)}"?</h3>${opts.map(([v,l,d])=>`<button class="btn alt" data-vis="${v}" style="margin-bottom:8px;text-align:left;${(b.vis||'private')===v?'border-color:var(--ac);':''}">${l}<div class="mu" style="font-weight:400;font-size:12px">${d}</div></button>`).join('')}<p class="mu">Viewers see your cards and today's prices. They never see what you paid.</p><button class="btn" id="no">Close</button>`);
   $('#no').onclick=()=>closeModal();
   document.querySelectorAll('#modal [data-vis]').forEach(el=>el.onclick=()=>{const v=el.dataset.vis;
     const apply=()=>{const was=b.vis||'private';b.vis=v;
@@ -1168,10 +1223,10 @@ function bVisDlg(b){
     if(v!=='private'&&!ACC.handle){accDlg(()=>setTimeout(apply,0));return}
     apply()})}
 
-function fvBack(){if(FV.view==='binder')fvGo(FV.from==='browse'?'browse':'profile',FV.from==='browse'?{}:{handle:FV.owner});else fvGo('home')}
+function fvBack(){if(FV.view==='offer'&&OF.back&&OF.back.view&&OF.back.view!=='offer'&&OF.back.view!=='inbox'){fvGo(OF.back.view,OF.back.args||{});return}if(FV.view==='binder')fvGo(FV.from==='browse'?'browse':'profile',FV.from==='browse'?{}:{handle:FV.owner});else fvGo('home')}
 function fvGo(view,args,fromPop){const from=FV.view;Object.assign(FV,{view,handle:'',owner:'',id:'',page:0,focus:''},args||{});FV.from=from;if(!fromPop)navPush();fvRender()}
 const fvEl=()=>$('#friendsView');
-function fvRender(){const my=++FV.rid;({home:fvHome,profile:fvProfile,binder:fvBinder,browse:fvBrowse}[FV.view]||fvHome)(my)}
+function fvRender(){const my=++FV.rid;({home:fvHome,profile:fvProfile,binder:fvBinder,browse:fvBrowse,offer:fvOffer,inbox:fvInbox}[FV.view]||fvHome)(my)}
 function fvErr(msg){fvEl().innerHTML=`<button class="chip" id="fvback">← Back</button><p class="mu">${esc(msg)}</p>`;$('#fvback').onclick=fvBack}
 const coverHtml=a=>`<div class="cov">${(a||[]).slice(0,4).map(i=>`<img src="${esc(tcgImg(i))}" loading="lazy" alt="">`).join('')}</div>`;
 
@@ -1182,11 +1237,12 @@ async function fvHome(my){
     $('#fvstart').onclick=()=>accDlg(()=>fvRender());$('#fvlogin').onclick=()=>loginDlg(()=>fvRender());$('#fvbrowse').onclick=()=>fvGo('browse');return}
   el.innerHTML='<p class="mu">Loading…</p>';
   let m;try{m=await api('me')}catch(e){if(my!==FV.rid)return;el.innerHTML=`<h3>Friends</h3><p class="mu">${esc(e.message)}</p><button class="btn alt" id="facc">Account</button>`;$('#facc').onclick=acctMenu;return}
-  if(my!==FV.rid)return;fvBadge(m.incoming.length);
-  await ftLoad(true);await fvNeed([...FT.items,...FW.items]);if(my!==FV.rid)return;fvBadge(m.incoming.length);
+  if(my!==FV.rid)return;fvBadge(m.incoming.length,m.inbox);
+  await ftLoad(true);await fvNeed([...FT.items,...FW.items]);if(my!==FV.rid)return;fvBadge(m.incoming.length,m.inbox);
   const mc=matchCalc();
   el.innerHTML=`<div class="row" style="align-items:center;justify-content:space-between;margin-top:4px"><h3 style="margin:0">@${esc(m.handle)}</h3><button class="chip" id="facc">Account</button></div>
   ${matchPanel()}
+  <button class="frow btnrow" id="finbox"><div style="min-width:0"><b>📬 Offers &amp; requests</b><div class="mu">${m.pending?m.pending+' waiting for your reply':'Trade offers and card requests'}</div></div><span>${m.inbox?'<span class="bell">'+m.inbox+' new</span> ':''}<span class="mu">›</span></span></button>
   ${m.incoming.length?`<h3>Friend requests</h3>${m.incoming.map(h=>`<div class="frow"><b>@${esc(h)}</b><span><button class="chip on" data-acc="${esc(h)}">Accept</button> <button class="chip" data-dec="${esc(h)}">Decline</button></span></div>`).join('')}`:''}
   <div class="row" style="align-items:center;justify-content:space-between;margin:14px 0 8px"><h3 style="margin:0">Your friends</h3><button class="chip" id="faddtog">＋ Add</button></div>
   ${m.friends.length?m.friends.map(h=>{const nt=FT.items.filter(x=>x.o===h).length,nw=FW.items.filter(x=>x.o===h).length,mm=mc.have.filter(x=>x.o===h).length+mc.want.filter(x=>x.o.includes(h)).length;
@@ -1194,7 +1250,7 @@ async function fvHome(my){
   <div id="faddbox"${m.friends.length||m.incoming.length?' hidden':''}><div class="row"><input id="fadd" type="text" placeholder="their handle" maxlength="21" autocapitalize="none" autocorrect="off" spellcheck="false"><button class="btn" id="fsend" style="flex:0 0 90px;padding:10px">Send</button></div><p class="mu" id="fmsg" style="min-height:1.2em"></p></div>
   ${m.outgoing.length?`<p class="mu">Waiting on: ${m.outgoing.map(h=>`@${esc(h)} <button class="chip" data-cancel="${esc(h)}">Cancel</button>`).join(' ')}</p>`:''}
   <button class="btn" id="fvbrowse" style="margin-top:14px">🌐 Browse binders, trades &amp; wants</button><p class="mu" style="margin:6px 2px 0;text-align:center">Public binders, trade lists and cards people are looking for.</p>`;
-  $('#facc').onclick=acctMenu;$('#fvbrowse').onclick=()=>fvGo('browse');$('#faddtog').onclick=()=>{const bx=$('#faddbox');bx.hidden=!bx.hidden;if(!bx.hidden)$('#fadd').focus()};
+  $('#facc').onclick=acctMenu;$('#finbox').onclick=()=>fvGo('inbox');$('#fvbrowse').onclick=()=>fvGo('browse');$('#faddtog').onclick=()=>{const bx=$('#faddbox');bx.hidden=!bx.hidden;if(!bx.hidden)$('#fadd').focus()};
   const act=async(a,body,msg)=>{try{await api(a,body);if(msg)toast(msg)}catch(e){toast(e.message)}fvRender()};
   document.querySelectorAll('#friendsView [data-acc]').forEach(b=>b.onclick=()=>act('friend_accept',{from:b.dataset.acc},'You and @'+b.dataset.acc+' are friends'));
   document.querySelectorAll('#friendsView [data-dec]').forEach(b=>b.onclick=()=>act('friend_remove',{who:b.dataset.dec}));
@@ -1203,9 +1259,112 @@ async function fvHome(my){
   $('#fsend').onclick=async()=>{const h=$('#fadd').value.trim().toLowerCase().replace(/^@/,'');if(!h){$('#fmsg').textContent='Enter a handle.';return}
     try{const r=await api('friend_add',{to:h});toast(r.rel==='friend'?'You and @'+h+' are now friends':'Request sent to @'+h);fvRender()}catch(e){$('#fmsg').textContent=e.message}}}
 
+
+// ================= Requests, offers and the inbox =================
+const OF={to:'',kind:'offer',give:[],get:[],cash:0,note:'',counter:'',back:null};
+const OFK=x=>x.i+'|'+x.k;
+const offVal=x=>{if(x.p>0)return x.p;const c=cardById(x.i);return c&&c.v[x.k]?Math.max(0,c.v[x.k][0]||0):0};
+const offSum=a=>a.reduce((t,x)=>t+offVal(x),0);
+const offStrip=a=>a.map(x=>{const o={i:x.i,k:x.k};if(x.p>0)o.p=x.p;return o});
+function offerStart(to,o){o=o||{};
+  Object.assign(OF,{to,kind:o.kind||'offer',give:o.give||[],get:o.get||[],cash:o.cash||0,note:'',counter:o.counter||'',back:{view:FV.view,args:{handle:FV.handle,owner:FV.owner,id:FV.id}}});
+  if(!ACC.handle){toast('Sign in on the Friends tab first');return}
+  closeModal();setTimeout(()=>{showTab('friends');fvGo('offer')},o.fromModal?400:0)}
+function offTot(){
+  const g=offSum(OF.give),t=offSum(OF.get),c=OF.cash||0,mine=g+Math.max(0,c),theirs=t+Math.max(0,-c),d=mine-theirs;
+  return `<b>You give ${money(mine)}</b>${c>0?` <span class="mu">(incl. ${money(c)} cash)</span>`:''} · <b>You get ${money(theirs)}</b>${c<0?` <span class="mu">(incl. ${money(-c)} cash)</span>`:''}<br><span class="mu">${!OF.give.length&&!OF.get.length?'Pick cards below.':Math.abs(d)<0.005?'Even trade.':d>0?`You are giving ${money(d)} more.`:`You are getting ${money(-d)} more.`}</span>`}
+async function fvOffer(my){
+  const el=fvEl();if(!OF.to||!ACC.handle){fvGo('home');return}
+  el.innerHTML='<p class="mu">Loading…</p>';
+  await ftLoad();
+  const theirs=[],seen=new Set();
+  for(const x of FT.items)if(x.o===OF.to&&!seen.has(OFK(x))){seen.add(OFK(x));theirs.push({i:x.i,k:x.k,p:x.p||0})}
+  for(const x of OF.get)if(!seen.has(OFK(x))){seen.add(OFK(x));theirs.push(x)}
+  const mine=[],s2=new Set();
+  for(const l of T.lists)for(const x of l.items)if(!s2.has(OFK(x))){s2.add(OFK(x));mine.push({i:x.i,k:x.k,p:x.p||0})}
+  for(const x of OF.give)if(!s2.has(OFK(x))){s2.add(OFK(x));mine.push(x)}
+  await fvNeed([...theirs,...mine]);if(my!==FV.rid)return;
+  const on=(arr,x)=>arr.some(y=>OFK(y)===OFK(x));
+  const row=(x,side,arr)=>{const c=cardById(x.i);if(!c)return '';return `<label class="trow ofr"><input type="checkbox" data-ofs="${side}|${x.i}|${esc(x.k)}|${x.p||0}"${on(arr,x)?' checked':''}><img src="${esc(c.img)}" alt="" loading="lazy"><div style="flex:1;min-width:0"><b>${esc(c.name)}</b>${c.lang==='jp'?'<span class="lang">JP</span>':''}<div class="mu">${esc(c.set)} · ${esc(x.k)}</div></div><div class="tp">${money(offVal(x))}</div></label>`};
+  const ttl=OF.counter?'Counter @'+esc(OF.to)+"'s offer":OF.kind==='request'?'Request a card from @'+esc(OF.to):'Offer a trade to @'+esc(OF.to);
+  el.innerHTML=`<button class="chip" id="fvback">← Back</button><h3 style="margin:12px 0 4px">${ttl}</h3>
+  <p class="mu" style="margin-top:0">${OF.kind==='request'&&!OF.counter?'Tick the card(s) you would like. Offer something back if you want to.':'Tick what you would get and what you would give.'}</p>
+  <h4 class="mh">You get from @${esc(OF.to)}</h4>${theirs.length?theirs.map(x=>row(x,'get',OF.get)).join(''):`<p class="mu">@${esc(OF.to)} has nothing listed right now. You can still add a card by name.</p>`}
+  <button class="btn alt" id="ofaddget" style="margin:6px 0">＋ Add another card by name</button>
+  <h4 class="mh">You give${OF.kind==='request'&&!OF.counter?' (optional)':''}</h4>${mine.length?mine.map(x=>row(x,'give',OF.give)).join(''):'<p class="mu">Nothing on your trade lists yet. Add cards by name, or build a list in the Trade tab.</p>'}
+  <button class="btn alt" id="ofaddgive" style="margin:6px 0">＋ Add another card by name</button>
+  <div class="panel"><div class="prow"><span>You add cash $</span><input id="ofc1" type="number" inputmode="decimal" min="0" step="0.5" value="${OF.cash>0?OF.cash:''}" placeholder="0"></div><div class="prow"><span>They add cash $</span><input id="ofc2" type="number" inputmode="decimal" min="0" step="0.5" value="${OF.cash<0?-OF.cash:''}" placeholder="0"></div></div>
+  <div class="panel" id="oftot">${offTot()}</div>
+  <div class="row"><input id="ofnote" type="text" maxlength="300" placeholder="Add a note (e.g. can meet Saturday?)" value="${esc(OF.note)}"></div>
+  <button class="btn" id="ofsend">${OF.counter?'Send counter-offer':OF.kind==='request'?'Send request':'Send offer'}</button>
+  <p class="mu" style="text-align:center">Binder Buddy does not handle payment or shipping. Work out the swap with your friend.</p>`;
+  $('#fvback').onclick=fvBack;
+  el.querySelectorAll('[data-ofs]').forEach(cb=>cb.onchange=()=>{const [side,i,k,pr]=cb.dataset.ofs.split('|'),arr=OF[side],x={i:+i,k,p:+pr||0},n=arr.findIndex(y=>OFK(y)===OFK(x));
+    if(cb.checked&&n<0)arr.push(x);else if(!cb.checked&&n>=0)arr.splice(n,1);$('#oftot').innerHTML=offTot()});
+  const cash=()=>{OF.cash=(parseFloat($('#ofc1').value)||0)-(parseFloat($('#ofc2').value)||0);$('#oftot').innerHTML=offTot()};
+  $('#ofc1').oninput=cash;$('#ofc2').oninput=cash;
+  $('#ofnote').oninput=e=>{OF.note=e.target.value};
+  $('#ofaddget').onclick=()=>tPick((c,k)=>{OF.get.push({i:c.i,k});fvRender()});
+  $('#ofaddgive').onclick=()=>tPick((c,k)=>{OF.give.push({i:c.i,k});fvRender()});
+  $('#ofsend').onclick=async()=>{
+    if(!OF.give.length&&!OF.get.length){toast('Pick at least one card');return}
+    const body={give:offStrip(OF.give),get:offStrip(OF.get),cash:OF.cash||0,note:OF.note};
+    $('#ofsend').disabled=true;
+    try{if(OF.counter)await api('offer_respond',Object.assign({id:OF.counter,act:'counter'},body));else await api('offer_send',Object.assign({to:OF.to,kind:OF.kind},body));
+      toast(OF.counter?'Counter-offer sent':OF.kind==='request'?'Request sent':'Offer sent');
+      Object.assign(OF,{give:[],get:[],cash:0,note:'',counter:''});fvGo('inbox')}
+    catch(e){toast(e.message);$('#ofsend').disabled=false}}}
+
+const OFS={list:[]};
+const STAT={pending:'⏳ Waiting',accepted:'✅ Agreed',declined:'✖ Declined',cancelled:'Cancelled',countered:'↩ Countered',completed:'🏁 Completed'};
+function offItems(a){return a.length?a.map(x=>{const c=cardById(x.i);return c?`<div class="oi"><img src="${esc(c.img)}" alt="" loading="lazy"><span>${esc(c.name)}<span class="mu"> · ${esc(x.k)}</span></span><b>${money(offVal(x))}</b></div>`:''}).join(''):'<div class="mu">nothing</div>'}
+function offerCard(o){
+  const me=ACC.handle,mine=o.from===me,other=mine?o.to:o.from;
+  const give=mine?o.give:o.get,get=mine?o.get:o.give,cash=mine?o.cash:-o.cash;
+  const pend=o.status==='pending',agreed=o.status==='accepted';
+  const btns=(pend&&!mine?`<button class="btn" data-oa="accept" data-id="${o.id}">Accept</button><div class="row"><button class="btn alt" data-oa="counter" data-id="${o.id}">Counter</button><button class="btn alt" data-oa="decline" data-id="${o.id}">Decline</button></div>`:'')
+   +(pend&&mine?`<button class="btn alt" data-oa="cancel" data-id="${o.id}">Cancel this ${o.kind==='request'?'request':'offer'}</button>`:'')
+   +(agreed?`<button class="btn" data-oa="complete" data-id="${o.id}">🏁 Mark trade completed</button>`:'')
+   +((pend||agreed||o.status==='completed')?`<button class="chip" data-oa="msg" data-id="${o.id}" style="margin-top:8px">💬 Message</button>`:'');
+  return `<div class="ocard${o.unseen?' new':''}"><div class="row" style="align-items:center;justify-content:space-between;margin:0 0 6px"><b>${mine?'You → @'+esc(other):'@'+esc(other)+' → you'}</b><span><span class="tag">${o.kind==='request'?'🙋 Request':'🤝 Offer'}</span><span class="tag${agreed||o.status==='completed'?' hit':''}">${STAT[o.status]||o.status}</span>${o.unseen?'<span class="bell">new</span>':''}</span></div>
+  <div class="mh" style="margin:6px 0 2px;font-size:13px">You give</div>${offItems(give)}${cash>0?`<div class="oi"><span>💵 Cash</span><b>${money(cash)}</b></div>`:''}
+  <div class="mh" style="margin:6px 0 2px;font-size:13px">You get</div>${offItems(get)}${cash<0?`<div class="oi"><span>💵 Cash</span><b>${money(-cash)}</b></div>`:''}
+  ${o.note?`<div class="onote"><b>@${esc(o.from)}:</b> ${esc(o.note)}</div>`:''}${o.thread.map(m=>`<div class="onote"><b>@${esc(m.u)}:</b> ${esc(m.t)}</div>`).join('')}
+  <div class="mu" style="margin-top:4px">${ago(o.updated)}</div>${btns}</div>`}
+function offApplyDone(list){
+  let ap=[];try{ap=JSON.parse(localStorage.getItem('bb_off_applied')||'[]')}catch(e){}
+  const me=ACC.handle;let changed=0,who='';
+  for(const o of list){if(o.status!=='completed'||ap.includes(o.id))continue;
+    const mine=o.from===me,gave=mine?o.give:o.get,got=mine?o.get:o.give;
+    for(const g of gave)for(const l of T.lists){const n=l.items.findIndex(x=>x.i===g.i&&x.k===g.k);if(n>=0){l.items.splice(n,1);changed++}}
+    for(const g of got){const n=T.wish.findIndex(x=>x.i===g.i);if(n>=0){T.wish.splice(n,1);changed++}}
+    ap.push(o.id);who=mine?o.to:o.from}
+  if(changed){tSetCur(T.cur);tSave();toast('Trade with @'+who+' done. Updated your trade list and wishlist. Update your binders too.')}
+  try{localStorage.setItem('bb_off_applied',JSON.stringify(ap.slice(-200)))}catch(e){}}
+async function fvInbox(my){
+  const el=fvEl();el.innerHTML='<p class="mu">Loading…</p>';
+  let r;try{r=await api('offer_list',{mark:true})}catch(e){if(my!==FV.rid)return;fvErr(e.message);return}
+  if(my!==FV.rid)return;
+  await fvNeed(r.offers.flatMap(o=>o.give.concat(o.get)));if(my!==FV.rid)return;
+  OFS.list=r.offers;offApplyDone(r.offers);fvBadge(FVREQ,0);
+  const me=ACC.handle,inc=r.offers.filter(o=>o.to===me&&o.status==='pending'),sent=r.offers.filter(o=>o.from===me&&o.status==='pending'),ag=r.offers.filter(o=>o.status==='accepted'),past=r.offers.filter(o=>!['pending','accepted'].includes(o.status));
+  const sec=(t,a)=>a.length?`<h4 class="mh">${t} (${a.length})</h4>${a.map(offerCard).join('')}`:'';
+  el.innerHTML=`<button class="chip" id="fvback">← Back</button><h3 style="margin:12px 0 6px">📬 Offers &amp; requests</h3>
+  ${r.offers.length?sec('Waiting for your reply',inc)+sec('Agreed',ag)+sec('Sent, waiting',sent)+(past.length?`<details class="fold"><summary>Past <span class="mu">(${past.length})</span></summary><div class="foldbody">${past.map(offerCard).join('')}</div></details>`:''):'<p class="mu">Nothing yet. Open a friend\'s profile and tap Make an offer or Request a card.</p>'}`;
+  $('#fvback').onclick=fvBack;
+  el.querySelectorAll('[data-oa]').forEach(b=>b.onclick=async()=>{
+    const id=b.dataset.id,act=b.dataset.oa,o=OFS.list.find(x=>x.id===id);if(!o)return;
+    const other=o.from===me?o.to:o.from;
+    if(act==='counter'){offerStart(other,{kind:'offer',give:o.get.slice(),get:o.give.slice(),cash:-o.cash,counter:o.id});return}
+    if(act==='msg'){modal(`<h3>Message @${esc(other)}</h3><input id="omsg" type="text" maxlength="300" placeholder="Type a message" style="width:100%"><button class="btn" id="omsend" style="margin-top:10px">Send</button><button class="btn alt" id="no" style="margin-top:8px">Cancel</button>`);
+      $('#no').onclick=()=>closeModal();
+      $('#omsend').onclick=async()=>{const t=$('#omsg').value.trim();if(!t)return;try{await api('offer_msg',{id,text:t});closeModal();toast('Sent');fvRender()}catch(e){toast(e.message)}};return}
+    if(act==='complete'&&!confirm('Mark this trade as completed? Your traded cards come off your trade list and wishlist.'))return;
+    try{await api('offer_respond',{id,act});toast(act==='accept'?'Accepted. Message them to set up the swap.':act==='decline'?'Declined':act==='cancel'?'Cancelled':'Marked completed');fvRender()}catch(e){toast(e.message)}})}
+
 async function fvNeed(list){try{await loadData()}catch(e){return}
   if(list.some(r=>!cardById(r.i))&&!DATA.jp.length){try{await loadJP()}catch(e){}}}
-function myWishSet(){const s=new Set();for(const b of BD.binders)for(const pg of b.pages)for(const r of pg)if(r&&r.w)s.add(r.i);return s}
+function myWishSet(){const s=new Set(T.wish.map(r=>r.i));for(const b of BD.binders)for(const pg of b.pages)for(const r of pg)if(r&&r.w)s.add(r.i);return s}
 function fvCardRow(r,tag,extra){
   const c=cardById(r.i);if(!c)return '';
   const m=c.v[r.k]?c.v[r.k][0]:0;
@@ -1235,12 +1394,15 @@ async function fvProfile(my){
   const rel=l.rel;
   const relHtml=rel==='none'?(ACC.handle?'<button class="btn" id="frel">Add friend</button>':'<p class="mu">Pick a handle in Friends to add them.</p>'):rel==='in'?'<button class="btn" id="frel">Accept friend request</button>':rel==='out'?'<p class="mu">Friend request sent.</p>':rel==='friend'?'<div class="row" style="align-items:center;justify-content:space-between"><span class="mu">✓ Friends</span><button class="chip" id="frm">Remove friend</button></div>':'<p class="mu">This is how others see your profile.</p>';
   el.innerHTML=`<button class="chip" id="fvback">← Back</button><h3 style="margin-top:12px">@${esc(l.handle)}</h3>${relHtml}
+  ${rel==='friend'?'<div class="row"><button class="btn" id="fmoffer">🤝 Make an offer</button><button class="btn alt" id="fmreq">🙋 Request a card</button></div>':''}
   <h3>Binders</h3>${l.binders.length?l.binders.map(b=>`<button class="frow btnrow" data-b="${esc(b.id)}">${coverHtml(b.cover)}<div style="flex:1;min-width:0"><b>${esc(b.name)}</b><div class="mu">${b.cnt} card${b.cnt===1?'':'s'} · ${visLabel(b.vis)} · ${ago(b.updated)}</div></div><span class="mu">›</span></button>`).join(''):`<p class="mu">No binders to show yet.${rel==='friend'||rel==='self'?'':' Friends-only binders appear once you are friends.'}</p>`}`;
   el.insertAdjacentHTML('beforeend',fvTradeHtml(l)+'<button class="btn alt" id="fvplink" style="margin-top:10px">🔗 Share link to this profile</button>');
   if(FV.focus){const d=el.querySelector('details[data-lid="'+FV.focus+'"]');if(d){d.open=true;setTimeout(()=>d.scrollIntoView({block:'start'}),50)}}
   $('#fvplink').onclick=()=>shareUrl(profileLink(l.handle),'@'+l.handle+' on Binder Buddy');
   $('#fvback').onclick=fvBack;
   document.querySelectorAll('#friendsView [data-b]').forEach(b=>b.onclick=()=>fvGo('binder',{owner:l.handle,id:b.dataset.b}));
+  if($('#fmoffer'))$('#fmoffer').onclick=()=>offerStart(l.handle,{kind:'offer'});
+  if($('#fmreq'))$('#fmreq').onclick=()=>offerStart(l.handle,{kind:'request'});
   if($('#frel'))$('#frel').onclick=async()=>{try{const r=await api('friend_add',{to:l.handle});toast(r.rel==='friend'?'You are now friends':'Request sent');fvRender()}catch(e){toast(e.message)}};
   if($('#frm'))$('#frm').onclick=()=>{if(!confirm('Remove @'+l.handle+' from your friends?'))return;api('friend_remove',{who:l.handle}).then(()=>{toast('Removed');fvRender()}).catch(e=>toast(e.message))}}
 
@@ -1308,7 +1470,7 @@ async function fvBinder(my){
     modal(`<h3>${esc(c.name)}${r.w?' <span class="mu">♡ looking for this</span>':''}</h3><p class="mu">${esc(c.set)}${c.lang==='jp'?' · JP':''} · #${esc(c.number)}<br>Near Mint · ${esc(r.k)} · ${money(refVal(r))}</p><a class="btn alt" style="text-decoration:none" target="_blank" rel="noopener" href="${esc(link(c,r.k))}">Open on TCGplayer</a><button class="btn" id="no" style="margin-top:8px">Close</button>`);
     $('#no').onclick=()=>closeModal()})}
 
-if(ACC.handle){api('me').then(m=>fvBadge(m.incoming.length)).catch(()=>{});ftLoad(true)}
+if(ACC.handle){api('me').then(m=>fvBadge(m.incoming.length,m.inbox)).catch(()=>{});ftLoad(true)}
 
 // ================= How it works, share links, deep links =================
 const HELP_STEPS=[
@@ -1326,6 +1488,17 @@ function helpDlg(i){
   if($('#hskip'))$('#hskip').onclick=helpDone}
 function helpDone(){try{localStorage.setItem('bb_seen','1')}catch(e){}closeModal()}
 $('#helpbtn').onclick=()=>helpDlg(0);
+function themeSave(t){try{localStorage.setItem('bb_theme',JSON.stringify(t))}catch(e){}themeApply(t)}
+function themeDlg(){
+  const cur=themeLoad();
+  modal(`<h3>🎨 Colors</h3><div class="swg">${Object.keys(THEMES).map(k=>{const t=THEMES[k];return `<button class="sw${cur.k===k?' on':''}" data-th="${k}"><i style="background:${t.bg}"></i><i style="background:${t.surf}"></i><i style="background:${t.ac}"></i><br>${t.n}</button>`}).join('')}</div>
+  <div class="panel"><div class="prow"><span>Your own accent color</span><input type="color" id="thc" value="${cur.ac||'#f5c542'}" style="width:56px;height:40px;border:0;background:none;padding:0"></div><p class="mu" style="margin:6px 0 0">Keeps your current theme and swaps the highlight color.</p></div>
+  <button class="btn mbtn" id="no">Done</button>`);
+  $('#no').onclick=()=>closeModal();
+  document.querySelectorAll('#modal [data-th]').forEach(b=>b.onclick=()=>{themeSave({k:b.dataset.th});themeDlg()});
+  $('#thc').oninput=e=>{const c=themeLoad();themeSave({k:c.k==='custom'?(c.base||'gold'):c.k,base:c.k==='custom'?(c.base||'gold'):c.k,ac:e.target.value,custom:1})};
+}
+$('#themebtn').onclick=themeDlg;
 function linkBase(){return location.origin+location.pathname}
 async function shareUrl(url,title){
   try{if(navigator.share){await navigator.share({url,title});return}}catch(e){if(e&&e.name==='AbortError')return}
