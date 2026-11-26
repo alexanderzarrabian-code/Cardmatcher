@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><title>Binder Buddy admin</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#141a24;color:#e6e9ef;margin:0;padding:14px;max-width:640px;margin:0 auto}
+h1{font-size:20px}input,button{font-size:16px;padding:10px;border-radius:10px;border:2px solid #2d3748;background:#1e2634;color:#e6e9ef}
+button{cursor:pointer}.pri{background:#d9b45a;color:#1a1405;border:0;font-weight:700}.bad{background:#a84444;color:#fff;border:0}
+.card{background:#1e2634;border:2px solid #2d3748;border-radius:12px;padding:12px;margin:10px 0}.mu{color:#9aa4b5;font-size:13px}
+pre{white-space:pre-wrap;background:#141a24;padding:8px;border-radius:8px;font-size:12px;max-height:200px;overflow:auto}
+.row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+</style></head><body>
+<h1>Binder Buddy admin</h1>
+<div class="row"><input id="key" type="password" placeholder="Admin key" style="flex:1"><button class="pri" id="go">Load reports</button></div>
+<p class="mu" id="msg"></p><div id="list"></div>
+<div class="card"><b>Unban a handle</b><div class="row"><input id="ub" placeholder="handle" style="flex:1"><button id="ubgo">Unban</button></div></div>
+<script>
+const URLW='https://cardscan.alexanderzarrabian.workers.dev/api';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let KEY=sessionStorage.getItem('bbadmin')||'';$('#key').value=KEY;
+async function call(a,body){const h={'content-type':'application/json','x-admin':KEY};let p='';try{p=localStorage.getItem('bb_pass')||''}catch(e){}if(p)h['x-pass']=p;
+  const r=await fetch(URLW,{method:'POST',headers:h,body:JSON.stringify(Object.assign({a},body||{}))});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||('Error '+r.status));return j}
+async function load(){KEY=$('#key').value.trim();sessionStorage.setItem('bbadmin',KEY);$('#msg').textContent='Loading...';
+  try{const j=await call('admin_reports');$('#msg').textContent=j.reports.length?j.reports.length+' open report(s)':'No open reports.';
+    $('#list').innerHTML=j.reports.map(r=>`<div class="card"><b>@${esc(r.target)}</b> <span class="mu">reported by @${esc(r.reporter)} · ${esc(r.kind)} · ${esc(r.reason)} · ${new Date(r.created).toLocaleString()}</span>
+    ${r.total>1?`<div class="mu">${r.total} open reports against this person</div>`:''}${r.banned?'<div class="mu">Already banned</div>':''}
+    ${r.note?`<p>${esc(r.note)}</p>`:''}<pre>${esc(JSON.stringify(r.context,null,1))}</pre>
+    <div class="row"><button class="bad" data-a="ban" data-id="${r.id}">Ban @${esc(r.target)}</button><button data-a="dismiss" data-id="${r.id}">Dismiss</button></div></div>`).join('');
+    document.querySelectorAll('[data-a]').forEach(b=>b.onclick=async()=>{if(b.dataset.a==='ban'&&!confirm('Ban this account? Their binders and lists are removed and they cannot sign in.'))return;
+      try{await call('admin_act',{id:+b.dataset.id,act:b.dataset.a});load()}catch(e){alert(e.message)}})}
+  catch(e){$('#msg').textContent=e.message}}
+$('#go').onclick=load;
+$('#ubgo').onclick=async()=>{KEY=$('#key').value.trim();try{await call('admin_unban',{handle:$('#ub').value});alert('Unbanned')}catch(e){alert(e.message)}};
+</script></body></html>

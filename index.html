@@ -1220,7 +1220,7 @@ async function googleDone(cred,done){
   try{const j=await api('google',{credential:cred});if(j.need_handle)googleHandleDlg(cred,j.email,done);else await signedIn(j,done)}
   catch(e){toast(e.message)}}
 function accDlg(done){
-  modal(`<h3>Create your account</h3><p class="mu">Your handle is how friends find you. Your email and password are only for signing in.</p>${GBOX}<input id="ah" type="text" placeholder="handle (e.g. alex_cards)" maxlength="20" autocapitalize="none" autocorrect="off" spellcheck="false" style="width:100%"><input id="ae" type="email" placeholder="email" autocomplete="email" autocapitalize="none" style="width:100%;margin-top:8px"><input id="ap" type="password" placeholder="password (8+ characters)" autocomplete="new-password" style="width:100%;margin-top:8px"><p class="mu" id="aerr" style="color:#ff9b9b;min-height:1.2em"></p><button class="btn" id="aok">Create account</button><button class="btn alt" id="alog" style="margin-top:8px">I already have an account</button><button class="btn alt" id="ano" style="margin-top:8px">Cancel</button>`);
+  modal(`<h3>Create your account</h3><p class="mu">Your handle is how friends find you. Your email and password are only for signing in.</p>${GBOX}<input id="ah" type="text" placeholder="handle (e.g. alex_cards)" maxlength="20" autocapitalize="none" autocorrect="off" spellcheck="false" style="width:100%"><input id="ae" type="email" placeholder="email" autocomplete="email" autocapitalize="none" style="width:100%;margin-top:8px"><input id="ap" type="password" placeholder="password (8+ characters)" autocomplete="new-password" style="width:100%;margin-top:8px"><p class="mu" id="aerr" style="color:#ff9b9b;min-height:1.2em"></p><p class="mu" style="font-size:12px;margin:0 0 8px">By creating an account you agree to keep things friendly: no harassment, spam, scams or offensive content. People can report and block each other, and accounts that break these rules are removed.</p><button class="btn" id="aok">Create account</button><button class="btn alt" id="alog" style="margin-top:8px">I already have an account</button><button class="btn alt" id="ano" style="margin-top:8px">Cancel</button>`);
   gButton('gbox',c=>googleDone(c,done));
   $('#ano').onclick=()=>closeModal();
   $('#alog').onclick=()=>loginDlg(done);
@@ -1259,10 +1259,12 @@ async function restoreShared(){
     if(n){bSave();toast('Restored '+n+' shared binder'+(n>1?'s':''))}
     if(!T.lists.some(x=>x.items.length)&&Array.isArray(l.lists)&&l.lists.length){T.lists=l.lists.map(x=>({id:String(x.id),name:String(x.name||'List').slice(0,40),items:(x.items||[]).filter(r=>r.i&&r.k).map(r=>({i:r.i,k:r.k,m:r.m||'either',p:r.p})),vis:x.vis||'friends'}));tSetCur(T.lists[0].id);tSave()}}catch(e){}}
 function acctMenu(){
-  modal(`<h3>@${esc(ACC.handle)}</h3><button class="btn alt mbtn" id="aprof">See my profile as others do</button><button class="btn alt mbtn" id="asign">Sign-in options (email, Google)</button><button class="btn alt mbtn" id="aout">Sign out on this phone</button><button class="btn mbtn" id="no">Close</button>`);
+  modal(`<h3>@${esc(ACC.handle)}</h3><button class="btn alt mbtn" id="aprof">See my profile as others do</button><button class="btn alt mbtn" id="asign">Sign-in options (email, Google)</button><button class="btn alt mbtn" id="ablk">Blocked people</button><button class="btn alt mbtn" id="aout">Sign out on this phone</button><button class="btn alt mbtn" id="adel" style="color:#e58a8a">Delete my account</button><button class="btn mbtn" id="no">Close</button>`);
   $('#no').onclick=()=>closeModal();
   $('#aprof').onclick=()=>{closeModal();setTimeout(()=>{showTab('friends');fvGo('profile',{handle:ACC.handle})},350)};
   $('#asign').onclick=()=>signOptDlg();
+  $('#ablk').onclick=()=>blockedDlg();
+  $('#adel').onclick=()=>deleteAcctDlg();
   $('#aout').onclick=async()=>{let ac={};try{ac=await api('acct')}catch(e){}
     closeModal();setTimeout(async()=>{
     const safe=ac.email||ac.google;
@@ -1400,7 +1402,7 @@ function offerCard(o){
   const btns=(pend&&!mine?`<button class="btn" data-oa="accept" data-id="${o.id}">Accept</button><div class="row"><button class="btn alt" data-oa="counter" data-id="${o.id}">Counter</button><button class="btn alt" data-oa="decline" data-id="${o.id}">Decline</button></div>`:'')
    +(pend&&mine?`<button class="btn alt" data-oa="cancel" data-id="${o.id}">Cancel this ${o.kind==='request'?'request':'offer'}</button>`:'')
    +(agreed?`<button class="btn" data-oa="complete" data-id="${o.id}">🏁 Mark trade completed</button><button class="btn alt" data-oa="cancel" data-id="${o.id}">✖ Cancel trade (it fell through)</button>`:'')
-   +((pend||agreed||o.status==='completed')?`<button class="chip" data-oa="msg" data-id="${o.id}" style="margin-top:8px">💬 Message</button>`:'');
+   +((pend||agreed||o.status==='completed')?`<button class="chip" data-oa="msg" data-id="${o.id}" style="margin-top:8px">💬 Message</button>`:'')+(!mine?`<button class="chip" data-oa="report" data-id="${o.id}" style="margin-top:8px">⚑ Report</button>`:'');
   return `<div class="ocard${o.unseen?' new':''}"><div class="row" style="align-items:center;justify-content:space-between;margin:0 0 6px"><b>${mine?'You → @'+esc(other):'@'+esc(other)+' → you'}</b><span><span class="tag">${o.kind==='request'?'🙋 Request':'🤝 Offer'}</span><span class="tag${agreed||o.status==='completed'?' hit':''}">${STAT[o.status]||o.status}</span>${o.unseen?'<span class="bell">new</span>':''}</span></div>
   <div class="mh" style="margin:6px 0 2px;font-size:13px">You give</div>${offItems(give)}${cash>0?`<div class="oi"><span>💵 Cash</span><b>${money(cash)}</b></div>`:''}
   <div class="mh" style="margin:6px 0 2px;font-size:13px">You get</div>${offItems(get)}${cash<0?`<div class="oi"><span>💵 Cash</span><b>${money(-cash)}</b></div>`:''}
@@ -1430,6 +1432,7 @@ async function fvInbox(my){
   el.querySelectorAll('[data-oa]').forEach(b=>b.onclick=async()=>{
     const id=b.dataset.id,act=b.dataset.oa,o=OFS.list.find(x=>x.id===id);if(!o)return;
     const other=o.from===me?o.to:o.from;
+    if(act==='report'){reportDlg(other,'offer',id);return}
     if(act==='counter'){offerStart(other,{kind:'offer',give:o.get.slice(),get:o.give.slice(),cash:-o.cash,counter:o.id});return}
     if(act==='msg'){modal(`<h3>Message @${esc(other)}</h3><input id="omsg" type="text" maxlength="300" placeholder="Type a message" style="width:100%"><button class="btn" id="omsend" style="margin-top:10px">Send</button><button class="btn alt" id="no" style="margin-top:8px">Cancel</button>`);
       $('#no').onclick=()=>closeModal();
@@ -1438,14 +1441,47 @@ async function fvInbox(my){
     if(act==='complete'&&!confirm('Mark this trade as completed? Your traded cards come off your trade list and wishlist.'))return;
     try{await api('offer_respond',{id,act});toast(act==='accept'?'Accepted. Message them to set up the swap.':act==='decline'?'Declined':act==='cancel'?(o.status==='accepted'?'Trade cancelled':'Cancelled'):'Marked completed');fvRender()}catch(e){toast(e.message)}})}
 
+// ================= Report, block, delete account =================
+function reportDlg(who,kind,ref){
+  const R=[['spam','Spam or ads'],['abuse','Harassment or abuse'],['name','Offensive name or content'],['scam','Scam or fraud'],['other','Something else']];
+  modal(`<h3>Report @${esc(who)}</h3><p class="mu">Reports are private and reviewed by hand. Pick the closest reason.</p>${R.map(([v,l],n)=>`<label class="frow" style="cursor:pointer"><span>${l}</span><input type="radio" name="rr" value="${v}"${n===0?' checked':''}></label>`).join('')}<input id="rnote" type="text" maxlength="500" placeholder="Details (optional)" style="width:100%"><label class="mu" style="display:block;margin-top:8px"><input type="checkbox" id="rblock" checked> Also block @${esc(who)}</label><p class="mu" id="rerr" style="color:#ff9b9b;min-height:1.2em"></p><button class="btn" id="rsend">Send report</button><button class="btn alt" id="no" style="margin-top:8px">Cancel</button>`);
+  $('#no').onclick=()=>closeModal();
+  $('#rsend').onclick=async()=>{const r=document.querySelector('#modal input[name="rr"]:checked'),also=$('#rblock').checked;$('#rsend').disabled=true;
+    try{await api('report',{who,kind,ref,reason:r?r.value:'other',note:$('#rnote').value.trim()});
+      if(also)await api('block',{who});
+      closeModal();toast(also?'Reported and blocked @'+who:'Thanks, we will review your report');if(also)blockedAfter()}
+    catch(e){$('#rerr').textContent=e.message;$('#rsend').disabled=false}}}
+function blockedAfter(){ftSet([]);fwSet([]);FT.t=0;MSG.with='';if(NAV.tab==='friends')fvGo('home');else if(NAV.tab==='msg')msgRender();else tabLabel()}
+async function blockUser(who){
+  if(!confirm('Block @'+who+'? You will be removed from each other\'s friends, and neither of you can find, message or make offers to the other.'))return;
+  try{await api('block',{who});toast('Blocked @'+who);blockedAfter()}catch(e){toast(e.message)}}
+function moreMenu(who,kind,ref){
+  modal(`<h3>@${esc(who)}</h3><button class="btn alt mbtn" id="mrep">⚑ Report</button><button class="btn alt mbtn" id="mblk">🚫 Block</button><button class="btn mbtn" id="no">Close</button>`);
+  $('#no').onclick=()=>closeModal();
+  $('#mrep').onclick=()=>{closeModal();setTimeout(()=>reportDlg(who,kind||'user',ref),350)};
+  $('#mblk').onclick=()=>{closeModal();setTimeout(()=>blockUser(who),350)}}
+async function blockedDlg(){
+  modal('<h3>Blocked people</h3><p class="mu">Loading…</p>');
+  let r;try{r=await api('blocks_list')}catch(e){modal(`<h3>Blocked people</h3><p class="mu">${esc(e.message)}</p><button class="btn" id="no">Close</button>`);$('#no').onclick=()=>closeModal();return}
+  modal(`<h3>Blocked people</h3>${r.blocked.length?r.blocked.map(h=>`<div class="frow"><b>@${esc(h)}</b><button class="chip" data-ub="${esc(h)}">Unblock</button></div>`).join(''):'<p class="mu">You have not blocked anyone.</p>'}<button class="btn" id="no" style="margin-top:8px">Close</button>`);
+  $('#no').onclick=()=>closeModal();
+  document.querySelectorAll('#modal [data-ub]').forEach(b=>b.onclick=async()=>{try{await api('unblock',{who:b.dataset.ub});FT.t=0;blockedDlg()}catch(e){toast(e.message)}})}
+function deleteAcctDlg(){
+  modal(`<h3>Delete my account</h3><p class="mu">This permanently erases @${esc(ACC.handle)} from Binder Buddy: your profile, shared binders and lists, friends, offers and messages. It can't be undone. Binders saved on this phone stay here.</p><input id="dtxt" type="text" placeholder="Type DELETE to confirm" autocapitalize="characters" autocorrect="off" style="width:100%"><p class="mu" id="derr" style="color:#ff9b9b;min-height:1.2em"></p><button class="btn" id="dok" style="background:#a84444;color:#fff">Delete my account</button><button class="btn alt" id="no" style="margin-top:8px">Cancel</button>`);
+  $('#no').onclick=()=>closeModal();
+  $('#dok').onclick=async()=>{if($('#dtxt').value.trim()!=='DELETE'){$('#derr').textContent='Type DELETE exactly to confirm.';return}
+    $('#dok').disabled=true;
+    try{await api('delete_account',{confirm:'DELETE'});ACC.handle='';ACC.code='';ACC.tok=false;accSave();for(const k in SYNCED)delete SYNCED[k];MSG.with='';ftSet([]);fwSet([]);fvBadge(0,0,0);closeModal();toast('Your account was deleted');if(NAV.tab==='friends')fvRender();else if(NAV.tab==='msg')msgRender();else if(NAV.tab==='binders')bRender()}
+    catch(e){$('#derr').textContent=e.message;$('#dok').disabled=false}}}
 // ================= Messages =================
 const MSG={with:''};
 function msgBubbles(a){const me=ACC.handle;return a.length?a.map(m=>`<div class="mb${m.u===me?' me':''}">${esc(m.t)}<small>${ago(m.at)}</small></div>`).join(''):'<p class="mu" style="text-align:center">No messages yet. Say hi!</p>'}
 async function msgChat(w,soft){
   const el=$('#msgView');if(!el)return;
   if(!soft||!$('#mlog')){
-    el.innerHTML=`<button class="chip" id="mback">← Messages</button><h3 style="margin:12px 0 4px">@${esc(w)}</h3><div id="mlog" class="mlog"><p class="mu">Loading…</p></div><div id="mform"><div class="row"><input id="mtxt" type="text" maxlength="500" placeholder="Message @${esc(w)}" autocomplete="off"><button class="btn" id="msend" style="flex:0 0 84px;padding:10px">Send</button></div></div><button class="chip" id="moffer" style="margin-top:8px">🤝 Offers with @${esc(w)}</button>`;
+    el.innerHTML=`<div class="row" style="align-items:center;justify-content:space-between"><button class="chip" id="mback">← Messages</button><button class="chip" id="mmore" aria-label="Report or block">⋯</button></div><h3 style="margin:12px 0 4px">@${esc(w)}</h3><div id="mlog" class="mlog"><p class="mu">Loading…</p></div><div id="mform"><div class="row"><input id="mtxt" type="text" maxlength="500" placeholder="Message @${esc(w)}" autocomplete="off"><button class="btn" id="msend" style="flex:0 0 84px;padding:10px">Send</button></div></div><button class="chip" id="moffer" style="margin-top:8px">🤝 Offers with @${esc(w)}</button>`;
     $('#mback').onclick=()=>{MSG.with='';msgRender()};
+    $('#mmore').onclick=()=>moreMenu(w,'dm');
     $('#moffer').onclick=()=>{showTab('friends');fvGo('inbox')};
     const send=async()=>{const t=$('#mtxt').value.trim();if(!t)return;$('#msend').disabled=true;
       try{await api('dm_send',{to:w,text:t});$('#mtxt').value='';await msgChat(w,true)}catch(e){toast(e.message)}$('#msend').disabled=false};
@@ -1559,7 +1595,7 @@ async function fvProfile(my){
   await fvNeed([...(l.trade||[]),...(l.wants||[])]);if(my!==FV.rid)return;
   const rel=l.rel;
   const relHtml=rel==='none'?(ACC.handle?'<button class="btn" id="frel">Add friend</button>':'<p class="mu">Create an account in Friends to add them.</p>'):rel==='in'?'<button class="btn" id="frel">Accept friend request</button>':rel==='out'?'<p class="mu">Friend request sent.</p>':rel==='friend'?'<div class="row" style="align-items:center;justify-content:space-between"><span class="mu">✓ Friends</span><span><button class="chip" id="fmmsg">💬 Message</button> <button class="chip" id="frm">Remove friend</button></span></div>':'<p class="mu">This is how others see your profile.</p>';
-  el.innerHTML=`<button class="chip" id="fvback">← Back</button><h3 style="margin-top:12px">@${esc(l.handle)}</h3>${relHtml}
+  el.innerHTML=`<button class="chip" id="fvback">← Back</button><h3 style="margin-top:12px">@${esc(l.handle)}</h3>${relHtml}${rel!=='self'&&ACC.handle?'<div style="text-align:right;margin:4px 0"><button class="chip" id="fmore">⚑ Report / Block</button></div>':''}
   ${rel==='friend'?'<button class="btn" id="fmoffer">🤝 Make an offer</button>':''}
   <h3>Binders</h3>${l.binders.length?l.binders.map(b=>`<button class="frow btnrow" data-b="${esc(b.id)}">${coverHtml(b.cover)}<div style="flex:1;min-width:0"><b>${esc(b.name)}</b><div class="mu">${b.cnt} card${b.cnt===1?'':'s'} · ${visLabel(b.vis)} · ${ago(b.updated)}</div></div><span class="mu">›</span></button>`).join(''):`<p class="mu">No binders to show yet.${rel==='friend'||rel==='self'?'':' Friends-only binders appear once you are friends.'}</p>`}`;
   el.insertAdjacentHTML('beforeend',fvTradeHtml(l)+'<button class="btn alt" id="fvplink" style="margin-top:10px">🔗 Share link to this profile</button>');
@@ -1569,6 +1605,7 @@ async function fvProfile(my){
   document.querySelectorAll('#friendsView [data-b]').forEach(b=>b.onclick=()=>fvGo('binder',{owner:l.handle,id:b.dataset.b}));
   if($('#fmoffer'))$('#fmoffer').onclick=()=>offerStart(l.handle,{kind:'offer'});
   if($('#frel'))$('#frel').onclick=async()=>{try{const r=await api('friend_add',{to:l.handle});toast(r.rel==='friend'?'You are now friends':'Request sent');fvRender()}catch(e){toast(e.message)}};
+  if($('#fmore'))$('#fmore').onclick=()=>moreMenu(l.handle,'user');
   if($('#fmmsg'))$('#fmmsg').onclick=()=>{MSG.with=l.handle;showTab('msg')};
   if($('#frm'))$('#frm').onclick=()=>{if(!confirm('Remove @'+l.handle+' from your friends?'))return;api('friend_remove',{who:l.handle}).then(()=>{toast('Removed');fvRender()}).catch(e=>toast(e.message))}}
 
