@@ -126,6 +126,11 @@ details.fold.match>summary{border-color:var(--ac);color:var(--ac)}
 .ocard{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px;margin-bottom:10px}.ocard.new{border-color:var(--ac)}
 .oi{display:flex;align-items:center;gap:8px;font-size:14px;margin:3px 0}.oi img{width:28px;border-radius:3px}.oi span{flex:1;min-width:0}.onote{font-size:13px;margin-top:6px;padding:6px 8px;border-radius:8px;background:var(--panel)}
 label.ofr{cursor:pointer}label.ofr input{width:22px;height:22px;flex:0 0 22px;accent-color:var(--ac)}
+.trow2{background:var(--card);border:2px solid var(--line);border-radius:12px;margin-bottom:6px}.trow2>summary{list-style:none;display:flex;align-items:center;gap:8px;padding:6px 8px;cursor:pointer}.trow2>summary::-webkit-details-marker{display:none}
+.trow2 img{width:30px;flex:0 0 30px;border-radius:4px}.trow2 .rn{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.trow2 .rn b{font-size:15px}.trow2 .ri{font-size:13px}.trow2 .tp{font-size:14px;white-space:nowrap}
+.trow2 .rbody{padding:2px 10px 10px 48px;font-size:13px}.trow2[open]{border-color:var(--ac)}.chip.sm{font-size:12px;padding:4px 10px}details.pset{display:inline-block}details.pset>summary{list-style:none;cursor:pointer}details.pset>summary::-webkit-details-marker{display:none}
+details.fold>summary .lname{display:inline;font-size:17px}
+details.pset[open]{display:block;width:100%}
 </style>
 <script>
 var THEMES={gold:{n:'Gold Night',bg:'#0c1220',bg2:'#0a0f1b',surf:'#161f34',line:'#2f3e62',ac:'#f5c542',mu:'#9aa6bf',alt:'#18233f',altl:'#3a4a70',ban1:'#16223f',ban2:'#101a30'},
@@ -853,7 +858,7 @@ function bWireDrag(b){DR.b=b;document.querySelectorAll('.pk.has').forEach(el=>{
 
 // ================= Trade (scan a stack, see its value, find cards worth about that) =================
 const TK='bb_trade_v1';
-const T={f:{},fold:{},lists:[],cur:'',mine:[],theirs:[],wish:[],wishVis:'friends',tab:'list',pct:100,incl:false,mode:'about',range:5,lang:'en',review:[],msg:'',shown:40,results:[],rid:0};
+const T={f:{},fold:{},lists:[],cur:'',mine:[],theirs:[],wish:[],wishVis:'friends',tab:'list',ropen:new Set(),pct:100,incl:false,mode:'about',range:5,lang:'en',review:[],msg:'',shown:40,results:[],rid:0};
 const FOLDK='bb_fold_v1';
 try{Object.assign(T.fold,JSON.parse(localStorage.getItem(FOLDK)||'{}'))}catch(e){}
 const tFold=(key,sum,body,def)=>`<details class="fold" data-fk="${key}"${(T.fold[key]===undefined?def:T.fold[key])?' open':''}><summary>${sum}</summary><div class="foldbody">${body}</div></details>`;
@@ -906,11 +911,14 @@ async function tEnsure(){try{await loadData()}catch(e){T.msg=e.message}
   if((need||T.lang!=='en')&&!DATA.jp.length){try{await loadJP()}catch(e){if(T.lang!=='en'){T.lang='en';T.msg=e.message}}}}
 
 function tRow(r,side,i){
-  const c=cardById(r.i);
+  const c=cardById(r.i),key=side+'|'+i+'|'+r.i+'|'+r.k;
   if(!c)return `<div class="trow"><div class="mu" style="flex:1">card not found</div><button class="x" data-act="rm" data-side="${side}" data-i="${i}">✕</button></div>`;
-  const m=c.v[r.k]?c.v[r.k][0]:0;
-  return `<div class="trow"><img src="${esc(c.img)}" alt="" loading="lazy"><div style="flex:1;min-width:0"><b>${esc(c.name)}</b>${c.lang==='jp'?'<span class="lang">JP</span>':''}${side==='mine'&&ACC.handle&&FW.by.has(r.i)?`<span class="tag hot">🎁 ${ownTxt(FW.by.get(r.i))} wants this</span>`:''}<div class="mu">${esc(c.set)} · #${esc(c.number)}<br>${esc(r.k)}</div></div><div class="tp">${m>0?money(m):'—'}${shaky(c,r.k)?'<br><span class="warn">⚠</span>':''}</div><button class="x" data-act="rm" data-side="${side}" data-i="${i}" aria-label="Remove">✕</button></div>${side==='mine'?`<div class="tmeta"><button class="chip on" data-act="tmode" data-i="${i}">${MODE_LBL[r.m||'either']} ⇄</button>${(r.m==='sale'||r.m==='either')?`<span class="mu">Price $</span><input class="tpr" data-i="${i}" type="number" inputmode="decimal" min="0" step="0.01" placeholder="${m>0?m.toFixed(2):'ask'}" value="${r.p>0?r.p:''}">`:''}</div>`:''}`}
-const MODE_LBL={trade:'🔄 Trade',sale:'💵 Sale',either:'🔄💵 Trade or sale'};
+  const m=c.v[r.k]?c.v[r.k][0]:0,mine=side==='mine',asking=mine&&r.p>0&&(r.m==='sale'||r.m==='either');
+  const icon=mine?(r.m==='sale'?'💵':r.m==='trade'?'🔄':'🔄💵'):'';
+  return `<details class="trow2" data-rk="${esc(key)}"${T.ropen.has(key)?' open':''}><summary><img src="${esc(c.img)}" alt="" loading="lazy"><span class="rn"><b>${esc(c.name)}</b> <span class="mu">#${esc(c.number)}</span>${c.lang==='jp'?'<span class="lang">JP</span>':''}${mine&&ACC.handle&&FW.by.has(r.i)?'<span class="tag hot">🎁</span>':''}</span>${icon?`<span class="ri">${icon}</span>`:''}<span class="tp">${asking?'<span class="mu">ask</span> '+money(r.p):(m>0?money(m):'—')}${shaky(c,r.k)?' <span class="warn">⚠</span>':''}</span></summary>
+  <div class="rbody"><div class="mu">${esc(c.set)} · ${esc(r.k)}${mine&&ACC.handle&&FW.by.has(r.i)?`<br>🎁 ${ownTxt(FW.by.get(r.i))} wants this`:''}${m>0?`<br>Market ${money(m)}`:''}</div>
+  <div class="row" style="margin:8px 0 0;flex-wrap:wrap;align-items:center">${mine?`<button class="chip sm" data-act="tmode" data-i="${i}">${MODE_LBL[r.m||'either']} ⇄</button>`:''}${mine&&(r.m==='sale'||r.m==='either')?`<details class="pset"><summary class="chip sm">${r.p>0?'Asking '+money(r.p)+' · change':'＋ Set asking price'}</summary><div class="row" style="margin:6px 0 0;align-items:center"><span class="mu">Price $</span><input class="tpr" data-i="${i}" type="number" inputmode="decimal" min="0" step="0.01" placeholder="${m>0?m.toFixed(2):'ask'}" value="${r.p>0?r.p:''}"></div></details>`:''}<button class="chip sm" data-act="rm" data-side="${side}" data-i="${i}" style="margin-left:auto">✕ Remove</button></div></div></details>`}
+const MODE_LBL={trade:'🔄 Trade',sale:'💵 Sale',either:'🔄💵 Both'};
 const MODE_NEXT={either:'trade',trade:'sale',sale:'either'};
 
 const wishObj={name:'My wishlist',get vis(){return T.wishVis},set vis(v){T.wishVis=v}};
@@ -919,10 +927,10 @@ function tListHtml(){
   const a=tSum(T.mine),b=tSum(T.theirs),tv=a.val*T.pct/100,diff=tv-b.val,cl=tCurList();
   const mathSum=T.mine.length?`${money(tv)} <span class="mu">(${T.pct}%) · ${T.theirs.length?(diff>=0?'ahead '+money(diff):'owe '+money(-diff)):'nothing on their side'}</span>`:'<span class="mu">add cards first</span>';
   return `<div class="chips">${T.lists.map(l=>`<button class="chip${l.id===T.cur?' on':''}" data-act="tlist" data-id="${esc(l.id)}">${esc(l.name)} (${l.items.length})</button>`).join('')}<button class="chip" data-act="tnew">＋ New</button></div>
-  <div class="lhead"><div style="min-width:0"><b class="lname">${esc(cl.name)}</b><div class="mu">${T.mine.length} card${T.mine.length===1?'':'s'} · ${visLabel(tVis(cl))}</div></div><div class="row" style="margin:0;flex:0 0 auto"><button class="chip on" data-act="tadd">＋ Add</button><button class="chip" data-act="tmenu" aria-label="List options">⋯</button></div></div>
+  ${tFold('rows',`<span style="min-width:0"><b class="lname">${esc(cl.name)}</b> <span class="mu">${T.mine.length} card${T.mine.length===1?'':'s'} · ${visLabel(tVis(cl))}</span></span>`,`<div class="row" style="margin:0 0 8px"><button class="chip on" data-act="tadd">＋ Add</button><button class="chip" data-act="tmenu" aria-label="List options">⋯</button></div>
   ${T.msg?`<p class="mu" id="tmsg" style="color:var(--ac)">${esc(T.msg)}</p>`:''}
   ${T.review.length?`<h3>Needs a quick look (${T.review.length})</h3>${T.review.map(rv=>`<div class="review"><div style="display:flex;gap:10px;align-items:center">${rv.thumb?`<img src="${rv.thumb}" alt="" style="width:64px;border-radius:6px">`:''}<div><b>${esc(rv.label||'Unknown card')}</b><div class="mu">${esc(rv.note||'Tap the right one:')}</div></div></div>${rv.pairs.map((p,n)=>`<button class="item pair" data-act="pair" data-r="${rv.id}" data-p="${n}"><img src="${esc(p.c.img)}" loading="lazy" alt=""><div style="flex:1;min-width:0"><b style="margin:0">${esc(p.c.name)}</b>${p.c.lang==='jp'?'<span class="lang">JP</span>':''}<div class="mu">${esc(p.c.set)} · #${esc(p.c.number)}<br>${esc(p.k)}</div></div><div class="tp">${money(p.c.v[p.k][0])}</div></button>`).join('')}<div class="row"><button class="btn alt" data-act="manual" data-r="${rv.id}">Search by name</button><button class="btn alt" data-act="skip" data-r="${rv.id}">Skip</button></div></div>`).join('')}`:''}
-  ${T.mine.length?T.mine.map((r,i)=>tRow(r,'mine',i)).join(''):'<p class="mu">Tap ＋ Add to scan or search the cards you want to trade or sell. They do not need to be in a binder. Tap a card\'s label to switch between Trade, Sale, or both.</p>'}
+  ${T.mine.length?T.mine.map((r,i)=>tRow(r,'mine',i)).join(''):'<p class="mu">Tap ＋ Add to scan or search the cards you want to trade or sell. They do not need to be in a binder. Tap a card to see its set, set a price, or switch between Trade, Sale, or both.</p>'}`,true)}
   ${tFold('calc',`Trade math <span class="mu">${mathSum}</span>`,`<div class="panel"><div class="prow"><span>Trade value %</span><input id="tpct" type="number" inputmode="decimal" min="1" max="200" value="${T.pct}"></div>
   <div class="chips">${[100,90,80,70,60].map(n=>`<button class="chip${T.pct===n?' on':''}" data-act="pct" data-v="${n}">${n}%</button>`).join('')}</div>
   <p class="btot" style="margin-bottom:0"><b style="font-size:20px">Trade value ${money(tv)}</b><br><span>Market total ${money(a.val)} × ${T.pct}%</span></p>
@@ -1038,12 +1046,12 @@ function tWire(){
   if(f2)f2.onchange=()=>{const fs=[...f2.files];f2.value='';tScanFiles(fs)};
   const pct=$('#tpct');if(pct)pct.onchange=()=>{const n=parseFloat(pct.value);T.pct=n>0&&n<=200?n:100;tSave();tRender()};
   const tv_=$('#tvis');if(tv_)tv_.onclick=()=>tVisDlg(tCurList());
-  document.querySelectorAll('#tradeView .tpr').forEach(inp=>inp.onchange=()=>{const r=T.mine[+inp.dataset.i];if(!r)return;const n=parseFloat(inp.value);if(n>0)r.p=Math.round(n*100)/100;else delete r.p;tSave()});
+  document.querySelectorAll('#tradeView .tpr').forEach(inp=>inp.onchange=()=>{const r=T.mine[+inp.dataset.i];if(!r)return;const n=parseFloat(inp.value);if(n>0)r.p=Math.round(n*100)/100;else delete r.p;tSave();tRender()});
   const inc=$('#tinc');if(inc)inc.onchange=()=>{T.incl=inc.checked;tSave();tRender()};
   const rg=$('#trng');if(rg)rg.oninput=()=>{T.range=parseFloat(rg.value)||0;T.shown=40;tResults()}}
 $('#tradeView').addEventListener('click',async e=>{
   const el=e.target.closest('[data-act]');if(!el)return;const act=el.dataset.act;
-  if(act==='rm'){T[el.dataset.side].splice(+el.dataset.i,1);tSave();tRender()}
+  if(act==='rm'){T[el.dataset.side].splice(+el.dataset.i,1);T.ropen.clear();tSave();tRender()}
   else if(act==='tlist'){tSetCur(el.dataset.id);tSave();tRender()}
   else if(act==='ttab'){T.tab=el.dataset.v;T.msg='';tRender()}
   else if(act==='tadd')tAddMenu();
@@ -1077,7 +1085,7 @@ function tListMenu(){
   $('#lm2').onclick=()=>{closeModal();setTimeout(()=>tVisDlg(l),450)};
   $('#lm3').onclick=()=>{closeModal();setTimeout(()=>{if(!confirm('Delete the list "'+l.name+'"? The cards in it are not deleted from your binders.'))return;T.lists=T.lists.filter(x=>x!==l);if(!T.lists.length)T.lists=[{id:tNewId(),name:'My trade list',items:[],vis:'friends'}];tSetCur(T.lists[0].id);tSave();tRender()},450)}}
 tLoad();
-$('#tradeView').addEventListener('toggle',e=>{const d=e.target;if(!d||!d.dataset||!d.dataset.fk)return;T.fold[d.dataset.fk]=d.open;try{localStorage.setItem(FOLDK,JSON.stringify(T.fold))}catch(err){}},true);
+$('#tradeView').addEventListener('toggle',e=>{const d=e.target;if(d&&d.dataset&&d.dataset.rk){if(d.open)T.ropen.add(d.dataset.rk);else T.ropen.delete(d.dataset.rk);return}if(!d||!d.dataset||!d.dataset.fk)return;T.fold[d.dataset.fk]=d.open;try{localStorage.setItem(FOLDK,JSON.stringify(T.fold))}catch(err){}},true);
 
 // ================= Fill a binder page from a photo, and share a page as an image =================
 function bPhotoMenu(b){
