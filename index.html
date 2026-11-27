@@ -103,6 +103,7 @@ label.mu{color:var(--mu)}
 details.fold{margin:10px 0}details.fold>summary{cursor:pointer;font-weight:800;font-size:17px;list-style:none;padding:12px 14px;background:var(--card);border:2px solid var(--line);border-radius:12px;display:flex;justify-content:space-between;align-items:center;gap:8px}details.fold>summary::-webkit-details-marker{display:none}details.fold>summary::after{content:'▾';color:var(--mu)}details.fold[open]>summary::after{content:'▴'}details.fold[open]>summary{border-color:var(--ac)}.foldbody{padding-top:8px}
 #themebtn{position:absolute;left:14px;top:12px;width:32px;height:32px;border-radius:50%;border:2px solid var(--ac);background:transparent;font-size:15px;cursor:pointer;z-index:2;padding:0}
 .swg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.sw{border:2px solid var(--line);border-radius:12px;padding:8px;background:var(--card);color:var(--fg);font:700 14px system-ui;text-align:left;cursor:pointer}.sw.on{border-color:var(--ac)}.sw i{display:inline-block;width:16px;height:16px;border-radius:50%;margin-right:3px;vertical-align:-3px;border:1px solid rgba(128,128,128,.5)}
+#msgbtn{position:absolute;left:54px;top:12px;width:32px;height:32px;border-radius:50%;border:2px solid var(--ac);background:transparent;font-size:14px;cursor:pointer;z-index:2;padding:0;line-height:1}#msgbtn .nb{position:absolute;top:-7px;right:-7px;margin:0;min-width:16px;padding:0 4px;font-size:10px;line-height:16px}
 #bellbtn{position:absolute;right:54px;top:12px;width:32px;height:32px;border-radius:50%;border:2px solid var(--ac);background:transparent;font-size:14px;cursor:pointer;z-index:2;padding:0;line-height:1}
 #bellbtn .nb{position:absolute;top:-7px;right:-7px;margin:0;min-width:16px;padding:0 4px;font-size:10px;line-height:16px}
 .chip.sm{font-size:12px;padding:7px 4px;white-space:nowrap}.crow2{display:flex;gap:5px;flex-wrap:nowrap;margin:0 0 8px}.crow2 .chip{flex:1 1 0;min-width:0;text-align:center}
@@ -147,9 +148,9 @@ label.ofr{cursor:pointer}label.ofr input{width:22px;height:22px;flex:0 0 22px;ac
 .trow2 .rbody{padding:2px 10px 10px 48px;font-size:13px}.trow2[open]{border-color:var(--ac)}.chip.sm{font-size:12px;padding:4px 10px}details.pset{display:inline-block}details.pset>summary{list-style:none;cursor:pointer}details.pset>summary::-webkit-details-marker{display:none}
 details.fold>summary .lname{display:inline;font-size:17px}
 details.pset[open]{display:block;width:100%}
-.tab[data-tab="msg"]{flex:0 0 58px}.tab[data-tab="msg"] .nb{margin-left:2px;padding:0 5px}
+
 .nitem{display:flex;align-items:center;gap:10px;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:10px;margin-bottom:8px;cursor:pointer}.nitem.new{border-color:var(--ac)}.nitem .ni{font-size:20px;flex:0 0 26px;text-align:center}.nitem .nt{flex:1;min-width:0;font-size:15px;font-weight:700}.nitem .nt .mu{display:block;font-weight:400;font-size:13px}.nitem .dot{width:9px;height:9px;border-radius:50%;background:var(--ac);flex:0 0 9px}
-.tabs{gap:5px!important;padding-left:8px!important;padding-right:8px!important}.tab{font-size:12px!important;min-width:0;overflow:hidden;padding:10px 1px!important}.tab[data-tab="msg"]{flex:0 0 52px}
+.tabs{gap:5px!important;padding-left:8px!important;padding-right:8px!important}.tab{font-size:12px!important;min-width:0;overflow:hidden;padding:10px 1px!important}
 </style>
 <script>
 var THEMES={gold:{n:'Soft Gold',bg:'#141a24',bg2:'#10151e',surf:'#1e2634',line:'#364257',ac:'#d9b45a',mu:'#9aa3b5',alt:'#222b3a',altl:'#445068',ban1:'#1d2636',ban2:'#171e2b'},
@@ -167,8 +168,8 @@ function themeApply(t){t=t||themeLoad();var base=THEMES.gold,pr=Object.assign({}
 try{themeApply()}catch(e){}
 </script>
 </head><body>
-<div class="banner"><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><button id="themebtn" aria-label="Colors" title="Colors">🎨</button><button id="bellbtn" aria-label="Notifications" title="Notifications">🔔</button><button id="helpbtn" aria-label="How it works" title="How it works">?</button><h1>Binder Buddy</h1></div>
-<div class="tabs"><button class="tab on" data-tab="binders">📒 Binders</button><button class="tab" data-tab="find">🔍 Look up</button><button class="tab" data-tab="trade">🔄 Trade</button><button class="tab" data-tab="friends">👥 Friends</button><button class="tab" data-tab="msg" id="msgTab" aria-label="Messages">💬</button></div>
+<div class="banner"><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><button id="themebtn" aria-label="Colors" title="Colors">🎨</button><button id="msgbtn" aria-label="Messages" title="Messages">💬</button><button id="bellbtn" aria-label="Notifications" title="Notifications">🔔</button><button id="helpbtn" aria-label="How it works" title="How it works">?</button><h1>Binder Buddy</h1></div>
+<div class="tabs"><button class="tab on" data-tab="binders">📒 Binders</button><button class="tab" data-tab="find">🔍 Look up</button><button class="tab" data-tab="trade">🔄 Trade</button><button class="tab" data-tab="friends">👥 Friends</button><button class="tab" data-tab="browse">🌐 Browse</button></div>
 <div id="findView" hidden>
 <p class="hint" style="margin:0 0 8px">Scan or type a card to see its price and find cards worth about the same.</p>
 <div class="cams"><label class="btn" for="file">📷 Take photo</label>
@@ -193,6 +194,7 @@ try{themeApply()}catch(e){}
 <div id="friendsView" hidden></div>
 <div id="notifView" hidden></div>
 <div id="msgView" hidden></div>
+<div id="browseView" hidden></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.1.1/tesseract.min.js"></script>
 <script>
 const $=s=>document.querySelector(s);
@@ -551,7 +553,7 @@ function matchMarkSeen(){try{localStorage.setItem('bb_match_seen',JSON.stringify
 document.addEventListener('toggle',e=>{if(e.target&&e.target.classList&&e.target.classList.contains('match')&&e.target.open){matchMarkSeen();const b=e.target.querySelector('.bell');if(b)b.remove()}},true);
 let FVREQ=0,FVDM=0;
 function notifCount(){return ACC.handle?FVREQ+FVOFF+matchNew():0}
-function tabLabel(){const n=notifCount(),b=document.getElementById('bellbtn');if(b)b.innerHTML='🔔'+(n?'<span class="nb hot">'+(n>9?'9+':n)+'</span>':'');const t=document.querySelector('.tab[data-tab="msg"]');if(t)t.innerHTML='💬'+(FVDM?'<span class="nb hot">'+FVDM+'</span>':'')}
+function tabLabel(){const n=notifCount(),b=document.getElementById('bellbtn');if(b)b.innerHTML='🔔'+(n?'<span class="nb hot">'+(n>9?'9+':n)+'</span>':'');const t=document.getElementById('msgbtn');if(t)t.innerHTML='💬'+(FVDM?'<span class="nb hot">'+FVDM+'</span>':'')}
 const owners=a=>[...new Set(a.map(x=>x.o))];
 const ownTxt=a=>{const o=owners(a);return '@'+esc(o[0])+(o.length>1?' +'+(o.length-1):'')};
 function pkMk(r){ // marker on a binder pocket
@@ -599,6 +601,74 @@ function matchPanel(){
   const wantRows=m.want.map(e=>{const c=cardById(e.i);return c?tile(c,'want',e):''}).join('');
   return `<details class="fold match"><summary>🎯 Matches <span class="mu">(${n})</span>${matchNew()?' <span class="bell">🔔 '+matchNew()+' new</span>':''}</summary><div class="foldbody">${m.have.length?`<h4 class="mh">👥 Friends have cards you want (${m.have.length})</h4>${haveRows}`:''}${m.want.length?`<h4 class="mh">🎁 Friends want cards you have (${m.want.length})</h4>${wantRows}`:''}</div></details>`}
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-mlist]');if(!b)return;const i=+b.dataset.mlist,c=cardById(i);if(!c)return;tListDlg({i,k:(FW.by.get(i)||[]).map(x=>x.k).find(k=>c.v[k])||c.vk[0]},c)});
+
+
+// ================= Browse tab =================
+const BR={chip:'cards',scope:'all',q:'',d:{},rid:0};
+const brScope=rel=>BR.scope==='all'||(BR.scope==='friends'?rel==='friend':rel!=='friend');
+async function brLoad(kind){
+  const c=BR.d[kind];if(c&&Date.now()-c.t<60000)return c.v;
+  const v=await api(kind==='binders'?'browse':kind==='trade'?'browse_trade':'browse_wants');BR.d[kind]={t:Date.now(),v};return v}
+function brProfile(h){closeModal();setTimeout(()=>{showTab('friends');fvGo('profile',{handle:h})},350)}
+function brTile(c,sub,extra,attr){return `<button class="tl" ${attr} style="width:100%;text-align:left;color:inherit;font:inherit;cursor:pointer;padding:6px 8px"><img src="${esc(c.img)}" alt="" loading="lazy" style="width:38px"><div style="flex:1;min-width:0"><b style="font-size:14px">${esc(c.name)}</b>${c.lang==='jp'?'<span class="lang">JP</span>':''}<div class="mu">${sub}</div>${extra||''}</div><span class="mu">›</span></button>`}
+function brOwners(a){return a.slice(0,3).map(o=>'@'+esc(o)).join(', ')+(a.length>3?' +'+(a.length-3):'')}
+async function brRender(){
+  const el=$('#browseView'),my=++BR.rid;
+  const chips=[['cards','🔍 Cards'],['binders','📒 Binders'],['wish','♡ Wishlists'],['trade','🔄 Trade lists']];
+  const ph={cards:'Search a card name',binders:'Search binders or @name',wish:'Search wanted cards',trade:'Search cards for trade'}[BR.chip];
+  el.innerHTML=`<h3 style="margin:8px 0">Browse</h3><input id="brq" type="text" placeholder="${ph}" value="${esc(BR.q)}" style="width:100%;margin-bottom:8px"><div class="chips" style="margin:0 0 6px">${chips.map(c=>`<button class="chip${BR.chip===c[0]?' on':''}" data-bc="${c[0]}">${c[1]}</button>`).join('')}</div><div class="chips" style="margin:0 0 10px">${[['all','All'],['friends','👥 Friends'],['public','🌐 Public']].map(c=>`<button class="chip sm${BR.scope===c[0]?' on':''}" data-bs="${c[0]}">${c[1]}</button>`).join('')}</div><div id="brbody"><p class="mu">Loading…</p></div>`;
+  el.querySelectorAll('[data-bc]').forEach(b=>b.onclick=()=>{BR.chip=b.dataset.bc;brRender()});
+  el.querySelectorAll('[data-bs]').forEach(b=>b.onclick=()=>{BR.scope=b.dataset.bs;brRender()});
+  const body=$('#brbody');
+  let tr=null,wn=null,bi=null;
+  try{
+    if(BR.chip==='binders')bi=await brLoad('binders');
+    else if(BR.chip==='trade')tr=await brLoad('trade');
+    else if(BR.chip==='wish')wn=await brLoad('wants');
+    else{[tr,wn]=await Promise.all([brLoad('trade'),brLoad('wants')])}
+    await loadData();
+    const need=[];if(tr)for(const o of tr.owners)for(const l of o.lists)need.push(...l.items);if(wn)need.push(...wn.wants);
+    await fvNeed(need)}
+  catch(e){if(my===BR.rid)body.innerHTML=`<p class="mu">${esc(e.message)}</p>`;return}
+  if(my!==BR.rid)return;
+  const fr=new Set((wn&&wn.fr)||[]);
+  const wish=myWishSet(),mine=new Set(T.lists.flatMap(x=>x.items).map(x=>x.i));
+  const toks=()=>String(BR.q).toLowerCase().replace(/[^a-z0-9é'@\/ ]/g,' ').split(/\s+/).filter(Boolean);
+  const cardOk=c=>{const w=toks();return !w.length||(c&&w.every(t=>/^\d+$/.test(t)?(c.number||'').toLowerCase().replace(/^0+(?=\d)/,'').includes(t.replace(/^0+(?=\d)/,'')):(c.hay||'').includes(t)))};
+  const draw=()=>{
+    const q=BR.q.trim();
+    if(BR.chip==='binders'){
+      const w=toks().map(t=>t.replace(/^@/,''));
+      const L=bi.binders.filter(b=>brScope(b.rel)&&(!w.length||w.every(t=>b.name.toLowerCase().includes(t)||b.owner.includes(t))));
+      body.innerHTML=L.length?L.map((b,i)=>`<button class="frow btnrow" data-bb="${i}">${coverHtml(b.cover)}<div style="flex:1;min-width:0"><b>${esc(b.name)}</b><div class="mu">@${esc(b.owner)} · ${b.cnt} card${b.cnt===1?'':'s'}${b.rel==='friend'?' · 👥':''} · ${ago(b.updated)}</div></div><span class="mu">›</span></button>`).join(''):'<p class="mu">No binders here yet. Owners can share a binder from its ⋯ menu.</p>';
+      body.querySelectorAll('[data-bb]').forEach(b=>b.onclick=()=>{const x=L[+b.dataset.bb];showTab('friends');fvGo('binder',{owner:x.owner,id:x.id,via:'br'})});return}
+    if(BR.chip==='trade'){
+      const owners=tr.owners.filter(o=>brScope(o.rel)).map(o=>{const lists=o.lists.map(l=>({...l,items:l.items.filter(x=>cardOk(cardById(x.i)))})).filter(l=>l.items.length);
+        const n=lists.reduce((t,l)=>t+l.items.length,0),hits=lists.reduce((t,l)=>t+l.items.filter(x=>wish.has(x.i)).length,0);return {...o,lists,n,hits}}).filter(o=>o.n).sort((a,b)=>b.hits-a.hits||b.n-a.n);
+      body.innerHTML=owners.length?owners.map((o,oi)=>`<details class="fold"${q||o.hits?' open':''}><summary>@${esc(o.owner)} <span class="mu">(${o.n} card${o.n===1?'':'s'}${o.hits?' · '+o.hits+' you want':''}${o.rel==='friend'?' · 👥':''})</span></summary><div class="foldbody"><button class="chip sm" data-bp="${esc(o.owner)}" style="margin-bottom:6px">View profile</button>${o.lists.map((l,li)=>`<div class="mu" style="margin:4px 0 6px"><b>${esc(l.name)}</b></div>${l.items.map((x,xi)=>{const c=cardById(x.i);if(!c)return '';const m=c.v[x.k]?c.v[x.k][0]:0;return brTile(c,esc(c.set)+' · #'+esc(c.number),(wish.has(x.i)?'<span class="tag hit">🎯 You want this</span> ':'')+`<span class="mu">${esc(x.k)} · ${x.p>0?money(x.p)+' asking':(m>0?money(m):'—')}</span>`,`data-bt="${oi}|${li}|${xi}"`)}).join('')}`).join('')}</div></details>`).join(''):'<p class="mu">No trade lists to show.</p>';
+      body.querySelectorAll('[data-bp]').forEach(b=>b.onclick=()=>brProfile(b.dataset.bp));
+      body.querySelectorAll('[data-bt]').forEach(b=>b.onclick=()=>{const [oi,li,xi]=b.dataset.bt.split('|').map(Number),o=owners[oi],x=o.lists[li].items[xi];fvCardMenu(o.owner,x.i,x.k,x.p||0,o.rel)});return}
+    if(BR.chip==='wish'){
+      const rows=wn.wants.map(x=>({...x,o:x.o.filter(h=>brScope(fr.has(h)?'friend':'none'))})).filter(x=>x.o.length&&cardOk(cardById(x.i))).map(x=>({...x,has:mine.has(x.i)})).sort((a,b)=>(b.has-a.has)||(b.o.length-a.o.length));
+      body.innerHTML=rows.length?rows.slice(0,120).map((x,n)=>{const c=cardById(x.i);return c?brTile(c,esc(c.set)+' · #'+esc(c.number),(x.has?'<span class="tag hit">You have this</span> ':'')+`<span class="mu">♡ ${brOwners(x.o)}</span>`,`data-bw="${n}"`):''}).join('')+(rows.length>120?'<p class="mu">Showing the first 120. Search to narrow down.</p>':''):'<p class="mu">No wishlists to show.</p>';
+      body.querySelectorAll('[data-bw]').forEach(b=>b.onclick=()=>{const x=rows[+b.dataset.bw],c=cardById(x.i);brCardDlg(c,[],x.o.map(h=>({o:h})),fr)});return}
+    // cards
+    if(!toks().length){body.innerHTML='<p class="mu">Search a card name to see which friends or public users have it for trade or are looking for it.</p>';return}
+    const src=DATA.cards.concat(DATA.jp||[]);
+    const haves=new Map(),wants=new Map();
+    for(const o of tr.owners){if(!brScope(o.rel))continue;for(const l of o.lists)for(const x of l.items){if(!haves.has(x.i))haves.set(x.i,[]);haves.get(x.i).push({o:o.owner,rel:o.rel,l:l.id,ln:l.name,k:x.k,p:x.p||0,i:x.i})}}
+    for(const x of wn.wants){const os=x.o.filter(h=>brScope(fr.has(h)?'friend':'none'));if(!os.length)continue;if(!wants.has(x.i))wants.set(x.i,[]);for(const h of os)if(!wants.get(x.i).some(y=>y.o===h))wants.get(x.i).push({o:h})}
+    const L=src.filter(cardOk).map(c=>({c,h:haves.get(c.i)||[],w:wants.get(c.i)||[]})).sort((a,b)=>((b.h.length+b.w.length>0)-(a.h.length+a.w.length>0))||(a.c.hay.length-b.c.hay.length)).slice(0,40);
+    body.innerHTML=L.length?L.map((x,n)=>brTile(x.c,esc(x.c.set)+' · #'+esc(x.c.number),(x.h.length?`<span class="tag hit">👥 ${x.h.length} for trade</span> `:'')+(x.w.length?`<span class="tag">♡ ${x.w.length} want</span>`:''),`data-bk="${n}"`)).join(''):'<p class="mu">No cards found.</p>';
+    body.querySelectorAll('[data-bk]').forEach(b=>b.onclick=()=>{const x=L[+b.dataset.bk];brCardDlg(x.c,x.h,x.w,fr)})};
+  draw();
+  const inp=$('#brq');let t=null;inp.oninput=()=>{clearTimeout(t);t=setTimeout(()=>{BR.q=inp.value;draw()},200)}}
+function brCardDlg(c,h,w,fr){
+  if(!c)return;
+  modal(`<h3>${esc(c.name)}</h3><p class="mu">${esc(c.set)}${c.lang==='jp'?' · JP':''} · #${esc(c.number)}</p>${h.length?`<b>For trade (${h.length})</b>`+h.map((x,n)=>{const m=c.v[x.k]?c.v[x.k][0]:0;return `<button class="item" data-bh="${n}" style="margin-top:6px"><b>@${esc(x.o)}</b>${x.rel==='friend'?' 👥':''}<div class="mu">${esc(x.ln)} · ${esc(x.k)} · ${x.p>0?money(x.p)+' asking':(m>0?money(m):'—')}</div></button>`}).join(''):''}${w.length?`<div style="margin-top:${h.length?10:0}px"><b>Looking for it (${w.length})</b></div>`+w.map((x,n)=>`<button class="item" data-bu="${n}" style="margin-top:6px"><b>@${esc(x.o)}</b>${fr&&fr.has(x.o)?' 👥':''}<span class="mu"> · view profile</span></button>`).join(''):''}${!h.length&&!w.length?'<p class="mu">Nobody here has it listed or is looking for it yet.</p>':''}<button class="btn alt" id="no" style="margin-top:10px">Close</button>`);
+  $('#no').onclick=()=>closeModal();
+  document.querySelectorAll('#modal [data-bh]').forEach(b=>b.onclick=()=>{const x=h[+b.dataset.bh];closeModal();setTimeout(()=>fvCardMenu(x.o,x.i,x.k,x.p,x.rel),350)});
+  document.querySelectorAll('#modal [data-bu]').forEach(b=>b.onclick=()=>brProfile(w[+b.dataset.bu].o))}
 
 // ================= Accounts, friends and sharing =================
 const AK='bb_acct';
@@ -671,15 +741,17 @@ function showTab(t,fromPop){
   const prevTab=NAV.tab;
   if(!fromPop&&prevTab==='friends'&&t!=='friends'){FV.view='home';FV.handle='';FV.owner='';FV.id='';FV.focus=''}
   if(!fromPop&&NAV.tab!==t){NAV.tab=t;navPush()}NAV.tab=t;
-  $('#findView').hidden=t!=='find';$('#binderView').hidden=t!=='binders';$('#tradeView').hidden=t!=='trade';$('#friendsView').hidden=t!=='friends';$('#notifView').hidden=t!=='notif';$('#msgView').hidden=t!=='msg';
+  $('#findView').hidden=t!=='find';$('#binderView').hidden=t!=='binders';$('#tradeView').hidden=t!=='trade';$('#friendsView').hidden=t!=='friends';$('#notifView').hidden=t!=='notif';$('#msgView').hidden=t!=='msg';$('#browseView').hidden=t!=='browse';
   document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
   if(t==='binders')bRender(true);
   if(t==='trade')tRender(true);
   if(t==='friends')fvRender();
   if(t==='notif')notifRender();
   if(t==='msg')msgRender();
+  if(t==='browse')brRender();
   if(t==='find'||t==='trade'||t==='friends'||t==='binders')ftLoad()}
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{if(b.dataset.tab==='friends'&&NAV.tab==='friends'&&FV.view!=='home'){fvGo('home');return}if(b.dataset.tab==='msg'&&NAV.tab==='msg'&&MSG.with){MSG.with='';msgRender();return}showTab(b.dataset.tab)});
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{if(b.dataset.tab==='friends'&&NAV.tab==='friends'&&FV.view!=='home'){fvGo('home');return}showTab(b.dataset.tab)});
+$('#msgbtn').onclick=()=>{if(NAV.tab==='msg'&&MSG.with){MSG.with='';msgRender();return}showTab('msg')};
 $('#bellbtn').onclick=()=>showTab('notif');
 
 async function bEnsureData(){
@@ -1313,7 +1385,7 @@ function bVisDlg(b){
     if(v!=='private'&&!ACC.handle){accDlg(()=>setTimeout(apply,0));return}
     apply()})}
 
-function fvBack(){if(FV.view==='offer'&&OF.back&&OF.back.view&&OF.back.view!=='offer'&&OF.back.view!=='inbox'){fvGo(OF.back.view,OF.back.args||{});return}if(FV.view==='binder')fvGo(FV.from==='browse'?'browse':'profile',FV.from==='browse'?{}:{handle:FV.owner});else fvGo('home')}
+function fvBack(){if(FV.view==='offer'&&OF.back&&OF.back.view&&OF.back.view!=='offer'&&OF.back.view!=='inbox'){fvGo(OF.back.view,OF.back.args||{});return}if(FV.view==='binder'&&FV.via==='br'){FV.via='';showTab('browse');return}if(FV.view==='binder')fvGo(FV.from==='browse'?'browse':'profile',FV.from==='browse'?{}:{handle:FV.owner});else fvGo('home')}
 function fvGo(view,args,fromPop){const from=FV.view;Object.assign(FV,{view,handle:'',owner:'',id:'',page:0,focus:''},args||{});FV.from=from;if(!fromPop)navPush();fvRender()}
 const fvEl=()=>$('#friendsView');
 function fvRender(){const my=++FV.rid;({home:fvHome,profile:fvProfile,binder:fvBinder,browse:fvBrowse,offer:fvOffer,inbox:fvInbox}[FV.view]||fvHome)(my)}
@@ -1323,8 +1395,8 @@ const coverHtml=a=>`<div class="cov">${(a||[]).slice(0,4).map(i=>`<img src="${es
 async function fvHome(my){
   const el=fvEl();
   if(!ACC.handle){
-    el.innerHTML=`<h3>Friends</h3><div class="panel"><p style="margin:0 0 10px">Share binders with friends and browse theirs. Create a free account with email or Google.</p><button class="btn" id="fvstart">Create an account</button><button class="btn alt" id="fvlogin" style="margin-top:8px">Sign in</button></div><button class="btn alt" id="fvbrowse">🌐 Browse binders, trades &amp; wants</button>`;
-    $('#fvstart').onclick=()=>accDlg(()=>fvRender());$('#fvlogin').onclick=()=>loginDlg(()=>fvRender());$('#fvbrowse').onclick=()=>fvGo('browse');return}
+    el.innerHTML=`<h3>Friends</h3><div class="panel"><p style="margin:0 0 10px">Share binders with friends and browse theirs. Create a free account with email or Google.</p><button class="btn" id="fvstart">Create an account</button><button class="btn alt" id="fvlogin" style="margin-top:8px">Sign in</button></div>`;
+    $('#fvstart').onclick=()=>accDlg(()=>fvRender());$('#fvlogin').onclick=()=>loginDlg(()=>fvRender());return}
   el.innerHTML='<p class="mu">Loading…</p>';
   let m;try{m=await api('me')}catch(e){if(my!==FV.rid)return;el.innerHTML=`<h3>Friends</h3><p class="mu">${esc(e.message)}</p><button class="btn alt" id="facc">Account</button>`;$('#facc').onclick=acctMenu;return}
   if(my!==FV.rid)return;fvBadge(m.incoming.length,m.inbox,m.dm);
@@ -1339,8 +1411,8 @@ async function fvHome(my){
     return `<button class="frow btnrow" data-open="${esc(h)}" style="padding:9px 12px"><b style="font-size:14.5px;font-weight:700">@${esc(h)}</b><span>${mm?`<span class="bell">🎯 ${mm}</span> `:''}<span class="mu">›</span></span></button>`}).join(''):'<p class="mu">No friends yet. Tap ＋ Add and enter a handle.</p>'}
   <div id="faddbox"${m.friends.length||m.incoming.length?' hidden':''}><div class="row"><input id="fadd" type="text" placeholder="their handle" maxlength="21" autocapitalize="none" autocorrect="off" spellcheck="false"><button class="btn" id="fsend" style="flex:0 0 90px;padding:10px">Send</button></div><p class="mu" id="fmsg" style="min-height:1.2em"></p></div>
   ${m.outgoing.length?`<p class="mu">Waiting on: ${m.outgoing.map(h=>`@${esc(h)} <button class="chip" data-cancel="${esc(h)}">Cancel</button>`).join(' ')}</p>`:''}
-  <button class="btn" id="fvbrowse" style="margin-top:14px">🌐 Browse binders, trades &amp; wants</button><p class="mu" style="margin:6px 2px 0;text-align:center">Public binders, trade lists and cards people are looking for.</p>`;
-  $('#facc').onclick=acctMenu;$('#finbox').onclick=()=>fvGo('inbox');$('#fvbrowse').onclick=()=>fvGo('browse');$('#faddtog').onclick=()=>{const bx=$('#faddbox');bx.hidden=!bx.hidden;if(!bx.hidden)$('#fadd').focus()};
+`;
+  $('#facc').onclick=acctMenu;$('#finbox').onclick=()=>fvGo('inbox');$('#faddtog').onclick=()=>{const bx=$('#faddbox');bx.hidden=!bx.hidden;if(!bx.hidden)$('#fadd').focus()};
   const act=async(a,body,msg)=>{try{await api(a,body);if(msg)toast(msg)}catch(e){toast(e.message)}fvRender()};
   document.querySelectorAll('#friendsView [data-acc]').forEach(b=>b.onclick=()=>act('friend_accept',{from:b.dataset.acc},'You and @'+b.dataset.acc+' are friends'));
   document.querySelectorAll('#friendsView [data-dec]').forEach(b=>b.onclick=()=>act('friend_remove',{who:b.dataset.dec}));
@@ -1716,7 +1788,8 @@ const TOUR=[
  {tab:'trade',sel:'details[data-fk="calc"]',alt:'.tab[data-tab="trade"]',t:'🧮 Trade math',d:'Open this to compare both sides of a trade. Pick 100, 90, 80 or 70% to count your cards at a discount.'},
  {tab:'friends',sel:'#fvstart',alt:'.tab[data-tab="friends"]',t:'👥 Friends',d:'Create a free account with email or Google, then add friends by handle. Look inside their binders and trade lists, and check 🎯 Matches for swaps that work for both of you.'},
  {tab:'friends',sel:'.tab[data-tab="friends"]',t:'🤝 Offers and requests',d:'On a friend\'s profile, tap Make an offer, or tap any of their cards and choose Make an offer. They can accept, counter or decline. If a deal falls through, either of you can cancel it.'},
- {tab:'msg',sel:'.tab[data-tab="msg"]',t:'💬 Messages',d:'Chat with friends to set up a meetup. Your offers and requests are in here too.'},
+ {tab:'browse',sel:'.tab[data-tab="browse"]',t:'🌐 Browse',d:'Search for a card to see who has it or wants it, or browse binders, wishlists and trade lists from friends and public users.'},
+ {tab:'msg',sel:'#msgbtn',t:'💬 Messages',d:'Chat with friends to set up a meetup. Your offers and requests are in here too.'},
  {tab:'msg',sel:'#bellbtn',t:'🔔 Notifications',d:'Friend requests, offers waiting on you, replies and new matches all show up here. The number tells you how many are new.'},
  {tab:'msg',sel:'#themebtn',t:'🎨 Colors',d:'Pick a color theme that is easy on your eyes, or choose your own accent color.'}
 ];
