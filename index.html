@@ -1603,6 +1603,16 @@ function fvTradeHtml(l){
   h+=`<details class="fold"><summary>Looking for <span class="mu">(${wants.length})</span></summary><div class="foldbody">`+(wants.length?wants.map(r=>fvCardRow(r,`<span class="tag">♡</span>${!isMe&&mine.has(r.i)?'<span class="tag hit">You have this</span>':''}`)).join(''):`<p class="mu">No ♡ cards in ${isMe?'your shared':'their visible'} binders. Mark a card as wishlist in a shared binder and it shows up here.</p>`)+'</div></details>';
   return h}
 
+function pmFor(h){
+  if(!ACC.handle)return {n:0,get:[],give:[]};
+  const m=matchCalc(),get=m.have.filter(x=>x.o===h).map(x=>({i:x.i,k:x.k,p:x.p||0}));
+  const mine=new Map();for(const l of T.lists)for(const x of l.items)if(!mine.has(x.i))mine.set(x.i,x);
+  const give=m.want.filter(e=>e.o.includes(h)).map(e=>{const x=mine.get(e.i);return {i:e.i,k:x?x.k:e.k,p:x?(x.p||0):0}});
+  return {n:get.length+give.length,get,give}}
+function pmHtml(h){
+  const m=pmFor(h);if(!m.n)return '';
+  const side=(arr,t)=>arr.length?`<div class="mu" style="margin:4px 0 2px">${t}</div>`+arr.map(x=>{const c=cardById(x.i);return c?`<div class="tl" style="padding:4px 0"><img src="${esc(c.img)}" alt="" loading="lazy" style="width:32px"><div style="flex:1;min-width:0"><b style="font-size:13.5px">${esc(c.name)}</b><div class="mu">${esc(c.set)} · #${esc(c.number)}</div></div></div>`:''}).join(''):'';
+  return `<div class="panel match-card" style="margin-top:8px"><b>🎯 You match with @${esc(h)}</b>${side(m.get,'You could get')}${side(m.give,'You could give')}<button class="btn" id="pmgo" style="margin-top:8px">🤝 Start trade with these ${m.n===1?'card':m.n+' cards'}</button></div>`}
 async function fvProfile(my){
   const el=fvEl();el.innerHTML='<p class="mu">Loading…</p>';
   let l;try{l=await api('list_user',{handle:FV.handle})}catch(e){if(my!==FV.rid)return;fvErr(e.message);return}
@@ -1612,7 +1622,8 @@ async function fvProfile(my){
   const relTop=rel==='none'?(ACC.handle?'<button class="btn" id="frel">Add friend</button>':'<p class="mu">Create an account in Friends to add them.</p>'):rel==='in'?'<button class="btn" id="frel">Accept friend request</button>':rel==='out'?'<p class="mu" style="margin:4px 0">Friend request sent.</p>':rel==='self'?'<p class="mu" style="margin:4px 0">This is how others see your profile.</p>':'';
   const chips=(rel==='friend'?'<button class="chip sm" id="fmmsg">💬 Message</button>':'')+'<button class="chip sm" id="fvplink">🔗 Share</button>'+(rel!=='self'&&ACC.handle?'<button class="chip sm" id="fmore">⚑ Report</button>':'')+(rel==='friend'?'<button class="chip sm" id="frm">Remove</button>':'');
   el.innerHTML=`<button class="chip" id="fvback">← Back</button><h3 style="margin:12px 0 8px">@${esc(l.handle)}${rel==='friend'?' <span class="mu" style="font-size:13px;font-weight:600">✓ Friends</span>':''}</h3><div class="crow2">${chips}</div>${relTop}
-  ${rel==='friend'?'<button class="btn" id="fmoffer" style="margin-top:8px">🤝 Make an offer</button>':''}
+  ${rel==='friend'?pmHtml(l.handle):''}
+  ${rel==='friend'?'<button class="btn'+(pmFor(l.handle).n?' alt':'')+'" id="fmoffer" style="margin-top:8px">🤝 Make an offer</button>':''}
   <h3>Binders</h3>${l.binders.length?l.binders.map(b=>`<button class="frow btnrow" data-b="${esc(b.id)}">${coverHtml(b.cover)}<div style="flex:1;min-width:0"><b>${esc(b.name)}</b><div class="mu">${b.cnt} card${b.cnt===1?'':'s'} · ${visLabel(b.vis)} · ${ago(b.updated)}</div></div><span class="mu">›</span></button>`).join(''):`<p class="mu">No binders to show yet.${rel==='friend'||rel==='self'?'':' Friends-only binders appear once you are friends.'}</p>`}`;
   el.insertAdjacentHTML('beforeend',fvTradeHtml(l));
   if(FV.focus){const d=el.querySelector('details[data-lid="'+FV.focus+'"]');if(d){d.open=true;setTimeout(()=>d.scrollIntoView({block:'start'}),50)}}
@@ -1620,6 +1631,7 @@ async function fvProfile(my){
   $('#fvback').onclick=fvBack;
   document.querySelectorAll('#friendsView [data-b]').forEach(b=>b.onclick=()=>fvGo('binder',{owner:l.handle,id:b.dataset.b}));
   if($('#fmoffer'))$('#fmoffer').onclick=()=>offerStart(l.handle,{kind:'offer'});
+  if($('#pmgo'))$('#pmgo').onclick=()=>{const m=pmFor(l.handle);offerStart(l.handle,{kind:'offer',get:m.get,give:m.give})};
   if($('#frel'))$('#frel').onclick=async()=>{try{const r=await api('friend_add',{to:l.handle});toast(r.rel==='friend'?'You are now friends':'Request sent');fvRender()}catch(e){toast(e.message)}};
   if($('#fmore'))$('#fmore').onclick=()=>moreMenu(l.handle,'user');
   if($('#fmmsg'))$('#fmmsg').onclick=()=>{MSG.with=l.handle;showTab('msg')};
