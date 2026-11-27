@@ -253,7 +253,7 @@ const link=(c,k)=>c.url+'?Language=English&Printing='+encodeURIComponent(k).repl
 // A price is 'uncertain' when market and lowest listing disagree by more than 3x (and it's not a cheap card)
 const shaky=(c,k)=>{const v=c.v[k],m=v[0],l=v[1];return m>0&&l>0&&Math.max(m,l)>=40&&(l>3*m||m>3*l)};
 
-const loadImg=f=>new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=URL.createObjectURL(f)});
+let loadImg=f=>new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=URL.createObjectURL(f)});
 function crop(img,x,y,w,h,outW,mode){
   const sw=img.width*w,sh=img.height*h,sc=outW/sw,c=document.createElement('canvas');
   c.width=outW;c.height=Math.max(1,Math.round(sh*sc));const g=c.getContext('2d');
@@ -861,8 +861,9 @@ function bPocket(b,i){
   $('#rm').onclick=()=>{b.pages[BD.page][i]=null;bSave();closeModal();bRender()}}
 
 async function bPicker(b,i){
-  modal(`<h3>Add a card</h3><input id="bq" type="text" placeholder="Pokémon name (add a number like 4/102 if you want)" style="width:100%"><div class="row mu" style="align-items:center;flex-wrap:wrap">Show <button class="chip on" data-pl="en">English</button><button class="chip" data-pl="jp">Japanese</button><button class="chip" data-pl="both">Both</button></div><label class="mu" style="display:block;margin:6px 0"><input type="checkbox" id="bwish"> Add as wishlist (I don't own it yet)</label><p class="mu" id="bpmsg">Loading cards…</p><div id="bpres"></div><button class="btn alt" id="no" style="margin-top:8px">Cancel</button>`);
+  modal(`<h3>Add a card</h3><div class="cams"><label class="btn" for="bsc">📷 Scan card</label><label class="btn alt" for="bsc2">🖼️ Photo</label></div><input id="bsc" class="pick" type="file" accept="image/*" capture="environment"><input id="bsc2" class="pick" type="file" accept="image/*"><input id="bq" type="text" placeholder="Pokémon name (add a number like 4/102 if you want)" style="width:100%"><div class="row mu" style="align-items:center;flex-wrap:wrap">Show <button class="chip on" data-pl="en">English</button><button class="chip" data-pl="jp">Japanese</button><button class="chip" data-pl="both">Both</button></div><label class="mu" style="display:block;margin:6px 0"><input type="checkbox" id="bwish"> Add as wishlist (I don't own it yet)</label><p class="mu" id="bpmsg">Loading cards…</p><div id="bpres"></div><button class="btn alt" id="no" style="margin-top:8px">Cancel</button>`);
   $('#no').onclick=()=>closeModal();
+  for(const id of ['#bsc','#bsc2']){const f=$(id);f.onchange=()=>{const file=f.files[0];f.value='';if(file)bScanPocket(b,i,file)}}
   $('#bwish').checked=BD.wish;$('#bwish').onchange=e=>{BD.wish=e.target.checked};
   let pl='en',list=[],t=null,shown=40;
   try{await loadData()}catch(e){$('#bpmsg').textContent=e.message;return}
@@ -884,6 +885,19 @@ async function bPicker(b,i){
     if(pl!=='en'&&!DATA.jp.length){$('#bpmsg').textContent='Loading Japanese prices…';try{await loadJP()}catch(e){$('#bpmsg').textContent=e.message;pl='en';document.querySelectorAll('#modal .chip[data-pl]').forEach(x=>x.classList.toggle('on',x.dataset.pl==='en'));return}}
     run()});
   setTimeout(()=>{const q=$('#bq');if(q)q.focus()},50)}
+
+async function bScanPocket(b,i,file){
+  modal(`<h3>Reading card…</h3><p class="mu">Hold on a few seconds.</p>`);
+  const back=()=>{closeModal();setTimeout(()=>bPicker(b,i),450)};
+  let m;
+  try{const img=await loadImg(file);const r=await claudeRead(img);m=await tMatch(r)}
+  catch(e){modal(`<h3>Couldn't read that</h3><p class="mu">${esc(String(e.message||e))}</p><button class="btn" id="bsr">Search by name</button><button class="btn alt" id="no" style="margin-top:8px">Cancel</button>`);$('#bsr').onclick=back;$('#no').onclick=()=>closeModal();return}
+  if(!m.list.length){modal(`<h3>No match found</h3><p class="mu">Try another photo, or search by name.</p><button class="btn" id="bsr">Search by name</button><button class="btn alt" id="no" style="margin-top:8px">Cancel</button>`);$('#bsr').onclick=back;$('#no').onclick=()=>closeModal();return}
+  if(m.list.length===1&&(m.exact||!m.num)&&!m.foreign){bChoose(b,i,m.list[0]);return}
+  const L=m.list.slice(0,8);
+  modal(`<h3>Which one is yours?</h3><p class="mu">${m.foreign?"This language isn't on TCGplayer, so pick a similar card.":'Pick the closest match.'}</p>${L.map((c,n)=>`<button class="item" data-n="${n}" style="display:flex;gap:10px;margin-bottom:8px;align-items:center"><img src="${esc(c.img)}" loading="lazy" alt="" style="width:56px;flex:0 0 56px"><div><b style="margin:0">${esc(c.name)}</b><div class="mu">${esc(c.set)}${c.lang==='jp'?'<span class="lang">JP</span>':''} · #${esc(c.number)}</div></div></button>`).join('')}<button class="btn alt" id="bsr">Search by name</button>`);
+  $('#bsr').onclick=back;
+  document.querySelectorAll('#modal [data-n]').forEach(el=>el.onclick=()=>bChoose(b,i,L[+el.dataset.n]))}
 
 function bChoose(b,i,c){
   const put=k=>{b.pages[BD.page][i]=Object.assign({i:c.i,k,a:c.v[k]?c.v[k][0]:0},BD.wish?{w:1}:{});bSave();closeModal();bRender()};
