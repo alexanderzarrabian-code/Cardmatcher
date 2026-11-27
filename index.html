@@ -105,6 +105,7 @@ details.fold{margin:10px 0}details.fold>summary{cursor:pointer;font-weight:800;f
 .swg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.sw{border:2px solid var(--line);border-radius:12px;padding:8px;background:var(--card);color:var(--fg);font:700 14px system-ui;text-align:left;cursor:pointer}.sw.on{border-color:var(--ac)}.sw i{display:inline-block;width:16px;height:16px;border-radius:50%;margin-right:3px;vertical-align:-3px;border:1px solid rgba(128,128,128,.5)}
 #bellbtn{position:absolute;right:54px;top:12px;width:32px;height:32px;border-radius:50%;border:2px solid var(--ac);background:transparent;font-size:14px;cursor:pointer;z-index:2;padding:0;line-height:1}
 #bellbtn .nb{position:absolute;top:-7px;right:-7px;margin:0;min-width:16px;padding:0 4px;font-size:10px;line-height:16px}
+.chip.sm{font-size:12px;padding:7px 4px;white-space:nowrap}.crow2{display:flex;gap:5px;flex-wrap:nowrap;margin:0 0 8px}.crow2 .chip{flex:1 1 0;min-width:0;text-align:center}
 .mlog{display:flex;flex-direction:column;gap:6px;margin:8px 0 10px;min-height:120px}
 .mb{max-width:82%;padding:8px 12px;border-radius:16px;background:var(--card);border:1px solid var(--line);align-self:flex-start;word-wrap:break-word;overflow-wrap:anywhere}
 .mb.me{align-self:flex-end;background:var(--ac);color:var(--onac);border-color:transparent}
@@ -166,7 +167,7 @@ function themeApply(t){t=t||themeLoad();var base=THEMES.gold,pr=Object.assign({}
 try{themeApply()}catch(e){}
 </script>
 </head><body>
-<div class="banner"><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><button id="themebtn" aria-label="Colors" title="Colors">🎨</button><button id="bellbtn" aria-label="Notifications" title="Notifications">🔔</button><button id="helpbtn" aria-label="How it works" title="How it works">?</button><h1>Binder Buddy</h1><p>Snap a card. Find its price twins.</p></div>
+<div class="banner"><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><button id="themebtn" aria-label="Colors" title="Colors">🎨</button><button id="bellbtn" aria-label="Notifications" title="Notifications">🔔</button><button id="helpbtn" aria-label="How it works" title="How it works">?</button><h1>Binder Buddy</h1></div>
 <div class="tabs"><button class="tab on" data-tab="binders">📒 Binders</button><button class="tab" data-tab="find">🔍 Look up</button><button class="tab" data-tab="trade">🔄 Trade</button><button class="tab" data-tab="friends">👥 Friends</button><button class="tab" data-tab="msg" id="msgTab" aria-label="Messages">💬</button></div>
 <div id="findView" hidden>
 <p class="hint" style="margin:0 0 8px">Scan or type a card to see its price and find cards worth about the same.</p>
@@ -576,13 +577,26 @@ function matchPreview(m){
   if(w){const c=cardById(w.i);f.push('@'+esc(w.o[0])+' wants your '+(c?esc(c.name):'card'))}
   const more=m.have.length+m.want.length-f.length;
   return f.length?'<div class="mprev">'+f.join(' · ')+(more>0?' · +'+more+' more':'')+'</div>':''}
+let MX=[];
+function matchDetail(n){
+  const t=MX[n];if(!t)return;const x=t.x,c=cardById(x.i);if(!c)return;const mk=c.v[x.k]?c.v[x.k][0]:0;
+  if(t.kind==='have'){
+    modal(`<h3>${esc(c.name)}</h3><p class="mu">${esc(c.set)}${c.lang==='jp'?' · JP':''} · #${esc(c.number)}<br>${esc(x.k)} · ${x.p>0?money(x.p)+' asking':(mk>0?'Near Mint '+money(mk):'no price')}<br><b>@${esc(x.o)}</b> · ${esc(x.ln)} · ${MODE_TXT[x.m]||'Trade or sale'}</p><button class="btn" id="mdoff">🤝 Make an offer</button><button class="btn alt" id="mdview" style="margin-top:8px">View their list</button><a class="btn alt" style="text-decoration:none;margin-top:8px" target="_blank" rel="noopener" href="${esc(link(c,x.k))}">Open on TCGplayer</a><button class="btn alt" id="no" style="margin-top:8px">Close</button>`);
+    $('#mdoff').onclick=()=>offerStart(x.o,{kind:'offer',get:[{i:+x.i,k:x.k,p:+x.p||0}],fromModal:true});
+    $('#mdview').onclick=()=>{closeModal();setTimeout(()=>ftGo(x.o,x.l),350)}
+  }else{
+    modal(`<h3>${esc(c.name)}</h3><p class="mu">${esc(c.set)}${c.lang==='jp'?' · JP':''} · #${esc(c.number)}<br>${mk>0?'Near Mint '+money(mk)+'<br>':''}${x.listed?'On your trade list':'In your binder'}<br>Wanted by ${x.o.map(o=>'<b>@'+esc(o)+'</b>').join(', ')}</p>${x.listed?'':'<button class="btn" id="mdlist">List it for trade</button>'}<a class="btn alt" style="text-decoration:none;margin-top:8px" target="_blank" rel="noopener" href="${esc(link(c,c.vk[0]))}">Open on TCGplayer</a><button class="btn alt" id="no" style="margin-top:8px">Close</button>`);
+    if($('#mdlist'))$('#mdlist').onclick=()=>{closeModal();const k=(FW.by.get(x.i)||[]).map(y=>y.k).find(q=>c.v[q])||c.vk[0];setTimeout(()=>tListDlg({i:x.i,k},c),350)}
+  }
+  $('#no').onclick=()=>closeModal()}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-mx]');if(b)matchDetail(+b.dataset.mx)});
 function matchPanel(){
   const m=matchCalc(),n=m.have.length+m.want.length;
   if(!n)return `<details class="fold match"><summary>🎯 Matches <span class="mu">(none yet)</span></summary><div class="foldbody"><p class="mu">When a friend lists a card you ♡, or a friend wants a card you own or have listed, it shows up here.</p></div></details>`;
-  const haveRows=m.have.map(x=>{const c=cardById(x.i);if(!c)return '';const mk=c.v[x.k]?c.v[x.k][0]:0;
-    return `<div class="tl hot"><img src="${esc(c.img)}" alt="" loading="lazy"><div style="flex:1;min-width:0"><b>${esc(c.name)}</b>${c.lang==='jp'?'<span class="lang">JP</span>':''}<span class="tag hit">${MODE_TXT[x.m]||'Trade or sale'}</span><div class="mu">${esc(c.set)} · ${esc(x.k)}<br><b>@${esc(x.o)}</b> · ${esc(x.ln)} · ${x.p>0?money(x.p)+' asking':(mk>0?money(mk):'—')}</div></div><span style="display:flex;gap:6px;flex-direction:column"><button class="chip on" data-fgo="${esc(x.o)}|${esc(x.l)}">View</button><button class="chip" data-req="${esc(x.o)}|${x.i}|${esc(x.k)}|${x.p||0}">Request</button></span></div>`}).join('');
-  const wantRows=m.want.map(e=>{const c=cardById(e.i);if(!c)return '';const mk=c.v[e.k]?c.v[e.k][0]:0;
-    return `<div class="tl hot"><img src="${esc(c.img)}" alt="" loading="lazy"><div style="flex:1;min-width:0"><b>${esc(c.name)}</b>${c.lang==='jp'?'<span class="lang">JP</span>':''}<span class="tag">${e.listed?'On your trade list':'In your binder'}</span><div class="mu">${esc(c.set)}<br>Wanted by ${e.o.map(o=>'<b>@'+esc(o)+'</b>').join(', ')}${mk>0?' · '+money(mk):''}</div></div>${e.listed?'':`<button class="chip on" data-mlist="${e.i}">List it</button>`}</div>`}).join('');
+  MX=[];
+  const tile=(c,kind,x)=>{const n=MX.push({kind,x});return `<button class="tl hot" data-mx="${n-1}" style="width:100%;text-align:left;color:inherit;font:inherit;cursor:pointer;padding:6px 8px"><img src="${esc(c.img)}" alt="" loading="lazy" style="width:38px"><div style="flex:1;min-width:0"><b style="font-size:14px">${esc(c.name)}</b>${c.lang==='jp'?'<span class="lang">JP</span>':''}<div class="mu">${esc(c.set)} · #${esc(c.number)}</div></div><span class="mu">›</span></button>`};
+  const haveRows=m.have.map(x=>{const c=cardById(x.i);return c?tile(c,'have',x):''}).join('');
+  const wantRows=m.want.map(e=>{const c=cardById(e.i);return c?tile(c,'want',e):''}).join('');
   return `<details class="fold match"><summary>🎯 Matches <span class="mu">(${n})</span>${matchNew()?' <span class="bell">🔔 '+matchNew()+' new</span>':''}</summary><div class="foldbody">${m.have.length?`<h4 class="mh">👥 Friends have cards you want (${m.have.length})</h4>${haveRows}`:''}${m.want.length?`<h4 class="mh">🎁 Friends want cards you have (${m.want.length})</h4>${wantRows}`:''}</div></details>`}
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-mlist]');if(!b)return;const i=+b.dataset.mlist,c=cardById(i);if(!c)return;tListDlg({i,k:(FW.by.get(i)||[]).map(x=>x.k).find(k=>c.v[k])||c.vk[0]},c)});
 
@@ -654,6 +668,8 @@ try{history.replaceState({tab:'binders',page:0,cur:null},'')}catch(e){}
 
 // tabs
 function showTab(t,fromPop){
+  const prevTab=NAV.tab;
+  if(!fromPop&&prevTab==='friends'&&t!=='friends'){FV.view='home';FV.handle='';FV.owner='';FV.id='';FV.focus=''}
   if(!fromPop&&NAV.tab!==t){NAV.tab=t;navPush()}NAV.tab=t;
   $('#findView').hidden=t!=='find';$('#binderView').hidden=t!=='binders';$('#tradeView').hidden=t!=='trade';$('#friendsView').hidden=t!=='friends';$('#notifView').hidden=t!=='notif';$('#msgView').hidden=t!=='msg';
   document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
@@ -965,7 +981,6 @@ function tListHtml(){
 function tWishHtml(){
   const bw=binderWishes().filter(r=>!T.wish.some(x=>x.i===r.i));
   return `<div class="lhead"><div style="min-width:0"><b class="lname">♡ My wishlist</b><div class="mu">${T.wish.length} card${T.wish.length===1?'':'s'} · ${visLabel(tVis(wishObj))}</div></div><div class="row" style="margin:0;flex:0 0 auto"><button class="chip on" data-act="tadd">＋ Add</button><button class="chip" data-act="wvis" aria-label="Who can see">👁</button></div></div>
-  <p class="mu" style="margin-top:0">Cards you are hunting for. Friends can see them and get a 🎯 when they have one. Cards you ♡ in a binder count too.</p>
   ${T.msg?`<p class="mu" id="tmsg" style="color:var(--ac)">${esc(T.msg)}</p>`:''}
   ${T.review.length?`<h3>Needs a quick look (${T.review.length})</h3>${T.review.map(rv=>`<div class="review"><b>${esc(rv.label||'Unknown card')}</b><div class="mu">${esc(rv.note||'Tap the right one:')}</div>${rv.pairs.map((p,n)=>`<button class="item pair" data-act="pair" data-r="${rv.id}" data-p="${n}"><img src="${esc(p.c.img)}" loading="lazy" alt=""><div style="flex:1;min-width:0"><b style="margin:0">${esc(p.c.name)}</b><div class="mu">${esc(p.c.set)} · #${esc(p.c.number)}<br>${esc(p.k)}</div></div><div class="tp">${money(p.c.v[p.k][0])}</div></button>`).join('')}<div class="row"><button class="btn alt" data-act="manual" data-r="${rv.id}">Search by name</button><button class="btn alt" data-act="skip" data-r="${rv.id}">Skip</button></div></div>`).join('')}`:''}
   ${T.wish.length?T.wish.map((r,i)=>tRow(r,'wish',i)).join(''):'<p class="mu">Nothing here yet. Tap ＋ Add to search a card, or scan one.</p>'}
@@ -1321,7 +1336,7 @@ async function fvHome(my){
   ${m.incoming.length?`<h3>Friend requests</h3>${m.incoming.map(h=>`<div class="frow"><b>@${esc(h)}</b><span><button class="chip on" data-acc="${esc(h)}">Accept</button> <button class="chip" data-dec="${esc(h)}">Decline</button></span></div>`).join('')}`:''}
   <div class="row" style="align-items:center;justify-content:space-between;margin:14px 0 8px"><h3 style="margin:0">Your friends</h3><button class="chip" id="faddtog">＋ Add</button></div>
   ${m.friends.length?m.friends.map(h=>{const nt=FT.items.filter(x=>x.o===h).length,nw=FW.items.filter(x=>x.o===h).length,mm=mc.have.filter(x=>x.o===h).length+mc.want.filter(x=>x.o.includes(h)).length;
-    return `<button class="frow btnrow" data-open="${esc(h)}"><div style="min-width:0"><b>@${esc(h)}</b><div class="mu">${nt} for trade · ${nw} wants</div></div><span>${mm?`<span class="bell">🎯 ${mm}</span> `:''}<span class="mu">›</span></span></button>`}).join(''):'<p class="mu">No friends yet. Tap ＋ Add and enter a handle.</p>'}
+    return `<button class="frow btnrow" data-open="${esc(h)}" style="padding:9px 12px"><b style="font-size:14.5px;font-weight:700">@${esc(h)}</b><span>${mm?`<span class="bell">🎯 ${mm}</span> `:''}<span class="mu">›</span></span></button>`}).join(''):'<p class="mu">No friends yet. Tap ＋ Add and enter a handle.</p>'}
   <div id="faddbox"${m.friends.length||m.incoming.length?' hidden':''}><div class="row"><input id="fadd" type="text" placeholder="their handle" maxlength="21" autocapitalize="none" autocorrect="off" spellcheck="false"><button class="btn" id="fsend" style="flex:0 0 90px;padding:10px">Send</button></div><p class="mu" id="fmsg" style="min-height:1.2em"></p></div>
   ${m.outgoing.length?`<p class="mu">Waiting on: ${m.outgoing.map(h=>`@${esc(h)} <button class="chip" data-cancel="${esc(h)}">Cancel</button>`).join(' ')}</p>`:''}
   <button class="btn" id="fvbrowse" style="margin-top:14px">🌐 Browse binders, trades &amp; wants</button><p class="mu" style="margin:6px 2px 0;text-align:center">Public binders, trade lists and cards people are looking for.</p>`;
@@ -1594,11 +1609,12 @@ async function fvProfile(my){
   if(my!==FV.rid)return;
   await fvNeed([...(l.trade||[]),...(l.wants||[])]);if(my!==FV.rid)return;
   const rel=l.rel;
-  const relHtml=rel==='none'?(ACC.handle?'<button class="btn" id="frel">Add friend</button>':'<p class="mu">Create an account in Friends to add them.</p>'):rel==='in'?'<button class="btn" id="frel">Accept friend request</button>':rel==='out'?'<p class="mu">Friend request sent.</p>':rel==='friend'?'<div class="row" style="align-items:center;justify-content:space-between"><span class="mu">✓ Friends</span><span><button class="chip" id="fmmsg">💬 Message</button> <button class="chip" id="frm">Remove friend</button></span></div>':'<p class="mu">This is how others see your profile.</p>';
-  el.innerHTML=`<button class="chip" id="fvback">← Back</button><h3 style="margin-top:12px">@${esc(l.handle)}</h3>${relHtml}${rel!=='self'&&ACC.handle?'<div style="text-align:right;margin:4px 0"><button class="chip" id="fmore">⚑ Report / Block</button></div>':''}
-  ${rel==='friend'?'<button class="btn" id="fmoffer">🤝 Make an offer</button>':''}
+  const relTop=rel==='none'?(ACC.handle?'<button class="btn" id="frel">Add friend</button>':'<p class="mu">Create an account in Friends to add them.</p>'):rel==='in'?'<button class="btn" id="frel">Accept friend request</button>':rel==='out'?'<p class="mu" style="margin:4px 0">Friend request sent.</p>':rel==='self'?'<p class="mu" style="margin:4px 0">This is how others see your profile.</p>':'';
+  const chips=(rel==='friend'?'<button class="chip sm" id="fmmsg">💬 Message</button>':'')+'<button class="chip sm" id="fvplink">🔗 Share</button>'+(rel!=='self'&&ACC.handle?'<button class="chip sm" id="fmore">⚑ Report</button>':'')+(rel==='friend'?'<button class="chip sm" id="frm">Remove</button>':'');
+  el.innerHTML=`<button class="chip" id="fvback">← Back</button><h3 style="margin:12px 0 8px">@${esc(l.handle)}${rel==='friend'?' <span class="mu" style="font-size:13px;font-weight:600">✓ Friends</span>':''}</h3><div class="crow2">${chips}</div>${relTop}
+  ${rel==='friend'?'<button class="btn" id="fmoffer" style="margin-top:8px">🤝 Make an offer</button>':''}
   <h3>Binders</h3>${l.binders.length?l.binders.map(b=>`<button class="frow btnrow" data-b="${esc(b.id)}">${coverHtml(b.cover)}<div style="flex:1;min-width:0"><b>${esc(b.name)}</b><div class="mu">${b.cnt} card${b.cnt===1?'':'s'} · ${visLabel(b.vis)} · ${ago(b.updated)}</div></div><span class="mu">›</span></button>`).join(''):`<p class="mu">No binders to show yet.${rel==='friend'||rel==='self'?'':' Friends-only binders appear once you are friends.'}</p>`}`;
-  el.insertAdjacentHTML('beforeend',fvTradeHtml(l)+'<button class="btn alt" id="fvplink" style="margin-top:10px">🔗 Share link to this profile</button>');
+  el.insertAdjacentHTML('beforeend',fvTradeHtml(l));
   if(FV.focus){const d=el.querySelector('details[data-lid="'+FV.focus+'"]');if(d){d.open=true;setTimeout(()=>d.scrollIntoView({block:'start'}),50)}}
   $('#fvplink').onclick=()=>shareUrl(profileLink(l.handle),'@'+l.handle+' on Binder Buddy');
   $('#fvback').onclick=fvBack;
