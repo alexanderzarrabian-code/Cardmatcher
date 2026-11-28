@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <style>
-:root{--bg:#141a24;--bg2:#10151e;--surf:#1e2634;--fg:#e6e9ef;--mu:#9aa3b5;--ac:#d9b45a;--onac:#1a1405;--gold:#d9b45a;--line:#364257;--aqua:#63b99b;--aqt:#93d1b9;--alt:#222b3a;--altl:#445068;--ban1:#1d2636;--ban2:#171e2b;--tabsbg:rgba(20,26,36,.94);--pkbg:rgba(20,26,36,.6);--inpc:#10151e;--ac2:color-mix(in srgb,var(--ac) 85%,#000);--blue:var(--ac);--card:color-mix(in srgb,var(--surf) 85%,transparent);--chip:color-mix(in srgb,var(--surf) 90%,transparent);--panel:color-mix(in srgb,var(--surf) 55%,transparent);--inp:color-mix(in srgb,var(--inpc) 85%,transparent);--shadow:0 3px 0 rgba(0,0,0,.35),0 0 14px color-mix(in srgb,var(--ac) 10%,transparent)}
+:root{--bg:#141a24;--bg2:#10151e;--surf:#1e2634;--fg:#e6e9ef;--mu:#aeb7c8;--ac:#d9b45a;--onac:#1a1405;--gold:#d9b45a;--line:#364257;--aqua:#63b99b;--aqt:#93d1b9;--alt:#222b3a;--altl:#445068;--ban1:#1d2636;--ban2:#171e2b;--tabsbg:rgba(20,26,36,.94);--pkbg:rgba(20,26,36,.6);--inpc:#10151e;--ac2:color-mix(in srgb,var(--ac) 85%,#000);--blue:var(--ac);--card:color-mix(in srgb,var(--surf) 85%,transparent);--chip:color-mix(in srgb,var(--surf) 90%,transparent);--panel:color-mix(in srgb,var(--surf) 55%,transparent);--inp:color-mix(in srgb,var(--inpc) 85%,transparent);--shadow:0 3px 0 rgba(0,0,0,.35),0 0 14px color-mix(in srgb,var(--ac) 10%,transparent)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{background:var(--bg)}
 body{margin:0;padding:0 14px 96px;font:16px/1.4 "Trebuchet MS","Avenir Next",system-ui,sans-serif;color:var(--fg);max-width:640px;margin:auto;min-height:100vh;
@@ -55,7 +55,7 @@ h3{font:900 17px/1.2 "Arial Black","Trebuchet MS",system-ui,sans-serif;margin:18
 .item:hover::after,.item:active::after{opacity:1}
 .item .tag{display:inline-block;margin-top:5px;background:linear-gradient(135deg,var(--aqua),var(--aqt));color:#052e1f;font-weight:800;border-radius:9px;padding:2px 8px}
 .chips{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 8px}
-.chip{flex:0 0 auto;padding:7px 12px;border-radius:99px;background:var(--chip);border:2px solid var(--line);color:var(--fg);font-size:13px;font-weight:700;cursor:pointer}
+.chip{flex:0 0 auto;padding:9px 13px;min-height:38px;border-radius:99px;background:var(--chip);border:2px solid var(--line);color:var(--fg);font-size:13px;font-weight:700;cursor:pointer}
 .chip[data-d]{border-color:var(--ac);color:var(--ac)}
 .chip[data-v]{border-width:2px;color:#eef1f7}
 .chip[data-v^="Holofoil"]{background:linear-gradient(120deg,var(--chip),#22305a)}
@@ -101,12 +101,10 @@ label.mu{color:var(--mu)}
 .tag{display:inline-block;font-size:11px;font-weight:800;border-radius:999px;padding:2px 8px;margin-left:6px;background:var(--line);color:var(--fg)}.tag.hit{background:var(--aqua);color:#06281d}
 .lbadge{position:absolute;top:2px;left:2px;z-index:2;background:var(--ac);color:var(--onac);font-size:10px;font-weight:800;border-radius:999px;padding:1px 6px;box-shadow:0 0 6px #000}
 details.fold{margin:10px 0}details.fold>summary{cursor:pointer;font-weight:800;font-size:17px;list-style:none;padding:12px 14px;background:var(--card);border:2px solid var(--line);border-radius:12px;display:flex;justify-content:space-between;align-items:center;gap:8px}details.fold>summary::-webkit-details-marker{display:none}details.fold>summary::after{content:'▾';color:var(--mu)}details.fold[open]>summary::after{content:'▴'}details.fold[open]>summary{border-color:var(--ac)}.foldbody{padding-top:8px}
-#themebtn{position:absolute;left:14px;top:12px;width:32px;height:32px;border-radius:50%;border:2px solid var(--ac);background:transparent;font-size:15px;cursor:pointer;z-index:2;padding:0}
+#setbtn{position:absolute;left:14px;top:12px;width:32px;height:32px;border-radius:50%;border:2px solid var(--ac);background:transparent;font-size:15px;cursor:pointer;z-index:2;padding:0}
 .swg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.sw{border:2px solid var(--line);border-radius:12px;padding:8px;background:var(--card);color:var(--fg);font:700 14px system-ui;text-align:left;cursor:pointer}.sw.on{border-color:var(--ac)}.sw i{display:inline-block;width:16px;height:16px;border-radius:50%;margin-right:3px;vertical-align:-3px;border:1px solid rgba(128,128,128,.5)}
-#msgbtn{position:absolute;left:54px;top:12px;width:32px;height:32px;border-radius:50%;border:2px solid var(--ac);background:transparent;font-size:14px;cursor:pointer;z-index:2;padding:0;line-height:1}#msgbtn .nb{position:absolute;top:-7px;right:-7px;margin:0;min-width:16px;padding:0 4px;font-size:10px;line-height:16px}
-#bellbtn{position:absolute;right:54px;top:12px;width:32px;height:32px;border-radius:50%;border:2px solid var(--ac);background:transparent;font-size:14px;cursor:pointer;z-index:2;padding:0;line-height:1}
-#bellbtn .nb{position:absolute;top:-7px;right:-7px;margin:0;min-width:16px;padding:0 4px;font-size:10px;line-height:16px}
-.chip.sm{font-size:12px;padding:7px 4px;white-space:nowrap}.crow2{display:flex;gap:5px;flex-wrap:nowrap;margin:0 0 8px}.crow2 .chip{flex:1 1 0;min-width:0;text-align:center}
+#msgbtn{position:absolute;right:14px;top:12px;width:32px;height:32px;border-radius:50%;border:2px solid var(--ac);background:transparent;font-size:14px;cursor:pointer;z-index:2;padding:0;line-height:1}#msgbtn .nb{position:absolute;top:-7px;right:-7px;margin:0;min-width:16px;padding:0 4px;font-size:10px;line-height:16px}
+.chip.sm{font-size:13px;padding:8px 5px;white-space:nowrap;min-height:36px}.crow2{display:flex;gap:5px;flex-wrap:nowrap;margin:0 0 8px}.crow2 .chip{flex:1 1 0;min-width:0;text-align:center}
 .mlog{display:flex;flex-direction:column;gap:6px;margin:8px 0 10px;min-height:120px}
 .mb{max-width:82%;padding:8px 12px;border-radius:16px;background:var(--card);border:1px solid var(--line);align-self:flex-start;word-wrap:break-word;overflow-wrap:anywhere}
 .mb.me{align-self:flex-end;background:var(--ac);color:var(--onac);border-color:transparent}
@@ -120,7 +118,7 @@ details.fold{margin:10px 0}details.fold>summary{cursor:pointer;font-weight:800;f
 #coachcard h3{margin:0 0 6px}#coachcard p{margin:0 0 10px}
 #coachcard .crow{display:flex;gap:8px;align-items:center}#coachcard .crow .btn{margin:0;padding:10px}
 #coachcard .cn{font-size:12px;color:var(--mu);flex:1}
-#helpbtn{position:absolute;right:14px;top:12px;width:32px;height:32px;border-radius:50%;border:2px solid var(--ac);background:transparent;color:var(--ac);font-weight:800;font-size:16px;cursor:pointer;z-index:2}
+
 .hstep{text-align:center;padding:6px 4px}.hstep .big{font-size:46px;line-height:1.1}.hstep h3{margin:8px 0 6px}.hdots{display:flex;gap:6px;justify-content:center;margin:12px 0}.hdots i{width:8px;height:8px;border-radius:50%;background:var(--line)}.hdots i.on{background:var(--ac)}
 .fbadge{position:absolute;top:4px;left:4px;z-index:2;background:var(--aqua);color:#06281d;font-size:11px;font-weight:800;border-radius:999px;padding:2px 8px;box-shadow:0 0 6px #000}
 .fbadge.want{background:var(--ac);color:var(--onac)}
@@ -150,7 +148,8 @@ details.fold>summary .lname{display:inline;font-size:17px}
 details.pset[open]{display:block;width:100%}
 
 .nitem{display:flex;align-items:center;gap:10px;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:10px;margin-bottom:8px;cursor:pointer}.nitem.new{border-color:var(--ac)}.nitem .ni{font-size:20px;flex:0 0 26px;text-align:center}.nitem .nt{flex:1;min-width:0;font-size:15px;font-weight:700}.nitem .nt .mu{display:block;font-weight:400;font-size:13px}.nitem .dot{width:9px;height:9px;border-radius:50%;background:var(--ac);flex:0 0 9px}
-.tabs{gap:5px!important;padding-left:8px!important;padding-right:8px!important}.tab{font-size:12px!important;min-width:0;overflow:hidden;padding:10px 1px!important}
+.tabs{gap:5px!important;padding-left:8px!important;padding-right:8px!important}.tab{font-size:12.5px!important;min-width:0;overflow:hidden;padding:10px 1px!important}
+#gload{position:fixed;top:64px;left:50%;transform:translateX(-50%);z-index:30;background:var(--surf);border:2px solid var(--ac);color:var(--fg);padding:8px 14px;border-radius:99px;font-size:13px;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.4)}#gload:before{content:'';display:inline-block;width:12px;height:12px;margin-right:8px;border:2px solid var(--ac);border-top-color:transparent;border-radius:50%;vertical-align:-2px;animation:gsp .8s linear infinite}@keyframes gsp{to{transform:rotate(360deg)}}
 </style>
 <script>
 var THEMES={gold:{n:'Soft Gold',bg:'#141a24',bg2:'#10151e',surf:'#1e2634',line:'#364257',ac:'#d9b45a',mu:'#9aa3b5',alt:'#222b3a',altl:'#445068',ban1:'#1d2636',ban2:'#171e2b'},
@@ -168,8 +167,8 @@ function themeApply(t){t=t||themeLoad();var base=THEMES.gold,pr=Object.assign({}
 try{themeApply()}catch(e){}
 </script>
 </head><body>
-<div class="banner"><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><button id="themebtn" aria-label="Colors" title="Colors">🎨</button><button id="msgbtn" aria-label="Messages" title="Messages">💬</button><button id="bellbtn" aria-label="Notifications" title="Notifications">🔔</button><button id="helpbtn" aria-label="How it works" title="How it works">?</button><h1>Binder Buddy</h1></div>
-<div class="tabs"><button class="tab on" data-tab="binders">📒 Binders</button><button class="tab" data-tab="find">🔍 Look up</button><button class="tab" data-tab="trade">🔄 Trade</button><button class="tab" data-tab="friends">👥 Friends</button><button class="tab" data-tab="browse">🌐 Browse</button></div>
+<div class="banner"><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✦</span><button id="setbtn" aria-label="Settings" title="Settings">⚙️</button><button id="msgbtn" aria-label="Inbox" title="Inbox">💬</button><h1>Binder Buddy</h1></div>
+<div class="tabs"><button class="tab on" data-tab="binders">📒 Binders</button><button class="tab" data-tab="find">📷 Scan</button><button class="tab" data-tab="trade">🔄 Trade</button><button class="tab" data-tab="friends">👥 Friends</button><button class="tab" data-tab="browse">🌐 Explore</button></div>
 <div id="findView" hidden>
 <p class="hint" style="margin:0 0 8px">Scan or type a card to see its price and find cards worth about the same.</p>
 <div class="cams"><label class="btn" for="file">📷 Take photo</label>
@@ -180,7 +179,8 @@ try{themeApply()}catch(e){}
 <button class="btn" id="go">Find price &amp; alternatives</button>
 <details class="fold" id="fopt"><summary>⚙ Search options <span class="mu">language, price range</span></summary><div class="foldbody"><div class="panel"><div class="prow"><span>Cards</span><div class="chips"><button class="chip on" data-lang="en">English</button><button class="chip" data-lang="jp">Japanese</button><button class="chip" data-lang="both">Both</button></div></div>
 <div class="prow"><span>Price range ± $</span><div class="stp"><button class="stpb" data-dir="-1" aria-label="Less">−</button><input id="range" type="number" inputmode="decimal" min="1" step="1" value="5"><button class="stpb" data-dir="1" aria-label="More">+</button></div></div></div></div></details>
-<details class="mu" id="browse" style="margin-top:14px"><summary class="bsum">💰 Browse by price</summary>
+<p class="mu" id="asof" style="text-align:center;margin:14px 0 0;font-size:12px"></p>
+<details class="mu" id="browse" style="margin-top:14px"><summary class="bsum">💰 Find similar by price</summary>
 <div class="row" style="margin-top:8px"><input id="bmin" type="number" inputmode="decimal" placeholder="Min $"><input id="bmax" type="number" inputmode="decimal" placeholder="Max $"></div>
 <div class="row"><input id="bname" type="text" placeholder="Pokémon name (optional)"></div>
 <div class="row mu" style="align-items:center;flex-wrap:wrap">Sort <button class="chip on" data-bs="hi">Price ↓</button><button class="chip" data-bs="lo">Price ↑</button><label style="margin-left:6px"><input type="checkbox" id="binc"> include uncertain</label></div>
@@ -195,6 +195,7 @@ try{themeApply()}catch(e){}
 <div id="notifView" hidden></div>
 <div id="msgView" hidden></div>
 <div id="browseView" hidden></div>
+<div id="gload" hidden>Loading card prices…</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.1.1/tesseract.min.js"></script>
 <script>
 const $=s=>document.querySelector(s);
@@ -222,11 +223,11 @@ function norm(c){
 function loadData(){
   if(DATA.ready)return DATA.ready;
   DATA.ready=(async()=>{
-    status('Loading card prices…');
-    let r;try{r=await fetch('prices.json',{cache:'no-cache'})}catch(e){DATA.ready=null;throw new Error('Could not load the price file (check your connection).')}
-    if(r.status===404){DATA.ready=null;throw new Error("The price file isn't built yet. On GitHub, open the Actions tab, run 'Update prices', then reload this page.")}
-    if(!r.ok){DATA.ready=null;throw new Error('Could not load the price file ('+r.status+').')}
-    const j=await r.json();DATA.cards=j.cards.map(c=>norm(c));DATA.updated=j.updated||'';status('');return DATA})();
+    status('Loading card prices…');const gl=document.getElementById('gload');if(gl)gl.hidden=false;
+    let r;try{r=await fetch('prices.json',{cache:'no-cache'})}catch(e){DATA.ready=null;if(gl)gl.hidden=true;throw new Error('Could not load the price file (check your connection).')}
+    if(r.status===404){DATA.ready=null;if(gl)gl.hidden=true;throw new Error("The price file isn't built yet. On GitHub, open the Actions tab, run 'Update prices', then reload this page.")}
+    if(!r.ok){DATA.ready=null;if(gl)gl.hidden=true;throw new Error('Could not load the price file ('+r.status+').')}
+    const j=await r.json();DATA.cards=j.cards.map(c=>norm(c));DATA.updated=j.updated||'';status('');if(gl)gl.hidden=true;const ao=document.getElementById('asof');if(ao)ao.textContent='Prices updated '+asOf();return DATA})();
   return DATA.ready}
 function loadJP(){
   if(DATA.jpReady)return DATA.jpReady;
@@ -553,7 +554,7 @@ function matchMarkSeen(){try{localStorage.setItem('bb_match_seen',JSON.stringify
 document.addEventListener('toggle',e=>{if(e.target&&e.target.classList&&e.target.classList.contains('match')&&e.target.open){matchMarkSeen();const b=e.target.querySelector('.bell');if(b)b.remove()}},true);
 let FVREQ=0,FVDM=0;
 function notifCount(){return ACC.handle?FVREQ+FVOFF+matchNew():0}
-function tabLabel(){const n=notifCount(),b=document.getElementById('bellbtn');if(b)b.innerHTML='🔔'+(n?'<span class="nb hot">'+(n>9?'9+':n)+'</span>':'');const t=document.getElementById('msgbtn');if(t)t.innerHTML='💬'+(FVDM?'<span class="nb hot">'+FVDM+'</span>':'')}
+function tabLabel(){const n=notifCount()+FVDM,t=document.getElementById('msgbtn');if(t)t.innerHTML='💬'+(n?'<span class="nb hot">'+(n>9?'9+':n)+'</span>':'');document.querySelectorAll('.ibar [data-ia]').forEach(b=>{const k=b.dataset.ia==='msg'?FVDM:notifCount();const sp=b.querySelector('.nb');if(sp)sp.remove();if(k)b.insertAdjacentHTML('beforeend','<span class="nb hot">'+(k>9?'9+':k)+'</span>')})}
 const owners=a=>[...new Set(a.map(x=>x.o))];
 const ownTxt=a=>{const o=owners(a);return '@'+esc(o[0])+(o.length>1?' +'+(o.length-1):'')};
 function pkMk(r){ // marker on a binder pocket
@@ -609,6 +610,8 @@ const brScope=rel=>BR.scope==='all'||(BR.scope==='friends'?rel==='friend':rel!==
 async function brLoad(kind){
   const c=BR.d[kind];if(c&&Date.now()-c.t<60000)return c.v;
   const v=await api(kind==='binders'?'browse':kind==='trade'?'browse_trade':'browse_wants');BR.d[kind]={t:Date.now(),v};return v}
+function brInvite(){const u=ACC.handle?profileLink(ACC.handle):linkBase();shareUrl(u,'Join me on Binder Buddy')}
+function brEmpty(msg){return `<p class="mu">${msg}</p><button class="btn alt" data-inv="1">📨 Invite a friend</button>`}
 function brProfile(h){closeModal();setTimeout(()=>{showTab('friends');fvGo('profile',{handle:h})},350)}
 function brTile(c,sub,extra,attr){return `<button class="tl" ${attr} style="width:100%;text-align:left;color:inherit;font:inherit;cursor:pointer;padding:6px 8px"><img src="${esc(c.img)}" alt="" loading="lazy" style="width:38px"><div style="flex:1;min-width:0"><b style="font-size:14px">${esc(c.name)}</b>${c.lang==='jp'?'<span class="lang">JP</span>':''}<div class="mu">${sub}</div>${extra||''}</div><span class="mu">›</span></button>`}
 function brOwners(a){return a.slice(0,3).map(o=>'@'+esc(o)).join(', ')+(a.length>3?' +'+(a.length-3):'')}
@@ -616,7 +619,7 @@ async function brRender(){
   const el=$('#browseView'),my=++BR.rid;
   const chips=[['cards','🔍 Cards'],['binders','📒 Binders'],['wish','♡ Wishlists'],['trade','🔄 Trade lists']];
   const ph={cards:'Search a card name',binders:'Search binders or @name',wish:'Search wanted cards',trade:'Search cards for trade'}[BR.chip];
-  el.innerHTML=`<h3 style="margin:8px 0">Browse</h3><input id="brq" type="text" placeholder="${ph}" value="${esc(BR.q)}" style="width:100%;margin-bottom:8px"><div class="chips" style="margin:0 0 6px">${chips.map(c=>`<button class="chip${BR.chip===c[0]?' on':''}" data-bc="${c[0]}">${c[1]}</button>`).join('')}</div><div class="chips" style="margin:0 0 10px">${[['all','All'],['friends','👥 Friends'],['public','🌐 Public']].map(c=>`<button class="chip sm${BR.scope===c[0]?' on':''}" data-bs="${c[0]}">${c[1]}</button>`).join('')}</div><div id="brbody"><p class="mu">Loading…</p></div>`;
+  el.innerHTML=`<h3 style="margin:8px 0">Explore</h3><input id="brq" type="text" placeholder="${ph}" value="${esc(BR.q)}" style="width:100%;margin-bottom:8px"><div class="chips" style="margin:0 0 6px;display:grid;grid-template-columns:1fr 1fr;gap:6px;overflow:visible">${chips.map(c=>`<button class="chip${BR.chip===c[0]?' on':''}" data-bc="${c[0]}">${c[1]}</button>`).join('')}</div><div class="chips" style="margin:0 0 10px">${[['all','All'],['friends','👥 Friends'],['public','🌐 Public']].map(c=>`<button class="chip sm${BR.scope===c[0]?' on':''}" data-bs="${c[0]}">${c[1]}</button>`).join('')}</div><div id="brbody"><p class="mu">Loading…</p></div>`;
   el.querySelectorAll('[data-bc]').forEach(b=>b.onclick=()=>{BR.chip=b.dataset.bc;brRender()});
   el.querySelectorAll('[data-bs]').forEach(b=>b.onclick=()=>{BR.scope=b.dataset.bs;brRender()});
   const body=$('#brbody');
@@ -629,28 +632,28 @@ async function brRender(){
     await loadData();
     const need=[];if(tr)for(const o of tr.owners)for(const l of o.lists)need.push(...l.items);if(wn)need.push(...wn.wants);
     await fvNeed(need)}
-  catch(e){if(my===BR.rid)body.innerHTML=`<p class="mu">${esc(e.message)}</p>`;return}
+  catch(e){if(my===BR.rid){body.innerHTML=`<p class="mu">${esc(e.message)}</p><button class="btn alt" id="brretry">↻ Try again</button>`;$('#brretry').onclick=()=>{BR.d={};brRender()}}return}
   if(my!==BR.rid)return;
   const fr=new Set((wn&&wn.fr)||[]);
   const wish=myWishSet(),mine=new Set(T.lists.flatMap(x=>x.items).map(x=>x.i));
   const toks=()=>String(BR.q).toLowerCase().replace(/[^a-z0-9é'@\/ ]/g,' ').split(/\s+/).filter(Boolean);
   const cardOk=c=>{const w=toks();return !w.length||(c&&w.every(t=>/^\d+$/.test(t)?(c.number||'').toLowerCase().replace(/^0+(?=\d)/,'').includes(t.replace(/^0+(?=\d)/,'')):(c.hay||'').includes(t)))};
-  const draw=()=>{
+  let draw=()=>{
     const q=BR.q.trim();
     if(BR.chip==='binders'){
       const w=toks().map(t=>t.replace(/^@/,''));
       const L=bi.binders.filter(b=>brScope(b.rel)&&(!w.length||w.every(t=>b.name.toLowerCase().includes(t)||b.owner.includes(t))));
-      body.innerHTML=L.length?L.map((b,i)=>`<button class="frow btnrow" data-bb="${i}">${coverHtml(b.cover)}<div style="flex:1;min-width:0"><b>${esc(b.name)}</b><div class="mu">@${esc(b.owner)} · ${b.cnt} card${b.cnt===1?'':'s'}${b.rel==='friend'?' · 👥':''} · ${ago(b.updated)}</div></div><span class="mu">›</span></button>`).join(''):'<p class="mu">No binders here yet. Owners can share a binder from its ⋯ menu.</p>';
+      body.innerHTML=L.length?L.map((b,i)=>`<button class="frow btnrow" data-bb="${i}">${coverHtml(b.cover)}<div style="flex:1;min-width:0"><b>${esc(b.name)}</b><div class="mu">@${esc(b.owner)} · ${b.cnt} card${b.cnt===1?'':'s'}${b.rel==='friend'?' · 👥':''} · ${ago(b.updated)}</div></div><span class="mu">›</span></button>`).join(''):brEmpty('No binders here yet. Be the first: share one of yours, or invite a friend to join.');
       body.querySelectorAll('[data-bb]').forEach(b=>b.onclick=()=>{const x=L[+b.dataset.bb];showTab('friends');fvGo('binder',{owner:x.owner,id:x.id,via:'br'})});return}
     if(BR.chip==='trade'){
       const owners=tr.owners.filter(o=>brScope(o.rel)).map(o=>{const lists=o.lists.map(l=>({...l,items:l.items.filter(x=>cardOk(cardById(x.i)))})).filter(l=>l.items.length);
         const n=lists.reduce((t,l)=>t+l.items.length,0),hits=lists.reduce((t,l)=>t+l.items.filter(x=>wish.has(x.i)).length,0);return {...o,lists,n,hits}}).filter(o=>o.n).sort((a,b)=>b.hits-a.hits||b.n-a.n);
-      body.innerHTML=owners.length?owners.map((o,oi)=>`<details class="fold"${q||o.hits?' open':''}><summary>@${esc(o.owner)} <span class="mu">(${o.n} card${o.n===1?'':'s'}${o.hits?' · '+o.hits+' you want':''}${o.rel==='friend'?' · 👥':''})</span></summary><div class="foldbody"><button class="chip sm" data-bp="${esc(o.owner)}" style="margin-bottom:6px">View profile</button>${o.lists.map((l,li)=>`<div class="mu" style="margin:4px 0 6px"><b>${esc(l.name)}</b></div>${l.items.map((x,xi)=>{const c=cardById(x.i);if(!c)return '';const m=c.v[x.k]?c.v[x.k][0]:0;return brTile(c,esc(c.set)+' · #'+esc(c.number),(wish.has(x.i)?'<span class="tag hit">🎯 You want this</span> ':'')+`<span class="mu">${esc(x.k)} · ${x.p>0?money(x.p)+' asking':(m>0?money(m):'—')}</span>`,`data-bt="${oi}|${li}|${xi}"`)}).join('')}`).join('')}</div></details>`).join(''):'<p class="mu">No trade lists to show.</p>';
+      body.innerHTML=owners.length?owners.map((o,oi)=>`<details class="fold"${q||o.hits?' open':''}><summary>@${esc(o.owner)} <span class="mu">(${o.n} card${o.n===1?'':'s'}${o.hits?' · '+o.hits+' you want':''}${o.rel==='friend'?' · 👥':''})</span></summary><div class="foldbody"><button class="chip sm" data-bp="${esc(o.owner)}" style="margin-bottom:6px">View profile</button>${o.lists.map((l,li)=>`<div class="mu" style="margin:4px 0 6px"><b>${esc(l.name)}</b></div>${l.items.map((x,xi)=>{const c=cardById(x.i);if(!c)return '';const m=c.v[x.k]?c.v[x.k][0]:0;return brTile(c,esc(c.set)+' · #'+esc(c.number),(wish.has(x.i)?'<span class="tag hit">🎯 You want this</span> ':'')+`<span class="mu">${esc(x.k)} · ${x.p>0?money(x.p)+' asking':(m>0?money(m):'—')}</span>`,`data-bt="${oi}|${li}|${xi}"`)}).join('')}`).join('')}</div></details>`).join(''):brEmpty('No trade lists to show yet. Invite a friend to start swapping.');
       body.querySelectorAll('[data-bp]').forEach(b=>b.onclick=()=>brProfile(b.dataset.bp));
       body.querySelectorAll('[data-bt]').forEach(b=>b.onclick=()=>{const [oi,li,xi]=b.dataset.bt.split('|').map(Number),o=owners[oi],x=o.lists[li].items[xi];fvCardMenu(o.owner,x.i,x.k,x.p||0,o.rel)});return}
     if(BR.chip==='wish'){
       const rows=wn.wants.map(x=>({...x,o:x.o.filter(h=>brScope(fr.has(h)?'friend':'none'))})).filter(x=>x.o.length&&cardOk(cardById(x.i))).map(x=>({...x,has:mine.has(x.i)})).sort((a,b)=>(b.has-a.has)||(b.o.length-a.o.length));
-      body.innerHTML=rows.length?rows.slice(0,120).map((x,n)=>{const c=cardById(x.i);return c?brTile(c,esc(c.set)+' · #'+esc(c.number),(x.has?'<span class="tag hit">You have this</span> ':'')+`<span class="mu">♡ ${brOwners(x.o)}</span>`,`data-bw="${n}"`):''}).join('')+(rows.length>120?'<p class="mu">Showing the first 120. Search to narrow down.</p>':''):'<p class="mu">No wishlists to show.</p>';
+      body.innerHTML=rows.length?rows.slice(0,120).map((x,n)=>{const c=cardById(x.i);return c?brTile(c,esc(c.set)+' · #'+esc(c.number),(x.has?'<span class="tag hit">You have this</span> ':'')+`<span class="mu">♡ ${brOwners(x.o)}</span>`,`data-bw="${n}"`):''}).join('')+(rows.length>120?'<p class="mu">Showing the first 120. Search to narrow down.</p>':''):brEmpty('No wishlists to show yet. Invite a friend to start swapping.');
       body.querySelectorAll('[data-bw]').forEach(b=>b.onclick=()=>{const x=rows[+b.dataset.bw],c=cardById(x.i);brCardDlg(c,[],x.o.map(h=>({o:h})),fr)});return}
     // cards
     if(!toks().length){body.innerHTML='<p class="mu">Search a card name to see which friends or public users have it for trade or are looking for it.</p>';return}
@@ -661,6 +664,7 @@ async function brRender(){
     const L=src.filter(cardOk).map(c=>({c,h:haves.get(c.i)||[],w:wants.get(c.i)||[]})).sort((a,b)=>((b.h.length+b.w.length>0)-(a.h.length+a.w.length>0))||(a.c.hay.length-b.c.hay.length)).slice(0,40);
     body.innerHTML=L.length?L.map((x,n)=>brTile(x.c,esc(x.c.set)+' · #'+esc(x.c.number),(x.h.length?`<span class="tag hit">👥 ${x.h.length} for trade</span> `:'')+(x.w.length?`<span class="tag">♡ ${x.w.length} want</span>`:''),`data-bk="${n}"`)).join(''):'<p class="mu">No cards found.</p>';
     body.querySelectorAll('[data-bk]').forEach(b=>b.onclick=()=>{const x=L[+b.dataset.bk];brCardDlg(x.c,x.h,x.w,fr)})};
+  const dw=draw;draw=()=>{dw();body.querySelectorAll('[data-inv]').forEach(b=>b.onclick=brInvite)};
   draw();
   const inp=$('#brq');let t=null;inp.oninput=()=>{clearTimeout(t);t=setTimeout(()=>{BR.q=inp.value;draw()},200)}}
 function brCardDlg(c,h,w,fr){
@@ -751,8 +755,7 @@ function showTab(t,fromPop){
   if(t==='browse')brRender();
   if(t==='find'||t==='trade'||t==='friends'||t==='binders')ftLoad()}
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{if(b.dataset.tab==='friends'&&NAV.tab==='friends'&&FV.view!=='home'){fvGo('home');return}showTab(b.dataset.tab)});
-$('#msgbtn').onclick=()=>{if(NAV.tab==='msg'&&MSG.with){MSG.with='';msgRender();return}showTab('msg')};
-$('#bellbtn').onclick=()=>showTab('notif');
+$('#msgbtn').onclick=()=>{if(NAV.tab==='msg'&&MSG.with){MSG.with='';msgRender();return}showTab(!FVDM&&notifCount()?'notif':'msg')};
 
 async function bEnsureData(){
   try{await loadData()}catch(e){status(e.message)}
@@ -773,8 +776,8 @@ async function bRender(load){
   if(load){await bEnsureData();bSnap()}
   const v=$('#binderView');
   if(!BD.binders.length){
-    v.innerHTML=`<h3>Your binders</h3><p class="mu">Make mock binder pages: pick cards, place them in pockets, and see the page value. Saved on this phone.</p><button class="btn" id="bnew">＋ Make your first binder</button>`;
-    $('#bnew').onclick=bNewDlg;bWireImport();return}
+    v.innerHTML=`<h3>Your binders</h3><p class="mu">Keep digital copies of your binders and see what they are worth. Saved on this phone.</p><button class="btn" id="bnew">＋ Make your first binder</button><button class="btn alt" id="bscan" style="margin-top:8px">📷 Scan a card first</button><button class="btn alt" id="bdisc" style="margin-top:8px">🌐 See what others are trading</button>`;
+    $('#bnew').onclick=bNewDlg;$('#bscan').onclick=()=>showTab('find');$('#bdisc').onclick=()=>showTab('browse');bWireImport();return}
   const b=curB()||BD.binders[0];BD.cur=b.id;
   if(BD.page>=b.pages.length)BD.page=b.pages.length-1;if(BD.page<0)BD.page=0;
   const pg=b.pages[BD.page];
@@ -1047,12 +1050,12 @@ const binderWishes=()=>{const m=new Map();for(const b of BD.binders)for(const pg
 function tListHtml(){
   const a=tSum(T.mine),b=tSum(T.theirs),tv=a.val*T.pct/100,diff=tv-b.val,cl=tCurList();
   const mathSum=T.mine.length?`${money(tv)} <span class="mu">(${T.pct}%) · ${T.theirs.length?(diff>=0?'ahead '+money(diff):'owe '+money(-diff)):'nothing on their side'}</span>`:'<span class="mu">add cards first</span>';
-  return `<div class="chips">${T.lists.map(l=>`<button class="chip${l.id===T.cur?' on':''}" data-act="tlist" data-id="${esc(l.id)}">${esc(l.name)} (${l.items.length})</button>`).join('')}<button class="chip" data-act="tnew">＋ New</button></div>
+  return `${T.lists.length>1?`<div class="chips">${T.lists.map(l=>`<button class="chip${l.id===T.cur?' on':''}" data-act="tlist" data-id="${esc(l.id)}">${esc(l.name)} (${l.items.length})</button>`).join('')}<button class="chip" data-act="tnew">＋ New</button></div>`:''}
   ${tFold('rows',`<span style="min-width:0"><b class="lname">${esc(cl.name)}</b> <span class="mu">${T.mine.length} card${T.mine.length===1?'':'s'} · ${visLabel(tVis(cl))}</span></span>`,`<div class="row" style="margin:0 0 8px"><button class="chip on" data-act="tadd">＋ Add</button><button class="chip" data-act="tmenu" aria-label="List options">⋯</button></div>
   ${T.msg?`<p class="mu" id="tmsg" style="color:var(--ac)">${esc(T.msg)}</p>`:''}
   ${T.review.length?`<h3>Needs a quick look (${T.review.length})</h3>${T.review.map(rv=>`<div class="review"><div style="display:flex;gap:10px;align-items:center">${rv.thumb?`<img src="${rv.thumb}" alt="" style="width:64px;border-radius:6px">`:''}<div><b>${esc(rv.label||'Unknown card')}</b><div class="mu">${esc(rv.note||'Tap the right one:')}</div></div></div>${rv.pairs.map((p,n)=>`<button class="item pair" data-act="pair" data-r="${rv.id}" data-p="${n}"><img src="${esc(p.c.img)}" loading="lazy" alt=""><div style="flex:1;min-width:0"><b style="margin:0">${esc(p.c.name)}</b>${p.c.lang==='jp'?'<span class="lang">JP</span>':''}<div class="mu">${esc(p.c.set)} · #${esc(p.c.number)}<br>${esc(p.k)}</div></div><div class="tp">${money(p.c.v[p.k][0])}</div></button>`).join('')}<div class="row"><button class="btn alt" data-act="manual" data-r="${rv.id}">Search by name</button><button class="btn alt" data-act="skip" data-r="${rv.id}">Skip</button></div></div>`).join('')}`:''}
-  ${T.mine.length?T.mine.map((r,i)=>tRow(r,'mine',i)).join(''):'<p class="mu">Tap ＋ Add to scan or search the cards you want to trade or sell. They do not need to be in a binder. Tap a card to see its set, set a price, or switch between Trade, Sale, or both.</p>'}`,true)}
-  ${tFold('calc',`Trade math <span class="mu">${mathSum}</span>`,`<div class="panel"><label class="mu" style="display:block;margin:0 0 6px"><input type="checkbox" id="tinc"${T.incl?' checked':''}> count uncertain-price cards${a.skipped?` <span class="warn">(${a.skipped} left out ⚠)</span>`:''}</label>
+  ${T.mine.length?T.mine.map((r,i)=>tRow(r,'mine',i)).join(''):'<p class="mu">Tap ＋ Add to scan or search cards you want to trade or sell.</p>'}`,true)}
+  ${!T.mine.length&&!T.theirs.length?'':tFold('calc',`Trade calculator <span class="mu">${mathSum}</span>`,`<div class="panel"><label class="mu" style="display:block;margin:0 0 6px"><input type="checkbox" id="tinc"${T.incl?' checked':''}> count uncertain-price cards${a.skipped?` <span class="warn">(${a.skipped} left out ⚠)</span>`:''}</label>
   <div class="mu" style="margin:0 0 6px">Count my cards at</div>
   <div class="chips">${[100,90,80,70].map(n=>`<button class="chip${T.pct===n?' on':''}" data-act="pct" data-v="${n}">${n}%</button>`).join('')}</div>
   <p class="btot" style="margin:8px 0 0"><b style="font-size:20px">Trade value ${money(tv)}</b></p></div>
@@ -1060,7 +1063,7 @@ function tListHtml(){
   ${T.theirs.length?T.theirs.map((r,i)=>tRow(r,'theirs',i)).join(''):'<p class="mu">Optional: add the cards you would get, or tap ＋ Get on a card below.</p>'}
   <button class="btn alt" data-act="addtheirs" style="margin:6px 0">＋ Add by name</button>
   ${T.mine.length?`<p class="btot"><b>${diff>=0?`You're ahead ${money(diff)}`:`You owe ${money(-diff)}`}</b><br><span>${T.theirs.length?'your trade value vs their market value':'nothing on their side yet'}</span></p>`:''}`,false)}
-  ${tFold('find',`Cards worth about ${money(Math.max(0,diff))}`,`<details class="fbar"><summary>⚙ Options <span class="mu">${T.lang==='en'?'English':T.lang==='jp'?'Japanese':'Both'} · ${T.mode==='about'?'about this value':'up to this value'}</span></summary><div class="panel" style="margin-top:0"><div class="prow"><span>Cards</span><div class="chips"><button class="chip${T.lang==='en'?' on':''}" data-act="tlang" data-v="en">English</button><button class="chip${T.lang==='jp'?' on':''}" data-act="tlang" data-v="jp">Japanese</button><button class="chip${T.lang==='both'?' on':''}" data-act="tlang" data-v="both">Both</button></div></div>
+  ${!T.mine.length?'':tFold('find',`Cards worth about ${money(Math.max(0,diff))}`,`<details class="fbar"><summary>⚙ Options <span class="mu">${T.lang==='en'?'English':T.lang==='jp'?'Japanese':'Both'} · ${T.mode==='about'?'about this value':'up to this value'}</span></summary><div class="panel" style="margin-top:0"><div class="prow"><span>Cards</span><div class="chips"><button class="chip${T.lang==='en'?' on':''}" data-act="tlang" data-v="en">English</button><button class="chip${T.lang==='jp'?' on':''}" data-act="tlang" data-v="jp">Japanese</button><button class="chip${T.lang==='both'?' on':''}" data-act="tlang" data-v="both">Both</button></div></div>
   <div class="prow"><span>Show</span><div class="chips"><button class="chip${T.mode==='about'?' on':''}" data-act="mode" data-v="about">About this value</button><button class="chip${T.mode==='upto'?' on':''}" data-act="mode" data-v="upto">Up to this value</button></div></div>
   ${T.mode==='about'?`<div class="prow"><span>Range ± $</span><div class="stp"><button class="stpb" data-dir="-1" aria-label="Less">−</button><input id="trng" type="number" inputmode="decimal" min="0" step="1" value="${T.range}"><button class="stpb" data-dir="1" aria-label="More">+</button></div></div>`:''}</div></details>
   <div id="tfbar"></div><div id="tres"></div>`,false)}`}
@@ -1197,8 +1200,9 @@ function tAddMenu(){
   $('#tsn').onclick=()=>{closeModal();setTimeout(()=>tPick((c,k)=>{tTarget().push({i:c.i,k});tSave();tRender()}),450)}}
 function tListMenu(){
   const l=tCurList();
-  modal(`<h3>${esc(l.name)}</h3><button class="btn alt mbtn" id="lm1">✎ Rename list</button><button class="btn alt mbtn" id="lm2" style="margin-top:8px">👁 Who can see: ${visLabel(tVis(l))}</button><button class="btn mbtn" id="lm3" style="margin-top:8px;background:#a84444;color:#fff">🗑 Delete list</button><button class="btn alt mbtn" id="no" style="margin-top:8px">Close</button>`);
+  modal(`<h3>${esc(l.name)}</h3><button class="btn alt mbtn" id="lm0">＋ New list</button><button class="btn alt mbtn" id="lm1" style="margin-top:8px">✎ Rename list</button><button class="btn alt mbtn" id="lm2" style="margin-top:8px">👁 Who can see: ${visLabel(tVis(l))}</button><button class="btn mbtn" id="lm3" style="margin-top:8px;background:#a84444;color:#fff">🗑 Delete list</button><button class="btn alt mbtn" id="no" style="margin-top:8px">Close</button>`);
   $('#no').onclick=()=>closeModal();
+  $('#lm0').onclick=()=>{closeModal();setTimeout(()=>tNewList(l=>{tSetCur(l.id);tSave();tRender()}),450)};
   $('#lm1').onclick=()=>{closeModal();setTimeout(()=>tNameDlg('Rename list',l.name,'Save',v=>{l.name=v;tSave();tRender()}),450)};
   $('#lm2').onclick=()=>{closeModal();setTimeout(()=>tVisDlg(l),450)};
   $('#lm3').onclick=()=>{closeModal();setTimeout(()=>{if(!confirm('Delete the list "'+l.name+'"? The cards in it are not deleted from your binders.'))return;T.lists=T.lists.filter(x=>x!==l);if(!T.lists.length)T.lists=[{id:tNewId(),name:'My trade list',items:[],vis:'friends'}];tSetCur(T.lists[0].id);tSave();tRender()},450)}}
@@ -1321,7 +1325,7 @@ async function googleDone(cred,done){
   try{const j=await api('google',{credential:cred});if(j.need_handle)googleHandleDlg(cred,j.email,done);else await signedIn(j,done)}
   catch(e){toast(e.message)}}
 function accDlg(done){
-  modal(`<h3>Create your account</h3><p class="mu">Your handle is how friends find you. Your email and password are only for signing in.</p>${GBOX}<input id="ah" type="text" placeholder="handle (e.g. alex_cards)" maxlength="20" autocapitalize="none" autocorrect="off" spellcheck="false" style="width:100%"><input id="ae" type="email" placeholder="email" autocomplete="email" autocapitalize="none" style="width:100%;margin-top:8px"><input id="ap" type="password" placeholder="password (8+ characters)" autocomplete="new-password" style="width:100%;margin-top:8px"><p class="mu" id="aerr" style="color:#ff9b9b;min-height:1.2em"></p><p class="mu" style="font-size:12px;margin:0 0 8px">By creating an account you agree to keep things friendly: no harassment, spam, scams or offensive content. People can report and block each other, and accounts that break these rules are removed. <a href="terms.html" target="_blank" rel="noopener">Terms</a> · <a href="privacy.html" target="_blank" rel="noopener">Privacy</a></p><button class="btn" id="aok">Create account</button><button class="btn alt" id="alog" style="margin-top:8px">I already have an account</button><button class="btn alt" id="ano" style="margin-top:8px">Cancel</button>`);
+  modal(`<h3>Create your account</h3><p class="mu">Your handle is how friends find you. Your email and password are only for signing in.</p>${GBOX}<input id="ah" type="text" placeholder="handle (e.g. alex_cards)" maxlength="20" autocapitalize="none" autocorrect="off" spellcheck="false" style="width:100%"><input id="ae" type="email" placeholder="email" autocomplete="email" autocapitalize="none" style="width:100%;margin-top:8px"><input id="ap" type="password" placeholder="password (8+ characters)" autocomplete="new-password" style="width:100%;margin-top:8px"><p class="mu" id="aerr" style="color:#ff9b9b;min-height:1.2em"></p><p class="mu" style="font-size:12px;margin:0 0 8px">By creating an account you agree to keep things friendly: no harassment, spam, scams or offensive content. People can report and block each other, and accounts that break these rules are removed. <a href="terms.html" target="_blank" rel="noopener" style="color:var(--ac)">Terms</a> · <a href="privacy.html" target="_blank" rel="noopener" style="color:var(--ac)">Privacy</a></p><button class="btn" id="aok">Create account</button><button class="btn alt" id="alog" style="margin-top:8px">I already have an account</button><button class="btn alt" id="ano" style="margin-top:8px">Cancel</button>`);
   gButton('gbox',c=>googleDone(c,done));
   $('#ano').onclick=()=>closeModal();
   $('#alog').onclick=()=>loginDlg(done);
@@ -1360,7 +1364,7 @@ async function restoreShared(){
     if(n){bSave();toast('Restored '+n+' shared binder'+(n>1?'s':''))}
     if(!T.lists.some(x=>x.items.length)&&Array.isArray(l.lists)&&l.lists.length){T.lists=l.lists.map(x=>({id:String(x.id),name:String(x.name||'List').slice(0,40),items:(x.items||[]).filter(r=>r.i&&r.k).map(r=>({i:r.i,k:r.k,m:r.m||'either',p:r.p})),vis:x.vis||'friends'}));tSetCur(T.lists[0].id);tSave()}}catch(e){}}
 function acctMenu(){
-  modal(`<h3>@${esc(ACC.handle)}</h3><button class="btn alt mbtn" id="aprof">See my profile as others do</button><button class="btn alt mbtn" id="asign">Sign-in options (email, Google)</button><button class="btn alt mbtn" id="ablk">Blocked people</button><button class="btn alt mbtn" id="aout">Sign out on this phone</button><button class="btn alt mbtn" id="adel" style="color:#e58a8a">Delete my account</button><p class="mu" style="text-align:center;margin:8px 0"><a href="privacy.html" target="_blank" rel="noopener">Privacy</a> · <a href="terms.html" target="_blank" rel="noopener">Terms</a> · <a href="delete-account.html" target="_blank" rel="noopener">Deleting your data</a></p><button class="btn mbtn" id="no">Close</button>`);
+  modal(`<h3>@${esc(ACC.handle)}</h3><button class="btn alt mbtn" id="aprof">See my profile as others do</button><button class="btn alt mbtn" id="asign">Sign-in options (email, Google)</button><button class="btn alt mbtn" id="ablk">Blocked people</button><button class="btn alt mbtn" id="aout">Sign out on this phone</button><button class="btn alt mbtn" id="adel" style="color:#e58a8a">Delete my account</button><p class="mu" style="text-align:center;margin:8px 0"><a href="privacy.html" target="_blank" rel="noopener" style="color:var(--ac)">Privacy</a> · <a href="terms.html" target="_blank" rel="noopener" style="color:var(--ac)">Terms</a> · <a href="delete-account.html" target="_blank" rel="noopener">Deleting your data</a></p><button class="btn mbtn" id="no">Close</button>`);
   $('#no').onclick=()=>closeModal();
   $('#aprof').onclick=()=>{closeModal();setTimeout(()=>{showTab('friends');fvGo('profile',{handle:ACC.handle})},350)};
   $('#asign').onclick=()=>signOptDlg();
@@ -1466,6 +1470,7 @@ async function fvOffer(my){
   const ttl=OF.counter?'Counter @'+esc(OF.to)+"'s offer":OF.kind==='request'?'Request a card from @'+esc(OF.to):'Offer a trade to @'+esc(OF.to);
   el.innerHTML=`<button class="chip" id="fvback">← Back</button><h3 style="margin:12px 0 4px">${ttl}</h3>
   <p class="mu" style="margin-top:0">${OF.kind==='request'&&!OF.counter?'Tick the card(s) you would like. Offer something back if you want to.':'Tick what you would get and what you would give.'}</p>
+  <p class="mu" style="font-size:12px;margin:0 0 8px">⚠️ Stay safe: meet in a public place, and use tracked shipping. Be careful sending first to someone new.</p>
   <div class="panel" id="oftot">${offTot()}</div>
   <details class="fold" data-of="get"${OF.topen?' open':''}><summary>You get from @${esc(OF.to)} <span class="mu" id="ogsum">${sideSum(OF.get)}</span></summary><div class="foldbody">${theirs.length?theirs.map(x=>row(x,'get',OF.get)).join(''):`<p class="mu">@${esc(OF.to)} has nothing listed right now. You can still add a card by name.</p>`}
   <button class="btn alt" id="ofaddget" style="margin:6px 0">＋ Add another card by name</button></div></details>
@@ -1593,12 +1598,19 @@ async function msgChat(w,soft){
   if(r.rel!=='friend'&&$('#mform'))$('#mform').innerHTML='<p class="mu">You can only message friends.</p>';
   if(!soft){const t=$('#mtxt');if(t&&t.scrollIntoView)t.scrollIntoView({block:'end'})}
   notifPoll()}
-async function msgRender(){
+function inboxBar(el,active){
+  if(!el||el.querySelector('.ibar'))return;
+  const d=document.createElement('div');d.className='seg ibar';d.style.margin='6px 0 10px';
+  d.innerHTML=`<button class="${active==='msg'?'on':''}" data-ia="msg">💬 Messages</button><button class="${active==='notif'?'on':''}" data-ia="notif">🔔 Alerts</button>`;
+  el.prepend(d);
+  d.querySelectorAll('[data-ia]').forEach(b=>b.onclick=()=>{if(b.dataset.ia!==active){MSG.with='';showTab(b.dataset.ia)}});tabLabel()}
+async function msgRender(){await msgRender0();if(!MSG.with&&NAV.tab==='msg')inboxBar($('#msgView'),'msg')}
+async function msgRender0(){
   const el=$('#msgView');if(!el)return;
-  if(!ACC.handle){el.innerHTML='<h3 style="margin:8px 0">💬 Messages</h3><div class="panel"><p style="margin:0 0 10px">Create an account in Friends to message friends and keep your trade chats in one place.</p><button class="btn" id="mgo">Go to Friends</button></div>';$('#mgo').onclick=()=>showTab('friends');return}
+  if(!ACC.handle){el.innerHTML='<h3 style="margin:8px 0">Messages</h3><div class="panel"><p style="margin:0 0 10px">Create an account in Friends to message friends and keep your trade chats in one place.</p><button class="btn" id="mgo">Go to Friends</button></div>';$('#mgo').onclick=()=>showTab('friends');return}
   if(MSG.with){msgChat(MSG.with);return}
-  el.innerHTML='<h3 style="margin:8px 0">💬 Messages</h3><p class="mu">Loading…</p>';
-  let t,m;try{[t,m]=await Promise.all([api('dm_threads'),api('me')])}catch(e){if(NAV.tab==='msg')el.innerHTML=`<h3 style="margin:8px 0">💬 Messages</h3><p class="mu">${esc(e.message)}</p>`;return}
+  el.innerHTML='<h3 style="margin:8px 0">Messages</h3><p class="mu">Loading…</p>';
+  let t,m;try{[t,m]=await Promise.all([api('dm_threads'),api('me')])}catch(e){if(NAV.tab==='msg')el.innerHTML=`<h3 style="margin:8px 0">Messages</h3><p class="mu">${esc(e.message)}</p>`;return}
   if(NAV.tab!=='msg'||MSG.with)return;
   fvBadge(m.incoming.length,m.inbox,m.dm);
   el.innerHTML=`<div class="row" style="align-items:center;justify-content:space-between;margin:8px 0"><h3 style="margin:0">💬 Messages</h3><button class="chip on" id="mnew">＋ New</button></div>
@@ -1633,11 +1645,12 @@ function notifOfferItem(o,me){
   else return null;
   if(lastMsg&&lastMsg.u!==me&&o.unseen&&!/agreed trade/.test(lastMsg.t)){icon='💬';txt=`<b>@${esc(lastMsg.u)}</b> messaged you: “${esc(lastMsg.t.slice(0,60))}”`}
   return {icon,txt,sub:`You give: ${esc(nameList(give))} · You get: ${esc(nameList(get))} · ${ago(o.updated)}`,isNew:o.unseen,pri,go:()=>fvGo('inbox'),tab:'friends'}}
-async function notifRender(){
+async function notifRender(){await notifRender0();if(NAV.tab==='notif')inboxBar($('#notifView'),'notif')}
+async function notifRender0(){
   const el=$('#notifView');if(!el)return;
-  if(!ACC.handle){el.innerHTML='<h3 style="margin:8px 0">🔔 Notifications</h3><div class="panel"><p style="margin:0 0 10px">Sign in on the Friends tab to get friend requests, offers and matches here.</p><button class="btn" id="nogo">Go to Friends</button></div>';$('#nogo').onclick=()=>showTab('friends');return}
-  el.innerHTML='<h3 style="margin:8px 0">🔔 Notifications</h3><p class="mu">Loading…</p>';
-  let m,r;try{[m,r]=await Promise.all([api('me'),api('offer_list')]);await ftLoad(true)}catch(e){if(NAV.tab==='notif')el.innerHTML=`<h3 style="margin:8px 0">🔔 Notifications</h3><p class="mu">${esc(e.message)}</p>`;return}
+  if(!ACC.handle){el.innerHTML='<h3 style="margin:8px 0">Alerts</h3><div class="panel"><p style="margin:0 0 10px">Sign in on the Friends tab to get friend requests, offers and matches here.</p><button class="btn" id="nogo">Go to Friends</button></div>';$('#nogo').onclick=()=>showTab('friends');return}
+  el.innerHTML='<h3 style="margin:8px 0">Alerts</h3><p class="mu">Loading…</p>';
+  let m,r;try{[m,r]=await Promise.all([api('me'),api('offer_list')]);await ftLoad(true)}catch(e){if(NAV.tab==='notif')el.innerHTML=`<h3 style="margin:8px 0">Alerts</h3><p class="mu">${esc(e.message)}</p>`;return}
   if(NAV.tab!=='notif')return;
   await fvNeed([...r.offers.flatMap(o=>o.give.concat(o.get)),...FT.items,...FW.items]);if(NAV.tab!=='notif')return;
   fvBadge(m.incoming.length,m.inbox,m.dm);
@@ -1791,21 +1804,12 @@ if(ACC.handle){api('me').then(m=>fvBadge(m.incoming.length,m.inbox,m.dm)).catch(
 
 // ================= How it works, share links, deep links =================
 const TOUR=[
- {tab:'binders',sel:'.tab[data-tab="binders"]',t:'📒 Your binders',d:'Build digital copies of your real binders and see what each page and the whole binder is worth at Near Mint prices.'},
- {tab:'binders',sel:'#bnew',alt:'.tab[data-tab="binders"]',t:'＋ Make a binder',d:'Start a binder here, then tap any empty pocket to add a card by name or photo. Hold and drag a card to rearrange.'},
- {tab:'binders',sel:'#bfill',alt:'#bnew',t:'📷 Fill a page from one photo',d:'Lay a real binder page flat, snap one photo, and every pocket is read for you. Cards it is unsure about are flagged to double-check.'},
- {tab:'binders',sel:'#bvis',alt:'#bnew',t:'👁 Who can see it',d:'Each binder is Private, Friends only or Public. Viewers see cards and prices, never what you paid.'},
- {tab:'binders',sel:'#bmore',alt:'#bnew',t:'⋯ More',d:'Rename the binder, change who can see it, copy a share link, or delete a page or the whole binder.'},
- {tab:'find',sel:'#go',alt:'.tab[data-tab="find"]',t:'🔍 Look up a card',d:'Scan or type a card to see its price and find other cards worth about the same. Handy for fair swaps.'},
- {tab:'trade',sel:'[data-act="tadd"]',alt:'.tab[data-tab="trade"]',t:'🔄 Your trade lists',d:'Tap ＋ Add to put cards on a list for trade or sale. Make a separate list for each card show or meetup. Tap a card for its details and price.'},
- {tab:'trade',sel:'.seg',alt:'.tab[data-tab="trade"]',t:'♡ Wishlist',d:'Switch to Wishlist to save cards you want. Friends can see it, and Matches tells you when a friend has one.'},
- {tab:'trade',sel:'details[data-fk="calc"]',alt:'.tab[data-tab="trade"]',t:'🧮 Trade math',d:'Open this to compare both sides of a trade. Pick 100, 90, 80 or 70% to count your cards at a discount.'},
- {tab:'friends',sel:'#fvstart',alt:'.tab[data-tab="friends"]',t:'👥 Friends',d:'Create a free account with email or Google, then add friends by handle. Look inside their binders and trade lists, and check 🎯 Matches for swaps that work for both of you.'},
- {tab:'friends',sel:'.tab[data-tab="friends"]',t:'🤝 Offers and requests',d:'On a friend\'s profile, tap Make an offer, or tap any of their cards and choose Make an offer. They can accept, counter or decline. If a deal falls through, either of you can cancel it.'},
- {tab:'browse',sel:'.tab[data-tab="browse"]',t:'🌐 Browse',d:'Search for a card to see who has it or wants it, or browse binders, wishlists and trade lists from friends and public users.'},
- {tab:'msg',sel:'#msgbtn',t:'💬 Messages',d:'Chat with friends to set up a meetup. Your offers and requests are in here too.'},
- {tab:'msg',sel:'#bellbtn',t:'🔔 Notifications',d:'Friend requests, offers waiting on you, replies and new matches all show up here. The number tells you how many are new.'},
- {tab:'msg',sel:'#themebtn',t:'🎨 Colors',d:'Pick a color theme that is easy on your eyes, or choose your own accent color.'}
+ {tab:'binders',sel:'#bnew',alt:'.tab[data-tab="binders"]',t:'📒 Binders',d:'Make digital copies of your binders and see what every page is worth. Tap an empty pocket to add a card by name or photo, or fill a whole page from one photo.'},
+ {tab:'find',sel:'#go',alt:'.tab[data-tab="find"]',t:'📷 Scan',d:'Scan or type any card to see its price and find other cards worth about the same. Handy for fair swaps.'},
+ {tab:'trade',sel:'[data-act="tadd"]',alt:'.tab[data-tab="trade"]',t:'🔄 Trade',d:'Put cards on a trade list and save cards you want on your wishlist. The trade calculator helps when you are swapping in person.'},
+ {tab:'friends',sel:'.tab[data-tab="friends"]',t:'👥 Friends',d:'Create a free account, add friends by handle, and look at their lists. When you match, tap Start trade to send an offer.'},
+ {tab:'browse',sel:'.tab[data-tab="browse"]',t:'🌐 Explore',d:'Search a card to see who has it or wants it, or browse binders, wishlists and trade lists from friends and public users.'},
+ {tab:'binders',sel:'#msgbtn',t:'💬 Inbox and ⚙️ Settings',d:'The 💬 button holds your messages, offers and alerts. The ⚙️ button has colors, your account and this tour again.'}
 ];
 const CH={i:0,from:'',on:false};
 const cSleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -1829,7 +1833,7 @@ async function coachShow(i){
 function coachEnd(){CH.on=false;const o=$('#coach');if(o)o.remove();try{localStorage.setItem('bb_seen','1')}catch(e){}if(CH.from&&NAV.tab!==CH.from)showTab(CH.from)}
 function helpDlg(){closeModal();if(CH.on)return;CH.on=true;CH.from=NAV.tab||'binders';coachShow(0)}
 function helpDone(){coachEnd()}
-$('#helpbtn').onclick=()=>helpDlg();
+
 function themeSave(t){try{localStorage.setItem('bb_theme',JSON.stringify(t))}catch(e){}themeApply(t)}
 function themeDlg(){
   const cur=themeLoad();
@@ -1840,7 +1844,16 @@ function themeDlg(){
   document.querySelectorAll('#modal [data-th]').forEach(b=>b.onclick=()=>{themeSave({k:b.dataset.th});themeDlg()});
   $('#thc').oninput=e=>{const c=themeLoad();themeSave({k:c.k==='custom'?(c.base||'gold'):c.k,base:c.k==='custom'?(c.base||'gold'):c.k,ac:e.target.value,custom:1})};
 }
-$('#themebtn').onclick=themeDlg;
+function settingsDlg(){
+  modal(`<h3>⚙️ Settings</h3><button class="btn alt mbtn" id="s1">🎨 Colors</button><button class="btn alt mbtn" id="s2" style="margin-top:8px">❓ How the app works</button><button class="btn alt mbtn" id="s3" style="margin-top:8px">👤 ${ACC.handle?'My account (@'+esc(ACC.handle)+')':'Sign in or create an account'}</button>
+  <div class="row" style="margin-top:8px;justify-content:center;gap:14px"><a href="privacy.html" target="_blank" rel="noopener" style="color:var(--ac)">Privacy</a><a href="terms.html" target="_blank" rel="noopener" style="color:var(--ac)">Terms</a><a href="delete-account.html" target="_blank" rel="noopener" style="color:var(--ac)">Delete account</a></div>
+  <p class="mu" style="font-size:12px;text-align:center;margin:10px 0 0">Binder Buddy is an unofficial fan tool. It is not affiliated with Pokémon, Nintendo or TCGplayer. Prices are TCGplayer market estimates and may be out of date.</p>
+  <button class="btn mbtn" id="no" style="margin-top:10px">Close</button>`);
+  $('#no').onclick=()=>closeModal();
+  $('#s1').onclick=()=>{closeModal();setTimeout(themeDlg,350)};
+  $('#s2').onclick=()=>{closeModal();setTimeout(helpDlg,350)};
+  $('#s3').onclick=()=>{closeModal();setTimeout(()=>{if(ACC.handle)acctMenu();else showTab('friends')},350)}}
+$('#setbtn').onclick=settingsDlg;
 function linkBase(){return location.origin+location.pathname}
 async function shareUrl(url,title){
   try{if(navigator.share){await navigator.share({url,title});return}}catch(e){if(e&&e.name==='AbortError')return}
